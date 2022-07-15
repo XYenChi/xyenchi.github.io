@@ -215,51 +215,10 @@ cert_mark.pl: ERROR: Could not compute score for 'MicroFPMark'
 
 找到报对应错误的 /util/perl/cert_mark.pl 文件中的对应代码：
 ```perl
-# Some of the marks require that sets of the scores be computed and
-# then added to list of scores to be geomean'd. E.g., GM(a, b, GM(d, e), f)
-# This is accomplished by checking for array references inside the list
-# of scores in the definition. Missing scores cause a '-1' to trickle up
-# through the computation.
-sub recurse_geomean {
-        my ($dbg_mark, $mode, $ptr) = @_;
-        my @res = ();
-        my $errors = 0;
-        for my $v (keys %$ptr) {
-                my $ips;
-                if ($v =~ m/^__SUBSET_\d+__$/) {
-                        $ips = recurse_geomean($dbg_mark, $mode, $ptr->{$v});
-                        if ($ips < 0) {
-                                $errors = 1;
-                        } else {
-                                push @res, $ips;
-                        }
-                } else {
-                        $ips = $g_scores{$v}{$mode}{'ips'};
-                        my $factor = $ptr->{$v};
-                        # Make sure the run actually completed
-                        if (! defined $ips) {
-                                print "$0: ERROR: Missing score for $v ($mode)\n";
-                                $errors = 1;
-                        } elsif ($g_scores{$v}{$mode}{'errors'} != 0) {
-                                print "$0: ERROR: Errors encountered in test $v, $mode run\n";
-                                $errors = 1;
-                        } else {
-                                my $score = $ips * $factor;
-                                $dbg_mark =~ s/\s+//g;
-                                printf("$0: DEBUG: IPS: %-30s %-30s %10s %14.4f %14.4f %14.4f\n",
-                                        $dbg_mark,
-                                        $v,
-                                        $mode,
-                                        $factor,
-                                        $ips,
-                                        $score
-                                ) if $g_opts{'debug'};
-                                push @res, $score;
-                        }
-                }
-        }
-        return $errors ? -1 : geomean(@res);
-} 
+ elsif ($g_scores{$v}{$mode}{'errors'} != 0) 
+        print "$0: ERROR: Errors encountered in test $v, $mode run\n";
+        $errors = 1;
+
 ``` 
 本段 `recurse_geomean` 函数功能为迭代计算几何平均数   
 `$v` 传入的值： 在 `%g_mark_definitions` 表中查询 `$factor` 值的项，此处为 `lu-*`。   
@@ -273,17 +232,10 @@ if ($mode eq "verification") {
 ```
 以及
 ```perl
-if ($ips =~ /inf/i) {
-			printf "$0: WARNING: Score for $name ($scoring) is invalid\n";
-		} else {
-			$g_scores{$name}{$scoring}{'ips'} = $ips;
-			# This should always exist, and at least be 0 if no errors,
-			# if not, it means the verification run failed.
-			my $errors = $most_recent_error{$name};
-			die "$0: RT-ERROR: Missing validation run for $name, $fn : $ln\n"
-				if not defined $errors;
-			$g_scores{$name}{$scoring}{'errors'} = $errors;
-			undef %most_recent_error; # eliminate any chance of stragglers!
+$g_scores{$name}{$scoring}{'ips'} = $ips;
+my $errors = $most_recent_error{$name};
+	if not defined $errors;
+	$g_scores{$name}{$scoring}{'errors'} = $errors;
 ```
 说明 log 文件中有测试项的 `$fails` 为1, 找到对应lu的log，发现 Results for verification run 该项的 Fails 全为1：
 ```
@@ -343,35 +295,31 @@ if ($ips =~ /inf/i) {
 #Median for final result lu-sml-20x2_50-sp/
 1203890958        MLT lu-sml-20x2_50-sp                          1   1     0 18.38400000      10000 543.95126197   1396544       3656 median single
 ```
-由于已知在 x86 上交叉编译后移植到 unmatched 上运行可以成功出结果，所以此处怀疑是 riscv-linux64-gnu-gcc 的问题。为了将问题定位在编译器上，尝试使用 clang 来编译运行 fpmark。在 /util/make/ 中复制 gcc64.mak， 另存为 clang.mak, 并将原有 gcc 的配置改成 clang 和相关的LLVM工具链，如下。
-```make
-# Variable: CC
-#	name of the compiler
-CC		= $(TOOLS)/bin/clang
-# Solaris : /usr/ccs/bin/as requires space after -o passed from gcc.
-#OBJOUT = -o \#
-OBJOUT	= -o
-COBJT	= -c
-CINCD	= -I
-CDEFN	= -D
-OEXT = .o
-
-# Variable: CC
-#	name of the assembler (if needed)
-AS		= $(TOOLS)/bin/llvm-as
-
-# Variable: CC
-#	name of the linker
-LD		= $(TOOLS)/bin/clang
-LDPP	= $(TOOLS)/bin/clang++
-EXEOUT	= -o
-EXE		= .exe
-
-# Variable: CC
-#	name of the librarian
-AR		= $(TOOLS)/bin/llvm-ar
-LIBTYPE	= .a
-LIBOUT	= 
+由于已知在 x86 上交叉编译后移植到 unmatched 上运行可以成功出结果，所以此处怀疑是 riscv-linux64-gnu-gcc 的问题。为了将问题定位在编译器上，尝试使用 clang 来编译运行 fpmark。在 /util/make/ 中复制 gcc.mak， 另存为 clang.mak, 并将原有 gcc 的配置改成 clang 和相关的LLVM工具链，diff 如下。
+```diff
+< #  File: util/make/clang.mak
+< #     LLVM Tool Definitions, Host Compile and Run
+---
+> #  File: util/make/gcc.mak
+> #     GCC Tool Definitions, Host Compile and Run
+39c39
+< CC            = $(TOOLS)/bin/clang
+---
+> CC            = $(TOOLS)/bin/gcc
+50c50
+< AS            = $(TOOLS)/bin/llvm-as
+---
+> AS            = $(TOOLS)/bin/as
+54,55c54,55
+< LD            = $(TOOLS)/bin/clang
+< LDPP  = $(TOOLS)/bin/clang++
+---
+> LD            = $(TOOLS)/bin/gcc
+> LDPP  = $(TOOLS)/bin/g++
+61c61
+< AR            = $(TOOLS)/bin/llvm-ar
+---
+> AR            = $(TOOLS)/bin/ar
 ```
 然后用下面的命令在 `lemontea` 编译运行，发现可以通过并出分。
 ```
@@ -481,68 +429,17 @@ man 一下 gcc 看看 -O2 是在干啥：
 #Target: wcertify-%
 #	Build, run and collect results for certification procedure on specific workloads
 wcertify-%: wbuild-%
-	$(RM) $(DIR_LOG)/*
-	$(MDIR) $(DIR_CERT)/verify
-	$(MDIR) $(DIR_CERT)/perf
-	@echo "$(DATESTAMP) Starting Run" >> $(LOG_PROGRESS)
-	[ -f $(RESLOG) ] || $(CAT) util/perl/headings.txt > $(RESLOG)
-	@echo "#Results for verification run started at $(SDATESTAMP) XCMD=$(XCMD)" >> $(RESLOG)
-	@echo "	Verification run for $*"
-	for WLD in workloads/$* ; do \
-		$(MAKE) -C $(DIR_IMG) -f $(TOPDIR)$${WLD}/Makefile load && \
-		$(MAKE) XCMD="$(XCMD) -v1" -C $(DIR_IMG) -f $(TOPDIR)$${WLD}/Makefile run && \
-		$(MAKE) -C $(DIR_LOG) -f $(TOPDIR)$${WLD}/Makefile results && \
-		$(MDIR) $(DIR_CERT)/verify/$${WLD} && \
-		$(CPDIR) $(DIR_LOG) $(DIR_CERT)/verify/$${WLD} \
-		;\
-	done
-	@echo "#Results for performance runs started at $(SDATESTAMP) XCMD=$(XCMD)" >> $(RESLOG)
-	@echo "	Performance runs for $*"
-	for ii in 1 2 3 ; do \
-	for WLD in workloads/$* ; do \
-		$(MAKE) -C $(DIR_IMG) -f $(TOPDIR)$${WLD}/Makefile load &&	\
-		$(MAKE) XCMD="$(XCMD) -v0" -C $(DIR_IMG) -f $(TOPDIR)$${WLD}/Makefile run &&	\
-		$(MAKE) -C $(DIR_LOG) -f $(TOPDIR)$${WLD}/Makefile results	\
-		;\
-	done; done
-	@echo "#Median for final result $*" >> $(RESLOG)
-	$(PERL) $(TOPDIR)/util/perl/cert_median.pl $(RESLOG) $(CONCURRNCY) >> $(RESLOG)
-	$(CPDIR) $(DIR_LOG) $(DIR_CERT)/perf 
 ```
 再看看编译器的参数是如何传入的,如果不传入 DDB 或者 DDN 程序会以默认 `CFLAGS = $(COMPILER_FLAGS) $(COMPILER_DEFS) $(PLATFORM_DEFS) $(PACK_OPTS)` 运行，其中 `COMPILER_FLAGS = -O2 $(CDEFN)NDEBUG $(CDEFN)HOST_EXAMPLE_CODE=1 -std=gnu99 `：   
 ```make
-# COMPILER SECTION
-
-# Variable: INCLUDE
-# You may need to override the Environment variable INCLUDE.
-# INCLUDE is used by most compilers, and should not 
-# be passed to the compiler in the makefile.
-INCLUDE = $(TOOLS)/include
-
-# -c             compile but do not link
-# -o             specify the output file name
-# -march=i486    generate code for the intel 486
-# -O0			 Do not optimize
-# -O2			 Optimize for speed
-
 COMPILER_FLAGS = -O2 $(CDEFN)NDEBUG $(CDEFN)HOST_EXAMPLE_CODE=1 -std=gnu99 
 COMPILER_NOOPT = -g -O0 $(CDEFN)NDEBUG $(CDEFN)HOST_EXAMPLE_CODE=1 
-COMPILER_DEBUG = -O0 -g $(CDEFN)HOST_EXAMPLE_CODE=1 -DBMDEBUG=1 -DTHDEBUG=1 
 PACK_OPTS = 
 
-#Variable: CFLAGS 
-#	Options for the compiler.
-ifdef DDB
- CFLAGS = $(COMPILER_DEBUG) $(COMPILER_DEFS) $(PLATFORM_DEFS) $(PACK_OPTS)
+ifdef DDN
+ CFLAGS = $(COMPILER_NOOPT) $(COMPILER_DEFS) $(PLATFORM_DEFS) $(PACK_OPTS) 
 else
- ifdef DDN
-  CFLAGS = $(COMPILER_NOOPT) $(COMPILER_DEFS) $(PLATFORM_DEFS) $(PACK_OPTS) 
- else
-  CFLAGS = $(COMPILER_FLAGS) $(COMPILER_DEFS) $(PLATFORM_DEFS) $(PACK_OPTS)
- endif
-endif
-ifdef DDT
- CFLAGS += -DTHDEBUG=1
+ CFLAGS = $(COMPILER_FLAGS) $(COMPILER_DEFS) $(PLATFORM_DEFS) $(PACK_OPTS)
 endif
 ```   
 所以加入 `DDN=1` 关闭默认优化，使用 `PACK_OPT` 分别传入 `-O0` `-O1` `-O2` 进行对比。   
