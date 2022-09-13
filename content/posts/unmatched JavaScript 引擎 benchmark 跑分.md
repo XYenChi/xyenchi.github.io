@@ -2,7 +2,7 @@
 title: "Unmatched JavaScript 引擎 Benchmark 跑分"
 date: 2022-09-05T12:59:38+08:00
 url: "/unmatched/benchmark/JS"
-draft: true
+draft: false
 ---
  unmatched 的系统信息 `Linux milk 5.19.2-arch1-1 #1 SMP PREEMPT Fri, 19 Aug 2022 19:44:19 +0000 riscv64 GNU/Linux` python 版本 :`Python 3.10.6`
 ###  v8   
@@ -150,3 +150,53 @@ stanford-crypto-pbkdf2-orig(RunTime): 21507 ms.
 stanford-crypto-sha256-iterative-orig(RunTime): 5959 ms.
 ```
 #### Octane
+```
+Richards: 14.0
+DeltaBlue: 14.1
+Crypto: 30.8
+RayTrace: 41.4
+EarleyBoyer: 62.5
+RegExp: 21.5
+Splay: 92.9
+SplayLatency: 533
+NavierStokes: 66.2
+PdfJS: 177
+Mandreel: 16.9
+MandreelLatency: 97.7
+Gameboy: 133
+CodeLoad: 2262
+Box2D: 86.3
+zlib: 66.7
+Typescript: 295
+----
+Score (version 9): 78.6
+```   
+#### SunSpider
+```
+3d-cube: 739
+3d-morph: 1179
+3d-raytrace: 882
+access-binary-trees: 705
+access-fannkuch: 1477
+access-nbody: 1117
+access-nsieve: 712
+bitops-3bit-bits-in-byte: 555
+bitops-bits-in-byte: 855
+bitops-bitwise-and: 3187
+bitops-nsieve-bits: 685
+controlflow-recursive: 785
+crypto-aes: 711
+crypto-md5: 551
+crypto-sha1: 545
+date-format-tofte: 852
+date-format-xparb: 543
+math-cordic: 974
+math-partial-sums: 1314
+math-spectral-norm: 681
+regexp-dna: 376
+string-base64: 568
+string-fasta: 1352
+string-tagcloud: 1085
+string-unpack-code: 2446
+string-validate-input: 2009
+```
