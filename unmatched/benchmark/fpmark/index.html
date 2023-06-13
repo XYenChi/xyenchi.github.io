@@ -246,30 +246,30 @@ cert_mark.pl: ERROR: Could not compute score for &#39;MicroFPMark&#39;
 1203890958        MLT lu-sml-20x2_50-sp                          1   1     0 18.38700000      10000 543.86251156   1396544       3656
 #Median for final result lu-sml-20x2_50-sp/
 1203890958        MLT lu-sml-20x2_50-sp                          1   1     0 18.38400000      10000 543.95126197   1396544       3656 median single
-</code></pre><p>由于已知在 x86 上交叉编译后移植到 unmatched 上运行可以成功出结果，所以此处怀疑是 riscv-linux64-gnu-gcc 的问题。为了将问题定位在编译器上，尝试使用 clang 来编译运行 fpmark。在 /util/make/ 中复制 gcc.mak， 另存为 clang.mak, 并将原有 gcc 的配置改成 clang 和相关的LLVM工具链，diff 如下。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-diff data-lang=diff><span class=line><span class=cl>&lt; #  File: util/make/clang.mak
-</span></span><span class=line><span class=cl>&lt; #     LLVM Tool Definitions, Host Compile and Run
-</span></span><span class=line><span class=cl><span class=gd>---
-</span></span></span><span class=line><span class=cl><span class=gd></span>&gt; #  File: util/make/gcc.mak
-</span></span><span class=line><span class=cl>&gt; #     GCC Tool Definitions, Host Compile and Run
-</span></span><span class=line><span class=cl>39c39
-</span></span><span class=line><span class=cl>&lt; CC            = $(TOOLS)/bin/clang
-</span></span><span class=line><span class=cl><span class=gd>---
-</span></span></span><span class=line><span class=cl><span class=gd></span>&gt; CC            = $(TOOLS)/bin/gcc
-</span></span><span class=line><span class=cl>50c50
-</span></span><span class=line><span class=cl>&lt; AS            = $(TOOLS)/bin/llvm-as
-</span></span><span class=line><span class=cl><span class=gd>---
-</span></span></span><span class=line><span class=cl><span class=gd></span>&gt; AS            = $(TOOLS)/bin/as
-</span></span><span class=line><span class=cl>54,55c54,55
-</span></span><span class=line><span class=cl>&lt; LD            = $(TOOLS)/bin/clang
-</span></span><span class=line><span class=cl>&lt; LDPP  = $(TOOLS)/bin/clang++
-</span></span><span class=line><span class=cl><span class=gd>---
-</span></span></span><span class=line><span class=cl><span class=gd></span>&gt; LD            = $(TOOLS)/bin/gcc
-</span></span><span class=line><span class=cl>&gt; LDPP  = $(TOOLS)/bin/g++
-</span></span><span class=line><span class=cl>61c61
-</span></span><span class=line><span class=cl>&lt; AR            = $(TOOLS)/bin/llvm-ar
-</span></span><span class=line><span class=cl><span class=gd>---
-</span></span></span><span class=line><span class=cl><span class=gd></span>&gt; AR            = $(TOOLS)/bin/ar
-</span></span></code></pre></div><p>然后用下面的命令在 <code>lemontea</code> 编译运行，发现可以通过并出分。</p><pre tabindex=0><code>make toolchain=clang XCMD=&#39;-c4&#39; certify-all
+</code></pre><p>由于已知在 x86 上交叉编译后移植到 unmatched 上运行可以成功出结果，所以此处怀疑是 riscv-linux64-gnu-gcc 的问题。为了将问题定位在编译器上，尝试使用 clang 来编译运行 fpmark。在 /util/make/ 中复制 gcc.mak， 另存为 clang.mak, 并将原有 gcc 的配置改成 clang 和相关的LLVM工具链，diff 如下。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-diff data-lang=diff><span class=line><span class=cl><span class=gd>&lt; #  File: util/make/clang.mak
+</span></span></span><span class=line><span class=cl><span class=gd>&lt; #     LLVM Tool Definitions, Host Compile and Run
+</span></span></span><span class=line><span class=cl><span class=gd></span><span class=gs>---
+</span></span></span><span class=line><span class=cl><span class=gs></span><span class=gi>&gt; #  File: util/make/gcc.mak
+</span></span></span><span class=line><span class=cl><span class=gi>&gt; #     GCC Tool Definitions, Host Compile and Run
+</span></span></span><span class=line><span class=cl><span class=gi></span><span class=gu>39c39
+</span></span></span><span class=line><span class=cl><span class=gu></span><span class=gd>&lt; CC            = $(TOOLS)/bin/clang
+</span></span></span><span class=line><span class=cl><span class=gd></span><span class=gs>---
+</span></span></span><span class=line><span class=cl><span class=gs></span><span class=gi>&gt; CC            = $(TOOLS)/bin/gcc
+</span></span></span><span class=line><span class=cl><span class=gi></span><span class=gu>50c50
+</span></span></span><span class=line><span class=cl><span class=gu></span><span class=gd>&lt; AS            = $(TOOLS)/bin/llvm-as
+</span></span></span><span class=line><span class=cl><span class=gd></span><span class=gs>---
+</span></span></span><span class=line><span class=cl><span class=gs></span><span class=gi>&gt; AS            = $(TOOLS)/bin/as
+</span></span></span><span class=line><span class=cl><span class=gi></span><span class=gu>54,55c54,55
+</span></span></span><span class=line><span class=cl><span class=gu></span><span class=gd>&lt; LD            = $(TOOLS)/bin/clang
+</span></span></span><span class=line><span class=cl><span class=gd>&lt; LDPP  = $(TOOLS)/bin/clang++
+</span></span></span><span class=line><span class=cl><span class=gd></span><span class=gs>---
+</span></span></span><span class=line><span class=cl><span class=gs></span><span class=gi>&gt; LD            = $(TOOLS)/bin/gcc
+</span></span></span><span class=line><span class=cl><span class=gi>&gt; LDPP  = $(TOOLS)/bin/g++
+</span></span></span><span class=line><span class=cl><span class=gi></span><span class=gu>61c61
+</span></span></span><span class=line><span class=cl><span class=gu></span><span class=gd>&lt; AR            = $(TOOLS)/bin/llvm-ar
+</span></span></span><span class=line><span class=cl><span class=gd></span><span class=gs>---
+</span></span></span><span class=line><span class=cl><span class=gs></span><span class=gi>&gt; AR            = $(TOOLS)/bin/ar
+</span></span></span></code></pre></div><p>然后用下面的命令在 <code>lemontea</code> 编译运行，发现可以通过并出分。</p><pre tabindex=0><code>make toolchain=clang XCMD=&#39;-c4&#39; certify-all
 </code></pre><pre tabindex=0><code>WORKLOAD RESULTS TABLE
 
                                                  MultiCore SingleCore
