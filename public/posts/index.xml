@@ -7,14 +7,41 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 06 Jul 2022 17:47:58 +0800</lastBuildDate><atom:link href="https://xyenchi.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 17 Jul 2023 12:59:38 +0800</lastBuildDate><atom:link href="https://xyenchi.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Hello_world</title>
-      <link>https://xyenchi.github.io/posts/hello_world/</link>
-      <pubDate>Wed, 06 Jul 2022 17:47:58 +0800</pubDate>
+      <title>RVV intrinsic的实现分析</title>
+      <link>https://xyenchi.github.io/rvv_intrinsic_analysis/</link>
+      <pubDate>Mon, 17 Jul 2023 12:59:38 +0800</pubDate>
       
-      <guid>https://xyenchi.github.io/posts/hello_world/</guid>
-      <description>Hello from XYenChi.</description>
+      <guid>https://xyenchi.github.io/rvv_intrinsic_analysis/</guid>
+      <description>包含的文件 riscv-c.cc riscv-protos.h riscv-vector-builtins-bases.cc riscv-vector-builtins-bases.h riscv-vector-builtins-functions.def riscv-vector-builtins-shapes.cc riscv-vector-builtins-shapes.h riscv-vector-builtins-types.def riscv-vector-builtins.cc riscv-vector-builtins.h riscv.md vector-iterators.md vector.md riscv-v.cc #define builtin_define(TXT) cpp_define (pfile, TXT) 定义 builtin_define 的宏，将其展开为 cpp_define(pfile, TXT)。其中 pfile 是指向文件的指针。 riscv_ext_version 函数，可以传一个最大值和一个最小</description>
+    </item>
+    
+    <item>
+      <title>RISC-V Vector 或 SIMD 类似拓展的应用举例子说明</title>
+      <link>https://xyenchi.github.io/linear_algebra/</link>
+      <pubDate>Mon, 03 Jul 2023 12:59:38 +0800</pubDate>
+      
+      <guid>https://xyenchi.github.io/linear_algebra/</guid>
+      <description>线性代数部分 专有名词： 线性方程组 齐次线性方程组 增广矩阵 还没有想好次级标题叫什么名字 不知道有没有必要从线性方程的求解开始讲起，简单带过一下好了</description>
+    </item>
+    
+    <item>
+      <title>Unmatched JavaScript 引擎 Benchmark 跑分</title>
+      <link>https://xyenchi.github.io/unmatched/benchmark/JS/</link>
+      <pubDate>Mon, 05 Sep 2022 12:59:38 +0800</pubDate>
+      
+      <guid>https://xyenchi.github.io/unmatched/benchmark/JS/</guid>
+      <description>unmatched 的系统信息 Linux milk 5.19.2-arch1-1 #1 SMP PREEMPT Fri, 19 Aug 2022 19:44:19 +0000 riscv64 GNU/Linux python 版本 :Python 3.10.6 v8 arch riscv 的 unmatched 上面并没有 v8 直接装来用，所以需要构建一个。放一个 v8 官方网站的构建教程做参考。但是</description>
+    </item>
+    
+    <item>
+      <title>Unmatched 编译运行 Fpmark</title>
+      <link>https://xyenchi.github.io/unmatched/benchmark/fpmark/</link>
+      <pubDate>Mon, 11 Jul 2022 14:22:10 +0800</pubDate>
+      
+      <guid>https://xyenchi.github.io/unmatched/benchmark/fpmark/</guid>
+      <description>现有如下两块 unmatched 用来跑 benchmark, 一台叫 lemontea, 另一台叫 milk 。 lemontea 系统信息，clang 版本，gcc 版本如下： [root@lemontea ~]# uname -a Linux lemontea 5.18.3-arch1-1 #1 SMP PREEMPT Sun, 12 Jun 2022 18:42:25 +0000 riscv64 GNU/Linux [root@lemontea ~]# clang -v clang version 13.0.1 Target: riscv64-unknown-linux-gnu</description>
     </item>
     
   </channel>

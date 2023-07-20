@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>RVV intrinsic的实现分析 | xyenchi&#39;s blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="包含的文件 riscv-c.cc riscv-protos.h riscv-vector-builtins-bases.cc riscv-vector-builtins-bases.h riscv-vector-builtins-functions.def riscv-vector-builtins-shapes.cc riscv-vector-builtins-shapes.h riscv-vector-builtins-types.def riscv-vector-builtins.cc riscv-vector-builtins.h riscv.md vector-iterators.md vector.md riscv-v.cc #define builtin_define(TXT) cpp_define (pfile, TXT) 定义 builtin_define 的宏，将其展开为 cpp_define(pfile, TXT)。其中 pfile 是指向文件的指针。 riscv_ext_version 函数，可以传一个最大值和一个最小">
+<meta name="author" content="">
+<link rel="canonical" href="https://xyenchi.github.io/rvv_intrinsic_analysis/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.d7fb4cbf980fe688a21621b06a795933c4e6bb2d4070ec940667af1715d84af2.css" integrity="sha256-1/tMv5gP5oiiFiGwanlZM8Tmuy1AcOyUBmevFxXYSvI=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://xyenchi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://xyenchi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://xyenchi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://xyenchi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://xyenchi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="RVV intrinsic的实现分析" />
+<meta property="og:description" content="包含的文件 riscv-c.cc riscv-protos.h riscv-vector-builtins-bases.cc riscv-vector-builtins-bases.h riscv-vector-builtins-functions.def riscv-vector-builtins-shapes.cc riscv-vector-builtins-shapes.h riscv-vector-builtins-types.def riscv-vector-builtins.cc riscv-vector-builtins.h riscv.md vector-iterators.md vector.md riscv-v.cc #define builtin_define(TXT) cpp_define (pfile, TXT) 定义 builtin_define 的宏，将其展开为 cpp_define(pfile, TXT)。其中 pfile 是指向文件的指针。 riscv_ext_version 函数，可以传一个最大值和一个最小" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://xyenchi.github.io/rvv_intrinsic_analysis/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-07-17T12:59:38&#43;08:00" />
+<meta property="article:modified_time" content="2023-07-17T12:59:38&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RVV intrinsic的实现分析"/>
+<meta name="twitter:description" content="包含的文件 riscv-c.cc riscv-protos.h riscv-vector-builtins-bases.cc riscv-vector-builtins-bases.h riscv-vector-builtins-functions.def riscv-vector-builtins-shapes.cc riscv-vector-builtins-shapes.h riscv-vector-builtins-types.def riscv-vector-builtins.cc riscv-vector-builtins.h riscv.md vector-iterators.md vector.md riscv-v.cc #define builtin_define(TXT) cpp_define (pfile, TXT) 定义 builtin_define 的宏，将其展开为 cpp_define(pfile, TXT)。其中 pfile 是指向文件的指针。 riscv_ext_version 函数，可以传一个最大值和一个最小"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://xyenchi.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "RVV intrinsic的实现分析",
+      "item": "https://xyenchi.github.io/rvv_intrinsic_analysis/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "RVV intrinsic的实现分析",
+  "name": "RVV intrinsic的实现分析",
+  "description": "包含的文件 riscv-c.cc riscv-protos.h riscv-vector-builtins-bases.cc riscv-vector-builtins-bases.h riscv-vector-builtins-functions.def riscv-vector-builtins-shapes.cc riscv-vector-builtins-shapes.h riscv-vector-builtins-types.def riscv-vector-builtins.cc riscv-vector-builtins.h riscv.md vector-iterators.md vector.md riscv-v.cc #define builtin_define(TXT) cpp_define (pfile, TXT) 定义 builtin_define 的宏，将其展开为 cpp_define(pfile, TXT)。其中 pfile 是指向文件的指针。 riscv_ext_version 函数，可以传一个最大值和一个最小",
+  "keywords": [
+    
+  ],
+  "articleBody": "包含的文件 riscv-c.cc\nriscv-protos.h\nriscv-vector-builtins-bases.cc\nriscv-vector-builtins-bases.h\nriscv-vector-builtins-functions.def\nriscv-vector-builtins-shapes.cc\nriscv-vector-builtins-shapes.h\nriscv-vector-builtins-types.def riscv-vector-builtins.cc\nriscv-vector-builtins.h\nriscv.md\nvector-iterators.md\nvector.md\nriscv-v.cc #define builtin_define(TXT) cpp_define (pfile, TXT) 定义 builtin_define 的宏，将其展开为 cpp_define(pfile, TXT)。其中 pfile 是指向文件的指针。 riscv_ext_version 函数，可以传一个最大值和一个最小值，返回 1000000倍的最大值和 1000倍的最小值。 riscv_cpu_cpp_builtins 函数，传入 pfile 指针，\nriscv-vector-builtins-bases.h 包含所有向量操作的namespace，声明外部的常量指针。\nriscv-vector-builtins-bases.cc 声明 load store 的 enum 类型，定义了 unit stride, strided 和 indexed 三种。indexed 没有跟着 spec 写 indexed-unordered 和 indexed-ordered。 定义了一个 vleff 和 vlsegff 的辅助函数去fold。调用 gcc/gimple.h 里面的 gimple_call_num_args.\n/* Return the number of arguments used by call statement GS. */ inline unsigned gimple_call_num_args (const gcall *gs) { return gimple_num_ops (gs) - 3; } inline unsigned gimple_call_num_args (const gimple *gs) { const gcall *gc = GIMPLE_CHECK2\u003cconst gcall *\u003e (gs); return gimple_call_num_args (gc); } gcc/gimple.cc 里面的 gimple_build_call_vec 函数\n/* Build a GIMPLE_CALL statement to function FN with the arguments specified in vector ARGS. */ gcall * gimple_build_call_vec (tree fn, const vec\u003ctree\u003e \u0026args) { unsigned i; unsigned nargs = args.length (); gcall *call = gimple_build_call_1 (fn, nargs); for (i = 0; i \u003c nargs; i++) gimple_call_set_arg (call, i, args[i]); return call; } gcc/gimple.h 里的 gimple_call_arg 函数\n/* Return the argument at position INDEX for call statement GS. */ inline tree gimple_call_arg (const gcall *gs, unsigned index) { gcc_gimple_checking_assert (gimple_num_ops (gs) \u003e index + 3); return gs-\u003eop[index + 3]; } 实现 vsetvl 和 vsetvlmax\n实现运算的操作看起来都是根据操作数类型转到对应的rtl.\nriscv-vector-builtins-functions.def 写 RVV intrinsic function 的名称，是否mask, 操作数符号和类型之类的。\nriscv-vector-builtins-shapes.cc 写intrinsic function的格式\n/* Declare the function shape NAME, pointing it to an instance of class _def. */ #define SHAPE(DEF, VAR) \\ static CONSTEXPR const DEF##_def VAR##_obj; \\ namespace shapes { const function_shape *const VAR = \u0026VAR##_obj; } riscv-vector-builtins-shapes.h 在 riscv_vector 的命名空间里声明 shapes 的命名空间\nriscv-vector-builtins-types.def 定义数据类型的宏\nriscv-vector-builtins.cc 看起来是在写intrinsic格式。\nriscv-vector-builtins.h 规定 intrinsic 特殊要求的bit表示 声明 intrinsic 用到的数据类型，后缀的结构体。 function_base 类的定义 function_checker 类的定义 function_shape 类的定义\nriscv.md 写rtl\nvector-iterators.md define_mode_iterator rtl\ndefine_code_attr\nvector.md ",
+  "wordCount" : "578",
+  "inLanguage": "en",
+  "datePublished": "2023-07-17T12:59:38+08:00",
+  "dateModified": "2023-07-17T12:59:38+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://xyenchi.github.io/rvv_intrinsic_analysis/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "xyenchi's blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://xyenchi.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://xyenchi.github.io" accesskey="h" title="xyenchi&#39;s blog (Alt + H)">xyenchi&#39;s blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://xyenchi.github.io/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://xyenchi.github.io/about-hugo/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://xyenchi.github.io/friends/" title="Friends">
+                    <span>Friends</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      RVV intrinsic的实现分析
+    </h1>
+    <div class="post-meta"><span title='2023-07-17 12:59:38 +0800 CST'>July 17, 2023</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h3 id="包含的文件">包含的文件<a hidden class="anchor" aria-hidden="true" href="#包含的文件">#</a></h3>
+<p><a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-c.cc">riscv-c.cc</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-protos.h">riscv-protos.h</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-bases.cc">riscv-vector-builtins-bases.cc</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-bases.h">riscv-vector-builtins-bases.h</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-functions.def">riscv-vector-builtins-functions.def</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-shapes.cc">riscv-vector-builtins-shapes.cc</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-shapes.h">riscv-vector-builtins-shapes.h</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-types.def">riscv-vector-builtins-types.def</a> <br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins.cc">riscv-vector-builtins.cc</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins.h">riscv-vector-builtins.h</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv.md">riscv.md</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector-iterators.md">vector-iterators.md</a><br>
+<a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector.md">vector.md</a></p>
+<h4 id="riscv-vcc">riscv-v.cc<a hidden class="anchor" aria-hidden="true" href="#riscv-vcc">#</a></h4>
+<p><code>#define builtin_define(TXT) cpp_define (pfile, TXT)</code> 定义 <code>builtin_define</code> 的宏，将其展开为 <code>cpp_define(pfile, TXT)</code>。其中 pfile 是指向文件的指针。
+riscv_ext_version 函数，可以传一个最大值和一个最小值，返回 1000000倍的最大值和 1000倍的最小值。
+riscv_cpu_cpp_builtins 函数，传入 pfile 指针，</p>
+<h4 id="riscv-vector-builtins-basesh">riscv-vector-builtins-bases.h<a hidden class="anchor" aria-hidden="true" href="#riscv-vector-builtins-basesh">#</a></h4>
+<p>包含所有向量操作的namespace，声明外部的常量指针。</p>
+<h4 id="riscv-vector-builtins-basescc">riscv-vector-builtins-bases.cc<a hidden class="anchor" aria-hidden="true" href="#riscv-vector-builtins-basescc">#</a></h4>
+<p>声明 load store 的 enum 类型，定义了 unit stride, strided 和 indexed 三种。indexed 没有跟着 spec 写 indexed-unordered 和 indexed-ordered。
+定义了一个 vleff 和 vlsegff 的辅助函数去fold。调用 <a href="https://github.com/gcc-mirror/gcc/blob/ae862e0e47cb2d62d7c624ab999a3bd8bd2914ef/gcc/gimple.h#L4">gcc/gimple.h</a> 里面的 gimple_call_num_args.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/* Return the number of arguments used by call statement GS.  */</span>
+</span></span><span class="line"><span class="cl"><span class="kr">inline</span> <span class="kt">unsigned</span>
+</span></span><span class="line"><span class="cl"><span class="nf">gimple_call_num_args</span> <span class="p">(</span><span class="k">const</span> <span class="n">gcall</span> <span class="o">*</span><span class="n">gs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="k">return</span> <span class="n">gimple_num_ops</span> <span class="p">(</span><span class="n">gs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">inline</span> <span class="kt">unsigned</span>
+</span></span><span class="line"><span class="cl"><span class="nf">gimple_call_num_args</span> <span class="p">(</span><span class="k">const</span> <span class="n">gimple</span> <span class="o">*</span><span class="n">gs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="k">const</span> <span class="n">gcall</span> <span class="o">*</span><span class="n">gc</span> <span class="o">=</span> <span class="n">GIMPLE_CHECK2</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">gcall</span> <span class="o">*&gt;</span> <span class="p">(</span><span class="n">gs</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> <span class="k">return</span> <span class="n">gimple_call_num_args</span> <span class="p">(</span><span class="n">gc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>gcc/gimple.cc 里面的 <code>gimple_build_call_vec</code> 函数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/* Build a GIMPLE_CALL statement to function FN with the arguments
+</span></span></span><span class="line"><span class="cl"><span class="cm">   specified in vector ARGS.  */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">gcall</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="nf">gimple_build_call_vec</span> <span class="p">(</span><span class="n">tree</span> <span class="n">fn</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec</span><span class="o">&lt;</span><span class="n">tree</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">unsigned</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">unsigned</span> <span class="n">nargs</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="n">length</span> <span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">gcall</span> <span class="o">*</span><span class="n">call</span> <span class="o">=</span> <span class="n">gimple_build_call_1</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">nargs</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nargs</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gimple_call_set_arg</span> <span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">call</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>gcc/gimple.h 里的 <code>gimple_call_arg</code> 函数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/* Return the argument at position INDEX for call statement GS.  */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">inline</span> <span class="n">tree</span>
+</span></span><span class="line"><span class="cl"><span class="nf">gimple_call_arg</span> <span class="p">(</span><span class="k">const</span> <span class="n">gcall</span> <span class="o">*</span><span class="n">gs</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="n">index</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">gcc_gimple_checking_assert</span> <span class="p">(</span><span class="n">gimple_num_ops</span> <span class="p">(</span><span class="n">gs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">gs</span><span class="o">-&gt;</span><span class="n">op</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>实现 vsetvl 和 vsetvlmax</p>
+<p>实现运算的操作看起来都是根据操作数类型转到对应的rtl.</p>
+<h4 id="riscv-vector-builtins-functionsdef">riscv-vector-builtins-functions.def<a hidden class="anchor" aria-hidden="true" href="#riscv-vector-builtins-functionsdef">#</a></h4>
+<p>写 RVV intrinsic function 的名称，是否mask, 操作数符号和类型之类的。</p>
+<h4 id="riscv-vector-builtins-shapescc">riscv-vector-builtins-shapes.cc<a hidden class="anchor" aria-hidden="true" href="#riscv-vector-builtins-shapescc">#</a></h4>
+<p>写intrinsic function的格式</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/* Declare the function shape NAME, pointing it to an instance
+</span></span></span><span class="line"><span class="cl"><span class="cm">  of class &lt;NAME&gt;_def.  */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define SHAPE(DEF, VAR) \
+</span></span></span><span class="line"><span class="cl"><span class="cp"> static CONSTEXPR const DEF##_def VAR##_obj; \
+</span></span></span><span class="line"><span class="cl"><span class="cp"> namespace shapes { const function_shape *const VAR = &amp;VAR##_obj; }
+</span></span></span></code></pre></div><h4 id="riscv-vector-builtins-shapesh">riscv-vector-builtins-shapes.h<a hidden class="anchor" aria-hidden="true" href="#riscv-vector-builtins-shapesh">#</a></h4>
+<p>在 riscv_vector 的命名空间里声明 shapes 的命名空间</p>
+<h4 id="riscv-vector-builtins-typesdef">riscv-vector-builtins-types.def<a hidden class="anchor" aria-hidden="true" href="#riscv-vector-builtins-typesdef">#</a></h4>
+<p>定义数据类型的宏</p>
+<h4 id="riscv-vector-builtinscc">riscv-vector-builtins.cc<a hidden class="anchor" aria-hidden="true" href="#riscv-vector-builtinscc">#</a></h4>
+<p>看起来是在写intrinsic格式。</p>
+<h4 id="riscv-vector-builtinsh">riscv-vector-builtins.h<a hidden class="anchor" aria-hidden="true" href="#riscv-vector-builtinsh">#</a></h4>
+<p>规定 intrinsic 特殊要求的bit表示
+声明 intrinsic 用到的数据类型，后缀的结构体。
+function_base 类的定义
+function_checker 类的定义
+function_shape 类的定义</p>
+<h4 id="riscvmd">riscv.md<a hidden class="anchor" aria-hidden="true" href="#riscvmd">#</a></h4>
+<p>写rtl</p>
+<h4 id="vector-iteratorsmd">vector-iterators.md<a hidden class="anchor" aria-hidden="true" href="#vector-iteratorsmd">#</a></h4>
+<p>define_mode_iterator rtl<br>
+define_code_attr</p>
+<h4 id="vectormd">vector.md<a hidden class="anchor" aria-hidden="true" href="#vectormd">#</a></h4>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
