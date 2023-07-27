@@ -80,7 +80,25 @@ gimple_call_arg (const gcall *gs, unsigned index)
 
  #### riscv-vector-builtins-functions.def   
  写 RVV intrinsic function 的名称，是否mask, 操作数符号和类型之类的。
- #### riscv-vector-builtins-shapes.cc
+ #### riscv-vector-builtins-shapes.cc   
+ 定义函数 shape NAME, 指向类`<NAME>_def`实例。   
+ 存在 rvv 0.7 的类定义，但是继承自 `misc_def` 结构体，`misc_def` 结构体继承自 `build_base` 结构体， `build_base` 结构体继承自 `function_shape` 类。   
+ ##### function_shape 类   
+ 
+
+ ```C++
+ /* vget_def class.  */
+struct vget_def : public misc_def
+{
+  bool check (function_checker &c) const override
+  {
+    poly_int64 outer_size = GET_MODE_SIZE (c.arg_mode (0));
+    poly_int64 inner_size = GET_MODE_SIZE (c.ret_mode ());
+    unsigned int nvecs = exact_div (outer_size, inner_size).to_constant ();
+    return c.require_immediate (1, 0, nvecs - 1);
+  }
+};
+```
  写intrinsic function的格式
  ```C++
  /* Declare the function shape NAME, pointing it to an instance
@@ -96,14 +114,53 @@ gimple_call_arg (const gcall *gs, unsigned index)
  #### riscv-vector-builtins.cc
  看起来是在写intrinsic格式。
  #### riscv-vector-builtins.h
- 规定 intrinsic 特殊要求的bit表示
- 声明 intrinsic 用到的数据类型，后缀的结构体。
- function_base 类的定义
- function_checker 类的定义
- function_shape 类的定义
+ riscv_vector 这个命名空间包括：   
+ 1.描述函数做什么的标识和读函数参数返回结果   
+ 2.定义用来识别RVV intrinsic需要的拓展的位值的宏   
+ 3.枚举 RVV 操作类型   
+ 4.
+ 声明 intrinsic 用到的数据类型，后缀的结构体。  
+ function_base 类的定义   
+ function_checker 类的定义   
+ function_shape 类的定义   
+ machine mode   
+ *规定 intrinsic 特殊要求的bit表示*   
+ **bit values 是哪里规定的呢？Full 'V' extension是什么呢？**    
+ **`inline machine_mode` 是什么呢？之前看《编译原理》还有有个inline相关的参数，但是太久没继续看，已经忘得只剩下inline这个单词了。vector type 和 index type 跟 machine_mode 有什么关系呢？**   
+
+ ```C++
+ /* Bit values used to identify required extensions for RVV intrinsics.  */
+#define RVV_REQUIRE_RV64BIT (1 << 0)	/* Require RV64.  */
+#define RVV_REQUIRE_ELEN_64 (1 << 1)	/* Require TARGET_VECTOR_ELEN_64.  */
+#define RVV_REQUIRE_ELEN_FP_32 (1 << 2) /* Require FP ELEN >= 32.  */
+#define RVV_REQUIRE_ELEN_FP_64 (1 << 3) /* Require FP ELEN >= 64.  */
+#define RVV_REQUIRE_FULL_V (1 << 4) /* Require Full 'V' extension.  */
+#define RVV_REQUIRE_MIN_VLEN_64 (1 << 5)	/* Require TARGET_MIN_VLEN >= 64.  */
+#define RVV_REQUIRE_ELEN_FP_16 (1 << 6) /* Require FP ELEN >= 32.  */
+ ```
+ ##### 用到的 rtx 种类   
+ use_exact_ins   
+ use_contiguous_load_insn
+ use_contiguous_store_insn   
+ use_compare_insn   
+ use_ternop_ins   
+ use_widen_ternop_insn   
+ use_scalar_move_insn   
+ generate_insn   
+ ##### machine mode
+ vector mode   
+ index mode   
+ arg mode   
+ mask mode   
+ ret mode   
  #### riscv.md
- 写rtl
+ 写 vector 相关的 rtl   
+ ##### attribute   
+ has_vtype_op   
+ 在 gcc/config/riscv/riscv-vsetvl.cc 里定义的 bool 值。判断RVV指令是否会用到 VTYPE 全局状态寄存器。   
+ `(define_attr "has_vtype_op" "false,true"` 表示 rtl 里面的 has_vtype_op 可以取到 false 或者 true。
  #### vector-iterators.md
  define_mode_iterator rtl   
  define_code_attr
  #### vector.md
+
