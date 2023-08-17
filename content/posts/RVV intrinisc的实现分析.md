@@ -5,6 +5,7 @@ url: "/rvv_intrinsic_analysis/"
 draft: false
 ---
 ### 包含的文件
+[constraint.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/constraint.md)
 [riscv-c.cc](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-c.cc)   
 [riscv-protos.h](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-protos.h)   
 [riscv-vector-builtins-bases.cc](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-bases.cc)   
@@ -19,7 +20,58 @@ draft: false
 [vector-iterators.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector-iterators.md)   
 [vector.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector.md)   
 
-#### riscv-v.cc
+#### constraint.md   
+在 match_operand 中，可以指定操作数约束(operand  constraint)。   
+约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。   
+1. 约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。   
+2. 说明操作数是否可以是一个内存引用以及其地址类型。   
+3. 描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。   
+GCC 中的约束(constraint)使用字符串(string)表示。   
+\>:   memory operand, autoincrement addressing type, including preincrement and postincrement.   
+f:   floating-point register   
+g:   general register, memory or integer immediate constant.   
+i:   Integer immediate operand, sign constant when and after compilering.   
+j:   SIBCALL_REGS   
+l:   JALR_REGS
+n:   known value integer immediate operand
+p:   memory address operand   
+x:   all operand   
+I:   12-bit integer signed immediate
+J:   integer zero   
+K:   5-bit unsigned immediate for CSR access instructions      
+L:   U-type 20-bit signed immediate      
+Ds3:   
+DsS:   
+DsD:   
+DbS:   
+DnS:   
+D03:   
+DsA:   
+G:   
+A:   
+S:   
+U:   
+T:   
+vr:   vector register      
+vd:   vector register except mask register
+vm:   vector mask register   
+vp:   poly int
+vu:   undefined vector value
+vi:   vector 5-bit signed immediate
+vj:   vector negated 5-bit signed immediate   
+vk:   vector 5-bit unsigned immediate   
+Wc0:   vector of immediate all zeros   
+Wc1:   vector of immediate all ones   
+Wb1:   BOOL vector of {...,0,...0,1}   
+Wdm:   Vector duplicate memory operand   
+th_f_fmv:   floating-point register for XTheadFmv   
+th_r_fmv:   integer register for XTheadFmv   
+vmWc1:   
+vector mask register + a vector of immediate all ones   
+rK:   
+register operand using general register + 5-bit unsigned immediate for CSR access instructiosn
+ 
+#### riscv-c.cc
 `#define builtin_define(TXT) cpp_define (pfile, TXT)` 定义 `builtin_define` 的宏，将其展开为 `cpp_define(pfile, TXT)`。其中 pfile 是指向文件的指针。
  riscv_ext_version 函数，可以传一个最大值和一个最小值，返回 1000000倍的最大值和 1000倍的最小值。
  riscv_cpu_cpp_builtins 函数，传入 pfile 指针，
