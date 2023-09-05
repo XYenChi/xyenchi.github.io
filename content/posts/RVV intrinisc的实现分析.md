@@ -5,7 +5,8 @@ url: "/rvv_intrinsic_analysis/"
 draft: false
 ---
 ### 包含的文件
-[constraint.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/constraint.md)
+[iterator.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/iterator.md)   
+[constraint.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/constraint.md)   
 [riscv-c.cc](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-c.cc)   
 [riscv-protos.h](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-protos.h)   
 [riscv-vector-builtins-bases.cc](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-bases.cc)   
@@ -20,13 +21,15 @@ draft: false
 [vector-iterators.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector-iterators.md)   
 [vector.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector.md)   
 
+#### iterator.md   
+
 #### constraint.md   
 在 match_operand 中，可以指定操作数约束(operand  constraint)。   
 约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。   
 1. 约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。   
 2. 说明操作数是否可以是一个内存引用以及其地址类型。   
 3. 描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。   
-GCC 中的约束(constraint)使用字符串(string)表示。   
+* GCC 中的约束(constraint)使用字符串(string)表示。   
 \>:   memory operand, autoincrement addressing type, including preincrement and postincrement.   
 f:   floating-point register   
 g:   general register, memory or integer immediate constant.   
@@ -70,16 +73,23 @@ vmWc1:
 vector mask register + a vector of immediate all ones   
 rK:   
 register operand using general register + 5-bit unsigned immediate for CSR access instructiosn
- 
+* 约束修饰字符 (Constraint Modifier Characters)   
+=:操作数只写   
++:操作可读可写   
+&:在某些约束选择(constraint alternative)中，该操作数是前面某个clobber的操作数，作为指令的输入操作数，该操作数在指令结束之前它的值已经被修改，因此，该操作数可能不再原来使用的寄存器或内存地址中存储      
+%:可交换，该操作数及其之后的操作数可以进行交换   
+eg. 操作数1的约束为 '%0'，表示与操作数0的约束相同。   
+#:直到逗号的所有字符在进行约束处理时将被忽略，这些字符只对寄存器选择起作用   
+\*:直到逗号的所有字符在进行约束处理是将被忽略，这些字符在寄存器选择是也将被忽略。   
 #### riscv-c.cc
 `#define builtin_define(TXT) cpp_define (pfile, TXT)` 定义 `builtin_define` 的宏，将其展开为 `cpp_define(pfile, TXT)`。其中 pfile 是指向文件的指针。
  riscv_ext_version 函数，可以传一个最大值和一个最小值，返回 1000000倍的最大值和 1000倍的最小值。
  riscv_cpu_cpp_builtins 函数，传入 pfile 指针，
 
- #### riscv-vector-builtins-bases.h
+#### riscv-vector-builtins-bases.h
  包含所有向量操作的namespace，声明外部的常量指针。
 
- #### riscv-vector-builtins-bases.cc
+#### riscv-vector-builtins-bases.cc
  声明 load store 的 enum 类型，定义了 unit stride, strided 和 indexed 三种。indexed 没有跟着 spec 写 indexed-unordered 和 indexed-ordered。
  定义了一个 vleff 和 vlsegff 的辅助函数去fold。调用 [gcc/gimple.h](https://github.com/gcc-mirror/gcc/blob/ae862e0e47cb2d62d7c624ab999a3bd8bd2914ef/gcc/gimple.h#L4) 里面的 gimple_call_num_args.   
  ```C++
@@ -215,4 +225,21 @@ struct vget_def : public misc_def
  define_mode_iterator rtl   
  define_code_attr
  #### vector.md
-
+ * 属性(Attribute)定义：   
+`has_vtype_op`   
+`has_vl_op`   
+`sew`   
+`lmul`   
+`ratio`:sew/lmul   
+`merge_op_idx`: "The index of operand[] to get the merge op."   
+`vl_op_idx`: "The index of operand[] to get the avl op."   
+`ta`: tail agnostic   
+`ma`: mask agnostic   
+`avl_type`   
+`vxrm_mode`: fix-point. rnu,rne,rdn,rod,none   
+`frm_mode`: float-point.   
+ * 指令模板(Insn Pattern)定义：
+`vlmax_avl`   
+`vxrmsi`   
+`fsrmsi_backup`   
+`fsrmsi_restore`   
