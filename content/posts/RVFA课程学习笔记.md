@@ -13,7 +13,7 @@ draft: false
 the number just after "RV":
   ***XLEN***: in the Unprivileged Specification document.
 represents ***the width of registers and not the width of the instructions***. Not all instruction width are allowed, only multiple of 16 bits wide.  
-for example, the 32 of RV32I.    
+for example, the 32 of RV32I.       
 ***RV64G***:   
 RV64IMAFDZicsr_Zifencei   
 
@@ -36,16 +36,24 @@ instruction type formats defined by the ***encoding of immediate***.
 R, I, S, B, U, J   
 ***R*** type:   
   "Register" type - this format is used by arithmetic register-register operations such as ADD, SUB, boolean operations, and shifts.   
+The R-type instruction format is the only one to encode three different registers.   
+Encode 3 registers, 0 immediate, 2 minor opcode fields, 1 major opcode field.   
 ***I*** type:   
   "Immediate" type - this format is used by arithmetic, logic, and shift operations with immediates, jump and link register, environment calls, and LOAD instructions. (have the longest immediate bits, 11 bits, from 20 to 31)   
+not the only instruction to encode immediate but R type.   
+
 ***S*** type:    
   "Store" type - this format is used by the STORE instructions.   
 ***B*** type:    
   "Branch" type - this format is used by the BRANCH instructions.   
+same structure as J   
 ***U*** type:    
   "Upper Immediate" type - this format is used by instructions that use upper immediates (LUI and AUIPC).   
 ***J*** type:    
-  "Jump" type - this format is used by the JAL (jump and link) instruction.   
+  "Jump" type - this format is used by the JAL (jump and link) instruction.    
+same structure as B   
+#### summary    
+The J-type instructions have the same structure as the U-type instructions, only differing by how the immediate is encoded.
 
 ### register   
 More: RISC processors usually have more than eight general-purpose registers.   
@@ -62,6 +70,46 @@ priviledged + unprivileged
   unprivileged: Base ISA and ISA extensions   
   privileged: interrupts, exceptions, virtual memory management, and physical memory protection etc   
 
+### software stack   
+ABI(specification) -> application   
+SBI(specification) -> supervisor(application)   
+HBI(specification) -> hypervisor(application)   
+AEE   
+SEE   
+HEE   
+
+### RISC-V ISA privilegde mode   
+**M** (machine) mode   
+**S** (supervisor) mode   
+**U** (user) mode   
+
+### traps   
+#### contained trap   
+Handled by the **software that raise it**.   
+Execution resumes after resolution.   
+
+#### requested trap  
+request to execution environment.  
+
+#### invisible trap   
+raised and handled by the execution environment.   
+not visible by the software running inside it.   
+
+#### fatal trap   
+cause the execution environment to stop exeception.   
+
+### CSR   
+#### Acronyms   
+**WPRI**: write preserve, read ignore.   
+**WLRL**: write legal, read legal.   
+**WARL**: write any, read legal.   
+#### Machine Level ISA   
+**MRET**: M mode return   
+**WFI**: Wait for Interrupt   
+
+
 ### tips      
 1. The first OpenRISC ISA is the first open ISA.   
-2. There are instruction set specifications for 32-bit and 64-bit address spaces, but the RISC-V design allows for **any bit-width** address spaces.
+2. There are instruction set specifications for 32-bit and 64-bit address spaces, but the RISC-V design allows for **any bit-width** address spaces.   
+3. AUIPC+JALR or LUI+JALR combo make absolute addressing achievable, so a program can unconditionally jump to any absolute address in the whole memory address space. not recommend.   
+4. 
