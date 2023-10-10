@@ -43,15 +43,17 @@ Encode 3 registers, 0 immediate, 2 minor opcode fields, 1 major opcode field.
 not the only instruction to encode immediate but R type.   
 
 ***S*** type:    
-  "Store" type - this format is used by the STORE instructions.   
+  "Store" type - this format is used by the STORE instructions.    
+same structure as B 
 ***B*** type:    
   "Branch" type - this format is used by the BRANCH instructions.   
-same structure as J   
+same structure as S   
 ***U*** type:    
   "Upper Immediate" type - this format is used by instructions that use upper immediates (LUI and AUIPC).   
+same structure as J
 ***J*** type:    
   "Jump" type - this format is used by the JAL (jump and link) instruction.    
-same structure as B   
+same structure as U   
 #### summary    
 The J-type instructions have the same structure as the U-type instructions, only differing by how the immediate is encoded.
 
@@ -104,10 +106,75 @@ cause the execution environment to stop exeception.
 **WLRL**: write legal, read legal.   
 **WARL**: write any, read legal.   
 #### Machine Level ISA   
+##### mstatus   
+register.   
+always 64 bits wide. RV32 machine implement it as two separate CSRs (mstatus and mstatush)   
+**xIE**: x mode **I**nterrupt **E**nabled   
+**xPIE**: x mode **P**revious **I**nterrupt **E**nabled   
+**xPP**: x mode **P**revious  **P**rivilege    
+x can be M or S mode   
+##### mip   
+**M**achine **I**nterrupt **P**ending WARL register   
+##### mie   
+**M**achine **I**nterrupt **E**nable WARL register   
+##### mepc   
+**M**achine **E**xception **P**rogram **C**ounter WARL register   
+##### mcause   
+**M**achine **C**ause WLRL register   
+##### mtval   
+**M**achine **T**rap **Val**ue register   
+##### mconfigptr   
+**M**achine **Config**uration **P**oin**t**e**r**    
+address
+##### I-type format instructions to enable trap handling    
 **MRET**: M mode return   
 **WFI**: Wait for Interrupt   
+#### Supervisor level   
+##### sstatus, sip, sie, scause   
+same as mstatus, mip, mie, mcause.   
+##### sepc, stval
+same as mepc and mtval, except they contain virtual rather than physical memory addresses.   
+##### satp
+**S**upervisor **A**ddress **T**ranslation and **P**rotection register has no Machine Level equivalent    
+it is used for memory address translation.   
+**MODE**   
+**ASID**   
+**PPN**   
+#### Hypervisor   
 
+### Assembly
+#### interrupt handler   
+__attribute\__((interrupt("machine")))   
+__attribute\__((interrupt("supervisor")))   
+#### call convention   
+register **s0** is callee register, the function that is called should be responsible for (re)storing it.   
 
+### GCC   
+### LLVM   
+### operate system   
+#### High-Level Atomic API   
+##### Mutex   
+A mutex is a lock that provides mutual exclusion to a shared resource.   
+A spinlock is a lock that uses busy waiting to synchronize access to a shared resource.    
+##### Semaphores   
+Data structure. A semaphore is one synchronization mechanism used in most OSes to control access to shared resources.    
+
+##### Monitors
+##### Send/Recv
+#### Low-Level Atomic Ops   
+##### Load/store
+##### Interrupt disable/enable
+##### Test&Set
+##### Other atomic instructions
+#### Interrupts(I/O), Multiprocessors and CPU scheduling
+
+### general purpose operate system
+##### SMAP   
+Supervisor Mode Access Prevention   
+SMAP is a hardware-based feature that prevents the kernel from accessing user-level memory.   
+##### SMEP   
+Supervisor Mode Execution Prevention   
+Unlike SMAP, which can be configured, SMEP is always enabled in RISC-V when paged virtual memory is enabled.   
 ### tips      
 1. The first OpenRISC ISA is the first open ISA.   
 2. There are instruction set specifications for 32-bit and 64-bit address spaces, but the RISC-V design allows for **any bit-width** address spaces.   
