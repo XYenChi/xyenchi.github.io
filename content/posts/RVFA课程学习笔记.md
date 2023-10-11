@@ -41,19 +41,38 @@ Encode 3 registers, 0 immediate, 2 minor opcode fields, 1 major opcode field.
 ***I*** type:   
   "Immediate" type - this format is used by arithmetic, logic, and shift operations with immediates, jump and link register, environment calls, and LOAD instructions. (have the longest immediate bits, 11 bits, from 20 to 31)   
 not the only instruction to encode immediate but R type.   
-
+1. generic register-immediate instruction   
+    12 bits immediate, 5 bits rs1, 3 bits funct3, 5 bits rd and 7 bits opcode.   
+2. generic LOAD instruction   
+    12 bits immediate, 5 bits rs1, 3 bits funct3, 5 bits rd and 7 bits opcode.   
+3. JALR instruction   
+    12 bits immediate, 5 bits rs1, 3 bits funct3, 5 bits rd and 7 bits opcode.   
+4. FENCE instruction   
+    4 bits fm, 1 bit PI, PO, PR, PW, SI, SO, SR and SW, 5 bits rs1, 3 bits funct3, 5 bits rd and 7 bits opcode.   
+5. Environment instruction   
+    12 bits immediate, 5 bits rs1, 3 bits funct3, 5 bits rd and 7 bits opcode.
+    **EBREAK** returns control to the debugging environment.   
+    **ECALL** requests privileged information to the execution environment in ways defined by the applicable EEI.    
+6. pseudoinstructions   
+    NOP, LI, MV, SEXT.W, SEQZ, The FENCE instruction without arguments is an alias for FENCE iorw iorw, JR, JALR and RET. 
 ***S*** type:    
   "Store" type - this format is used by the STORE instructions.    
-same structure as B 
+same structure as B    
 ***B*** type:    
   "Branch" type - this format is used by the BRANCH instructions.   
 same structure as S   
 ***U*** type:    
   "Upper Immediate" type - this format is used by instructions that use upper immediates (LUI and AUIPC).   
-same structure as J
+same structure as J   
+20 bits immediates, 5 bits rd and 7 bits opcode.   
+AUIPC rd imm "add upper immediate to PC" stores the value of PC in rd and adds the shifted imm to it.   
+LUI rd imm "load upper immediate" set rd to the shifted imm.   
 ***J*** type:    
   "Jump" type - this format is used by the JAL (jump and link) instruction.    
 same structure as U   
+JAL rd imm "jump and link":   
+  save PC+4, the return address associated with the JAL instruction, in rd.   
+  Add imm to PC.   
 #### summary    
 The J-type instructions have the same structure as the U-type instructions, only differing by how the immediate is encoded.
 
@@ -150,6 +169,18 @@ __attribute\__((interrupt("supervisor")))
 register **s0** is callee register, the function that is called should be responsible for (re)storing it.   
 
 ### GCC   
+#### compiler flags   
+##### code model
+**-mcmodel**:   
+-mcmodel=medlow:   
+address range is within 2 GiB in the absolute range between -2 GiB and +2 GiB   
+-mcmodel=medany:   
+an address range within 2 GiB but position-independent   
+**linker relaxation**:   
+used by the linker to efficiently load symbol addresses.   
+-mrelax:enable linker relaxations   
+-mno-relax:disable linker relaxations   
+
 ### LLVM   
 ### operate system   
 #### High-Level Atomic API   
