@@ -81,7 +81,10 @@ More: RISC processors usually have more than eight general-purpose registers.
 
 ### memory   
 Memory access is limited to Load and Store instructions.   
-
+#### virtual memory   
+1. single address space   
+2. divided into pages, 4 kilobytes long sections of continuous memory.   
+3. isolates software running above it requiring addresses to be translated by the operating system.   
 ### feature   
 modular: base(I must exist) + extensions   
 
@@ -158,8 +161,16 @@ same as mepc and mtval, except they contain virtual rather than physical memory 
 it is used for memory address translation.   
 **MODE**   
 **ASID**   
+**A**ddress **S**pace **ID**entifier   
 **PPN**   
+**P**hysical **P**age **N**umber   
 #### Hypervisor   
+#### memory model   
+##### RVWMO   
+**R**ISC-V **W**eak **M**emory **O**rdering   
+##### PMP   
+**P**hysical **M**emory **P**rotection   
+
 
 ### Assembly
 #### interrupt handler   
@@ -210,4 +221,4 @@ Unlike SMAP, which can be configured, SMEP is always enabled in RISC-V when page
 1. The first OpenRISC ISA is the first open ISA.   
 2. There are instruction set specifications for 32-bit and 64-bit address spaces, but the RISC-V design allows for **any bit-width** address spaces.   
 3. AUIPC+JALR or LUI+JALR combo make absolute addressing achievable, so a program can unconditionally jump to any absolute address in the whole memory address space. not recommend.   
-4. 
+4. RISC-V support **hypervisor nesting**(running a hypervisor on top of another hypervisor) with the Hypervisor extension.   
