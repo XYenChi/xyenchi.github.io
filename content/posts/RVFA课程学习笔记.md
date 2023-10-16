@@ -194,6 +194,12 @@ used by the linker to efficiently load symbol addresses.
 
 ### LLVM   
 ### operate system   
+#### AMO
+**R-type** instruction format.   
+
+atomic swap instrution can be used to atomically acquire and release locks.   
+atomic load-and-reserve and store-conditional instructions can be used to implement semaphores.   
+
 #### High-Level Atomic API   
 ##### Mutex   
 A mutex is a lock that provides mutual exclusion to a shared resource.   
@@ -209,7 +215,12 @@ Data structure. A semaphore is one synchronization mechanism used in most OSes t
 ##### Test&Set
 ##### Other atomic instructions
 #### Interrupts(I/O), Multiprocessors and CPU scheduling
-
+#### Synchronization   
+Load-linked/store-conditional(**LL/SC**):   
+Generally, LR will return the current value of an address, and a subsequent SC to the same address will store a new value only if no updates have occurred to the same address since the last LR.   
+Load-reserved/store-conditional(**LR/SC**):   
+If the SC.W **succeeds**, the instruction writes the word in rs2 to memory, and it **writes zero** to rd.    
+If the SC.W **fails**, the instruction does not write to memory, and it **writes a nonzero value** to rd.
 ### general purpose operate system
 ##### SMAP   
 Supervisor Mode Access Prevention   
@@ -218,7 +229,7 @@ SMAP is a hardware-based feature that prevents the kernel from accessing user-le
 Supervisor Mode Execution Prevention   
 Unlike SMAP, which can be configured, SMEP is always enabled in RISC-V when paged virtual memory is enabled.   
 ### tips      
-1. The first OpenRISC ISA is the first open ISA.   
+1. The OpenRISC ISA is the first open ISA.   
 2. There are instruction set specifications for 32-bit and 64-bit address spaces, but the RISC-V design allows for **any bit-width** address spaces.   
 3. AUIPC+JALR or LUI+JALR combo make absolute addressing achievable, so a program can unconditionally jump to any absolute address in the whole memory address space. not recommend.   
 4. RISC-V support **hypervisor nesting**(running a hypervisor on top of another hypervisor) with the Hypervisor extension.   
