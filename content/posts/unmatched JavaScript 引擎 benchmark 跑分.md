@@ -1,6 +1,5 @@
 ---
 title: "Unmatched JavaScript 引擎 Benchmark 跑分"
-date: 2022-09-05T12:59:38+08:00
 url: "/unmatched/benchmark/JS"
 draft: false
 ---

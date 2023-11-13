@@ -1,6 +1,5 @@
 ---
 title: "RVV intrinsic的实现分析"
-date: 2023-07-17T12:59:38+08:00
 url: "/rvv_intrinsic_analysis/"
 draft: false
 ---

@@ -1,6 +1,5 @@
 ---
 title: "RVFA课程学习笔记"
-date: 2023-10-03T12:59:38+08:00
 url: "/RVFA_COURSE/"
 draft: false
 ---

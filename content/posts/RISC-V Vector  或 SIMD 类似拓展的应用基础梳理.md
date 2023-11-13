@@ -1,6 +1,5 @@
 ---
 title: "RISC-V Vector 或 SIMD 类似拓展的应用举例子说明"
-date: 2023-07-03T12:59:38+08:00
 url: "/linear_algebra/"
 draft: false
 ---
