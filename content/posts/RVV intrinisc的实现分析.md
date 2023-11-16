@@ -20,6 +20,13 @@ draft: false
 [vector-iterators.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector-iterators.md)   
 [vector.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector.md)   
 
+### Acronyms   
+QI: 8 bits   
+HI: 16 bits   
+SI: 32 bits   
+DI: 64 bits   
+把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。   
+
 #### iterator.md   
 
 #### constraint.md   
@@ -43,17 +50,17 @@ draft: false
 ***J***:   integer zero   
 ***K***:   5-bit unsigned immediate for CSR access instructions      
 ***L***:   U-type 20-bit signed immediate      
-***Ds3***:   
-***DsS***:   
-***DsD***:   
+***Ds3***:   1, 2 or 3 immediate   
+***DsS***:   31 immediate   
+***DsD***:   63 immediate   
 ***DbS***:   
 ***DnS***:   
-***D03***:   
-***DsA***:   
+***D03***:   0, 1, 2 or 3 immediate   
+***DsA***:   0 - 10 immediate   
 ***G***:   
-***A***:   
-***S***:   
-***U***:   
+***A***:   An address that is held in a general-purpose register.   
+***S***:   A constraint that matches an absolute symbolic address.   
+***U***:   A PLT-indirect call address.   
 ***T***:   
 ***vr***:   vector register      
 ***vd***:   vector register except mask register   
