@@ -1,6 +1,5 @@
 ---
 title: "RVFA课程学习笔记"
-url: "/RVFA_COURSE/"
 draft: false
 ---
 ### timeline   

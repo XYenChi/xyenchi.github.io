@@ -1,6 +1,5 @@
 ---
 title: "Unmatched JavaScript 引擎 Benchmark 跑分"
-url: "/unmatched/benchmark/JS"
 draft: false
 ---
  unmatched 的系统信息 `Linux milk 5.19.2-arch1-1 #1 SMP PREEMPT Fri, 19 Aug 2022 19:44:19 +0000 riscv64 GNU/Linux` python 版本 :`Python 3.10.6`
