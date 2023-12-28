@@ -92,7 +92,7 @@ enableEmoji = true  # Shorthand emojis in content files - https://gohugo.io/func
 
   [[menu.main]]
     name = "Nonsence"
-    url = "diary/"
+    url = "nonsence/"
     weight = 10
 
   [[menu.main]]
