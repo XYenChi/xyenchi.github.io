@@ -8,6 +8,8 @@
     <meta http-equiv="refresh" content="0; url=https://xyenchi.github.io/nonsence/">
   </head>
 </html>
-{{ range .Pages.ByDate.Reverse }}
-  <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-{{ end }}
+<ul>
+  {{ range .Pages.ByDate.Reverse }}
+  <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+  {{ end }}
+</ul>
