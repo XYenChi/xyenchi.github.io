@@ -31,12 +31,14 @@ enableEmoji = true  # Shorthand emojis in content files - https://gohugo.io/func
   dateformShort   = "Jan 2"
   dateformNum     = "2006-01-02"
   dateformNumTime = "2006-01-02 15:04 -0700"
-
+  defaultTheme = "auto"  # to switch between dark or light according to browser theme
+  ShowReadingTime = true
+  ShowCodeCopyButtons = true
+  comments = true
   # Metadata mostly used in document's head
   # description = ""
   # images = [""]
   themeColor = "#494f5c"
-
   homeSubtitle = "A minimal and fast theme for Hugo."
   footerCopyright = ' &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
   # bgImg = ""  # Homepage background-image URL
@@ -56,17 +58,24 @@ enableEmoji = true  # Shorthand emojis in content files - https://gohugo.io/func
 
   # Social Icons
   # Check https://github.com/Track3/hermit#social-icons for more info.
-  [[params.social]]
+  
+  [params.profileMode]
+    enabled = true
+    imageWidth = 120
+    imageHeight = 120
+      [[params.profileMode.buttons]]
+        name = "About"
+        url = "/about"
+  [[params.profileMode.buttons]]
+    name = "github"
+    url = "https://github.com/XYenChi"
+  [[params.socialIcons]]
     name = "twitter"
     url = "https://twitter.com/OriaChiuan"
 
-  [[params.social]]
-    name = "instagram"
-    url = "https://instagram.com/"
-
-  [[params.social]]
-    name = "github"
-    url = "https://github.com/XYenChi"
+[services]
+  [services.disqus]
+    shortname = 'xyenchi'
 
 [menu]
 

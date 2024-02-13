@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en-us">
+  <div class="disqus-container">
+   {{ .Site.Config.Services.Disqus.Shortname  }}
+  </div>
   <head>
+    <script>
+      {{ range .Pages.ByDate.Reverse }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      {{ end }}
+    </script>
     <title>https://xyenchi.github.io/posts/</title>
     <link rel="canonical" href="https://xyenchi.github.io/nonsence/">
     <meta name="robots" content="noindex">
@@ -8,8 +16,3 @@
     <meta http-equiv="refresh" content="0; url=https://xyenchi.github.io/nonsence/">
   </head>
 </html>
-<ul>
-  {{ range .Pages.ByDate.Reverse }}
-  <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
-  {{ end }}
-</ul>
