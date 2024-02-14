@@ -1,6 +1,6 @@
 ---
 title: "记录 Gnu Gprofng"
-date: 2023-12-01T17:57:55+08:00
+date: "December 1, 2023"
 draft: true
 ---
 

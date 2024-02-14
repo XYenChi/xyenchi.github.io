@@ -14,9 +14,6 @@ enableEmoji = true  # Shorthand emojis in content files - https://gohugo.io/func
 # googleAnalytics = "UA-123-45"
 # disqusShortname = "yourdiscussshortname"
 
-[author]
-  name = "xyenchi"
-
 [blackfriday]
   # hrefTargetBlank = true
   # noreferrerLinks = true
@@ -27,6 +24,7 @@ enableEmoji = true  # Shorthand emojis in content files - https://gohugo.io/func
   # Categories are disabled by default.
 
 [params]
+  author = "xyenchi"
   dateform        = "Jan 2, 2006"
   dateformShort   = "Jan 2"
   dateformNum     = "2006-01-02"

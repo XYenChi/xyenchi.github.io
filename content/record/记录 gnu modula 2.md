@@ -1,6 +1,6 @@
 ---
 title: "记录 Gnu Modula 2"
-date: 2023-11-16T17:07:40+08:00
+date: "November 16, 2023"
 draft: false
 url: "/gnu/gcc/modula2"
 ---

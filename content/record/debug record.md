@@ -1,6 +1,6 @@
 ---
 title: "debug record"
-date: "2023-11-06T12:59:38+08:00"
+date: "November 6, 2023"
 url: "/debug_record/"
 draft: false
 ---
