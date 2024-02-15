@@ -58,7 +58,7 @@ params:
 
   # profile-mode
   profileMode:
-    enabled: false # needs to be explicitly set
+    enabled: true # needs to be explicitly set
     title: xyenchi's blog
     subtitle: "Record"
     #imageUrl: "<img location>"
