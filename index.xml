@@ -50,6 +50,18 @@ alexiusll&amp;rsquo;s Blog</description>
     </item>
     
     <item>
+      <title>2024开工大吉</title>
+      <link>https://xyenchi.github.io/nonsence/20240218/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240218/</guid>
+      <description>天气雨 虽然不管究竟是否开工大吉，肯定要嘴硬说一下开工大吉的。
+继续解决 RVV machine mode 报错没有声明的问题。
+研究了 Makefile.in genmodes.cc gengtype 等一系列文件没能发现什么问题。
+现在开始怀疑 riscv 写的相关文件有问题了。</description>
+    </item>
+    
+    <item>
       <title>debug record</title>
       <link>https://xyenchi.github.io/debug_record/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
