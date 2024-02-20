@@ -12,10 +12,10 @@
     <language>en</language><atom:link href="https://xyenchi.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>RISC-V Vector 或 SIMD 类似拓展的应用举例子说明</title>
-      <link>https://xyenchi.github.io/posts/risc-v-vector-%E6%88%96-simd-%E7%B1%BB%E4%BC%BC%E6%8B%93%E5%B1%95%E7%9A%84%E5%BA%94%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86/</link>
+      <link>https://xyenchi.github.io/posts/risc-v-vector--%E6%88%96-simd-%E7%B1%BB%E4%BC%BC%E6%8B%93%E5%B1%95%E7%9A%84%E5%BA%94%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xyenchi.github.io/posts/risc-v-vector-%E6%88%96-simd-%E7%B1%BB%E4%BC%BC%E6%8B%93%E5%B1%95%E7%9A%84%E5%BA%94%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86/</guid>
+      <guid>https://xyenchi.github.io/posts/risc-v-vector--%E6%88%96-simd-%E7%B1%BB%E4%BC%BC%E6%8B%93%E5%B1%95%E7%9A%84%E5%BA%94%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86/</guid>
       <description>线性代数部分 专有名词： 线性方程组
 齐次线性方程组
 增广矩阵

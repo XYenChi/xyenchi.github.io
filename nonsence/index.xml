@@ -85,6 +85,15 @@ https://github.com/bminor/binutils-gdb/blob/master/gprofng/libcollector/unwind.c
     </item>
     
     <item>
+      <title>找到漏摘的樱桃</title>
+      <link>https://xyenchi.github.io/nonsence/20240219/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240219/</guid>
+      <description>天气雨 终于找到了摘樱桃出的问题，如果早一点切分支搜，很快就能找出来，不知道自己脑子里每天装的是什么水。 翻译推文的时候也是，命名觉得不对劲但是却不会去发现并修改。大脑不用可能真的会生锈，太恐怖了。</description>
+    </item>
+    
+    <item>
       <title>搭建qemu跑最新最热linux kernel</title>
       <link>https://xyenchi.github.io/nonsence/20240109/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
