@@ -66,6 +66,17 @@ gdb opt/riscv64-unknown-linux-gnu-gcc
     </item>
     
     <item>
+      <title>only-riscv 分支的记录</title>
+      <link>https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/</guid>
+      <description>目前成功构建的 patch ：RISC-V: Fix VL operand bug in VSETVL PASS[PR110264]
+此patchRISC-V: Bugfix for RVV integer reduction in ZVE32/64.构建失败，但是RISC-V: Fix one typo for reduc expand GET_MODE_CLASS可以修复。 中间夹杂了 RISC-V:Add float16 tuple type support ,此构建失败报：
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from ../.././gcc/gcc/genemit.cc:25: ../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from .</description>
+    </item>
+    
+    <item>
       <title>RISC-V Vector 或 SIMD 类似拓展的应用举例子说明</title>
       <link>https://xyenchi.github.io/posts/risc-v-vector--%E6%88%96-simd-%E7%B1%BB%E4%BC%BC%E6%8B%93%E5%B1%95%E7%9A%84%E5%BA%94%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

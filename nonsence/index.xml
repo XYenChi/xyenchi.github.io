@@ -23,6 +23,17 @@
     </item>
     
     <item>
+      <title>only-riscv 分支的记录</title>
+      <link>https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/</guid>
+      <description>目前成功构建的 patch ：RISC-V: Fix VL operand bug in VSETVL PASS[PR110264]
+此patchRISC-V: Bugfix for RVV integer reduction in ZVE32/64.构建失败，但是RISC-V: Fix one typo for reduc expand GET_MODE_CLASS可以修复。 中间夹杂了 RISC-V:Add float16 tuple type support ,此构建失败报：
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from ../.././gcc/gcc/genemit.cc:25: ../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from .</description>
+    </item>
+    
+    <item>
       <title>办理业务踩的坑</title>
       <link>https://xyenchi.github.io/nonsence/%E5%8A%9E%E7%90%86%E4%B8%9A%E5%8A%A1%E8%B8%A9%E7%9A%84%E5%9D%91/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
