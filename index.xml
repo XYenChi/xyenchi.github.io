@@ -164,6 +164,18 @@ lemontea 系统信息，clang 版本，gcc 版本如下：
     </item>
     
     <item>
+      <title>再次重启每日废话</title>
+      <link>https://xyenchi.github.io/nonsence/20240613/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240613/</guid>
+      <description>天气晴
+下午看到了天上的云有奇妙纹理，像脑花，掏出手机拍了一张，发现手机摄像头的马赛克效果比脑花纹理还清晰。
+最近把主机转了个方向发现主板在 gprofng 编译的时候会亮过热的红灯，在cyy的建议下把 intel i7 12700 CPU 原装风扇换成了超大风扇，RISC-V qemu system 的性能好多了。既没有了终端显示乱刷问题，编译时间也快了很多。
+本来之前 gprofng 没啥头绪的，现在貌似觉得还可以研究一下，因为可以根据报错来找到哪里有问题了。</description>
+    </item>
+    
+    <item>
       <title>办理业务踩的坑</title>
       <link>https://xyenchi.github.io/nonsence/%E5%8A%9E%E7%90%86%E4%B8%9A%E5%8A%A1%E8%B8%A9%E7%9A%84%E5%9D%91/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

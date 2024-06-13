@@ -4,7 +4,10 @@
 研究了 Makefile.in genmodes.cc gengtype 等一系列文件没能发现什么问题。
 现在开始怀疑 riscv 写的相关文件有问题了。</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to 2024开工大吉" href=https://xyenchi.github.io/nonsence/20240218/></a></article><article class=post-entry><header class=entry-header><h2>only-riscv 分支的记录</h2></header><div class=entry-content><p>目前成功构建的 patch ：RISC-V: Fix VL operand bug in VSETVL PASS[PR110264]
 此patchRISC-V: Bugfix for RVV integer reduction in ZVE32/64.构建失败，但是RISC-V: Fix one typo for reduc expand GET_MODE_CLASS可以修复。 中间夹杂了 RISC-V:Add float16 tuple type support ,此构建失败报：
-../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from ../.././gcc/gcc/genemit.cc:25: ../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from ....</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to only-riscv 分支的记录" href=https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/></a></article><article class=post-entry><header class=entry-header><h2>办理业务踩的坑</h2></header><div class=entry-content><p>近日办理业务发现了一年前签合同和协议踩的坑，记录一下，以后也会新增累积，成为游刃有余的老油条。
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from ../.././gcc/gcc/genemit.cc:25: ../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from ....</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to only-riscv 分支的记录" href=https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/></a></article><article class=post-entry><header class=entry-header><h2>再次重启每日废话</h2></header><div class=entry-content><p>天气晴
+下午看到了天上的云有奇妙纹理，像脑花，掏出手机拍了一张，发现手机摄像头的马赛克效果比脑花纹理还清晰。
+最近把主机转了个方向发现主板在 gprofng 编译的时候会亮过热的红灯，在cyy的建议下把 intel i7 12700 CPU 原装风扇换成了超大风扇，RISC-V qemu system 的性能好多了。既没有了终端显示乱刷问题，编译时间也快了很多。
+本来之前 gprofng 没啥头绪的，现在貌似觉得还可以研究一下，因为可以根据报错来找到哪里有问题了。</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to 再次重启每日废话" href=https://xyenchi.github.io/nonsence/20240613/></a></article><article class=post-entry><header class=entry-header><h2>办理业务踩的坑</h2></header><div class=entry-content><p>近日办理业务发现了一年前签合同和协议踩的坑，记录一下，以后也会新增累积，成为游刃有余的老油条。
 总结以下几条：
 1.条款内容前后文矛盾
 2.暗改合同日期
@@ -19,10 +22,7 @@
 中午和很多只在线上水群看到过的群友吃萨利亚，奶油蘑菇汤好喝，芝士焗饭太腻了，吃了几口就吃不下了。
 本地热心群友帮助我找到警局办理了港澳通行证签注，万分感谢！
 下午参观站台，有真能避障的小车车和人工智障 AI, 还体验了一下 openKylin 运行的小车车游戏的自动模式。
-衷心祝愿 RISC-V 能发展地越来越好。耶！</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to 参加玄铁大会" href=https://xyenchi.github.io/nonsence/%E5%8F%82%E5%8A%A0%E7%8E%84%E9%93%81%E5%A4%A7%E4%BC%9A/></a></article><article class=post-entry><header class=entry-header><h2>回忆童年</h2></header><div class=entry-content><p>天气晴。
-今日观察东亚时区双周会，无法静心看代码。摸鱼。
-好久没有体验到考 RVFA 时候知识争相进入大脑的感觉了，需要加油。
-昨天晚上回忆起了很多童年往事，因为一个神奇的诱因。</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to 回忆童年" href=https://xyenchi.github.io/nonsence/20240104/></a></article><footer class=page-footer><nav class=pagination><a class=next href=https://xyenchi.github.io/nonsence/page/2/>Next »</a></nav></footer></main><footer class=footer><span>&copy; 2024 <a href=https://xyenchi.github.io/>xyenchi's blog</a></span>
+衷心祝愿 RISC-V 能发展地越来越好。耶！</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to 参加玄铁大会" href=https://xyenchi.github.io/nonsence/%E5%8F%82%E5%8A%A0%E7%8E%84%E9%93%81%E5%A4%A7%E4%BC%9A/></a></article><footer class=page-footer><nav class=pagination><a class=next href=https://xyenchi.github.io/nonsence/page/2/>Next »</a></nav></footer></main><footer class=footer><span>&copy; 2024 <a href=https://xyenchi.github.io/>xyenchi's blog</a></span>
 <span>Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
         <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
