@@ -1,6 +1,6 @@
 ---
 title: "Port gprofng for RISC-V"
-draft: false
+draft: true
 ---
 ### 简单介绍一下 gprofng 的功能   
 由于 gprofng 可以对可执行程序直接进行分析不需要重新编译源码，所以对闭源软件进行性能评测也很方便。    
