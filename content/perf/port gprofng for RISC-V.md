@@ -28,7 +28,7 @@ gprofng display text -func -exp -head test.{times}.er/
 ### 简单介绍一下 port 过程干了啥   
 #### 添加 binutils-gdb 的 --enable-gprofng 支持的架构   
 [configure.ac](https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=configure.ac;h=a390639bfa90a8013da0b6c65aa6f848f1b26759;hb=91b999864f9831287f2ea6f960e8fa98e7b13ee9)中判断是否开启构建 gprofng 的 target 里面添加 riscv64 的 [^1]triplet。   
-[^1]: ABI 中规定 triplet 格式为：cpu-vendor-os
+
 [gnu configure.ac 的介绍官网链接](https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/Writing-configure_002eac.html)   
 虽然很短一段但是翻译过来放在我的博客文章中却可以显得我的博客很长：   
 新建名为 *configure.ac* 、包含调用 Autoconf 用来检测软件包所需或者可以使用的系统特性的宏的文件来给软件包生成 *configure* 脚本。   
@@ -70,3 +70,4 @@ cyy介绍的 [hwprobe](https://docs.kernel.org/arch/riscv/hwprobe.html)
 感谢邱老师教我移植软件的方法还帮忙修好了glic的调用过程。终于迈出了提交patch的第一步，很难想象没有大家的帮助，我能做的有多少。   
 虽然到现在对 gprofng 整个工作的内部细节了解得没有很透彻，但是先记录下来现在干的事情等以后变强了继续完善。   
 
+[^1]: ABI 中规定 triplet 格式为：cpu-vendor-os   
