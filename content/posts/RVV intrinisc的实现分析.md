@@ -183,6 +183,21 @@ struct vget_def : public misc_def
  #### riscv-vector-builtins.cc
  看起来是在写intrinsic格式。
  #### riscv-vector-builtins.h
+ 记录了 RVV intrinsic function 的命名方式：   
+ - the base name ("vadd", etc.): 一般是 RISC-V 指令前面加个 'v'，除法指令的操作数顺序是反的，不要问我是怎么发现的（划掉。   
+ - the operand suffix ("_vv", "_vx", etc.): 表明指令操作数类型，'v'表示向量，'x'表示标量。   
+ - the type suffix ("_i32m1", "_i32mf2", etc.): 数字按照先后顺序表示 sew 和 lmul。   
+ - the predication suffix ("_tamu", "_tumu", etc.): t表示tail，m表示mask，a表示agnostic，u表示undisturbed。   
+ 记录实现过程中名称代表的含义：   
+ - function_base represents the base name.   
+ - operand_type_index can be used as an index to get operand suffix.   
+ - rvv_op_info can be used as an index to get argument suffix.   
+ - predication_type_index can be used as an index to get predication suffix.   
+
+ overloaded functions 移除了一些可以根据参数类型推测出来的后缀。   
+ function_builder 类提供了一些辅助函数来添加 intrinsic function。    
+ function_shape 类描述了指令如何在语言级别呈现。决定了 C/C++ overload 函数如何被编译器在语言级别识别；指定每个函数在语言级别呈现的的参数类型和返回类型。   
+ 
  riscv_vector 这个命名空间包括：   
  1.描述函数做什么的标识和读函数参数返回结果   
  2.定义用来识别RVV intrinsic需要的拓展的位值的宏   
@@ -194,8 +209,6 @@ struct vget_def : public misc_def
  function_shape 类的定义   
  machine mode   
  *规定 intrinsic 特殊要求的bit表示*   
- **bit values 是哪里规定的呢？Full 'V' extension是什么呢？**    
- **`inline machine_mode` 是什么呢？之前看《编译原理》还有有个inline相关的参数，但是太久没继续看，已经忘得只剩下inline这个单词了。vector type 和 index type 跟 machine_mode 有什么关系呢？**   
 
  ```C++
  /* Bit values used to identify required extensions for RVV intrinsics.  */
