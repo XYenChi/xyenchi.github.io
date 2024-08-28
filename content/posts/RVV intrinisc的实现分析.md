@@ -148,10 +148,17 @@ gimple_call_arg (const gcall *gs, unsigned index)
 实现运算的操作看起来都是根据操作数类型转到对应的rtl.
 
  #### riscv-vector-builtins-functions.def   
- 写 RVV intrinsic function 的名称，是否mask, 操作数符号和类型之类的。
+ 速记 DEF_RVV_TYPE:   
+ NAME: "vint32m1_t"   
+ NCHARS: the length of ABI-name, ABI名的长度。"__rvv_int32m1_t" 的长度是15。   
+ ABI_NAME: "__rvv_int32m1_t"   
+ SCALAR_TYPE: 
+ 写 RVV intrinsic function 的名称，是否mask, 操作数符号和类型之类的。   
+
  #### riscv-vector-builtins-shapes.cc   
  定义函数 shape NAME, 指向类`<NAME>_def`实例。   
  存在 rvv 0.7 的类定义，但是继承自 `misc_def` 结构体，`misc_def` 结构体继承自 `build_base` 结构体， `build_base` 结构体继承自 `function_shape` 类。   
+
  ##### function_shape 类   
  
 
