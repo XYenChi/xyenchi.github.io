@@ -2,7 +2,10 @@
 title: "RVV intrinsic的实现分析"
 url: "/rvv_intrinsic_analysis/"
 draft: false
----
+---   
+虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。   
+既然我第一行就写明了，那么便不是标题党。   
+之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。   
 ### 包含的文件
 [iterator.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/iterator.md)   
 [constraint.md](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/constraint.md)   
@@ -28,6 +31,7 @@ DI: 64 bits
 把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。   
 
 #### iterator.md   
+使用lisp声明通用寄存器位宽定义迭代器（iterator）名称      
 
 #### constraint.md   
 在 match_operand 中，可以指定操作数约束(operand  constraint)。   
@@ -89,60 +93,13 @@ eg. 操作数1的约束为 '%0'，表示与操作数0的约束相同。
 ***#***:直到逗号的所有字符在进行约束处理时将被忽略，这些字符只对寄存器选择起作用   
 ***\*:*** 直到逗号的所有字符在进行约束处理是将被忽略，这些字符在寄存器选择是也将被忽略。   
 #### riscv-c.cc
-`#define builtin_define(TXT) cpp_define (pfile, TXT)` 定义 `builtin_define` 的宏，将其展开为 `cpp_define(pfile, TXT)`。其中 pfile 是指向文件的指针。
- riscv_ext_version 函数，可以传一个最大值和一个最小值，返回 1000000倍的最大值和 1000倍的最小值。
- riscv_cpu_cpp_builtins 函数，传入 pfile 指针，
-
+riscv intrinsic 相关。   
 #### riscv-vector-builtins-bases.h
  包含所有向量操作的namespace，声明外部的常量指针。
 
 #### riscv-vector-builtins-bases.cc
- 声明 load store 的 enum 类型，定义了 unit stride, strided 和 indexed 三种。indexed 没有跟着 spec 写 indexed-unordered 和 indexed-ordered。
- 定义了一个 vleff 和 vlsegff 的辅助函数去fold。调用 [gcc/gimple.h](https://github.com/gcc-mirror/gcc/blob/ae862e0e47cb2d62d7c624ab999a3bd8bd2914ef/gcc/gimple.h#L4) 里面的 gimple_call_num_args.   
- ```C++
- /* Return the number of arguments used by call statement GS.  */
- inline unsigned
-gimple_call_num_args (const gcall *gs)
-{
-  return gimple_num_ops (gs) - 3;
-}
+对 RISC-V v extension 中的指令对应的 intrinsic function 包含的元素进行声明。比如操作数类型、舍入形式、mask 类型等。   
 
-inline unsigned
-gimple_call_num_args (const gimple *gs)
-{
-  const gcall *gc = GIMPLE_CHECK2<const gcall *> (gs);
-  return gimple_call_num_args (gc);
-}
-```
-gcc/gimple.cc 里面的 `gimple_build_call_vec` 函数
-```C++
-/* Build a GIMPLE_CALL statement to function FN with the arguments
-   specified in vector ARGS.  */
-
-gcall *
-gimple_build_call_vec (tree fn, const vec<tree> &args)
-{
-  unsigned i;
-  unsigned nargs = args.length ();
-  gcall *call = gimple_build_call_1 (fn, nargs);
-
-  for (i = 0; i < nargs; i++)
-    gimple_call_set_arg (call, i, args[i]);
-
-  return call;
-}
-```
-gcc/gimple.h 里的 `gimple_call_arg` 函数
-```C++
-/* Return the argument at position INDEX for call statement GS.  */
-
-inline tree
-gimple_call_arg (const gcall *gs, unsigned index)
-{
-  gcc_gimple_checking_assert (gimple_num_ops (gs) > index + 3);
-  return gs->op[index + 3];
-}
-```
 实现 vsetvl 和 vsetvlmax 
 
 实现运算的操作看起来都是根据操作数类型转到对应的rtl.
@@ -160,29 +117,7 @@ gimple_call_arg (const gcall *gs, unsigned index)
  存在 rvv 0.7 的类定义，但是继承自 `misc_def` 结构体，`misc_def` 结构体继承自 `build_base` 结构体， `build_base` 结构体继承自 `function_shape` 类。   
 
  ##### function_shape 类   
- 
-
- ```C++
- /* vget_def class.  */
-struct vget_def : public misc_def
-{
-  bool check (function_checker &c) const override
-  {
-    poly_int64 outer_size = GET_MODE_SIZE (c.arg_mode (0));
-    poly_int64 inner_size = GET_MODE_SIZE (c.ret_mode ());
-    unsigned int nvecs = exact_div (outer_size, inner_size).to_constant ();
-    return c.require_immediate (1, 0, nvecs - 1);
-  }
-};
-```
  写intrinsic function的格式
- ```C++
- /* Declare the function shape NAME, pointing it to an instance
-   of class <NAME>_def.  */
-#define SHAPE(DEF, VAR) \
-  static CONSTEXPR const DEF##_def VAR##_obj; \
-  namespace shapes { const function_shape *const VAR = &VAR##_obj; }
-  ```
  #### riscv-vector-builtins-shapes.h
  在 riscv_vector 的命名空间里声明 shapes 的命名空间
  #### riscv-vector-builtins-types.def
@@ -209,7 +144,7 @@ struct vget_def : public misc_def
  1.描述函数做什么的标识和读函数参数返回结果   
  2.定义用来识别RVV intrinsic需要的拓展的位值的宏   
  3.枚举 RVV 操作类型   
- 4.
+
  声明 intrinsic 用到的数据类型，后缀的结构体。  
  function_base 类的定义   
  function_checker 类的定义   
@@ -217,16 +152,6 @@ struct vget_def : public misc_def
  machine mode   
  *规定 intrinsic 特殊要求的bit表示*   
 
- ```C++
- /* Bit values used to identify required extensions for RVV intrinsics.  */
-#define RVV_REQUIRE_RV64BIT (1 << 0)	/* Require RV64.  */
-#define RVV_REQUIRE_ELEN_64 (1 << 1)	/* Require TARGET_VECTOR_ELEN_64.  */
-#define RVV_REQUIRE_ELEN_FP_32 (1 << 2) /* Require FP ELEN >= 32.  */
-#define RVV_REQUIRE_ELEN_FP_64 (1 << 3) /* Require FP ELEN >= 64.  */
-#define RVV_REQUIRE_FULL_V (1 << 4) /* Require Full 'V' extension.  */
-#define RVV_REQUIRE_MIN_VLEN_64 (1 << 5)	/* Require TARGET_MIN_VLEN >= 64.  */
-#define RVV_REQUIRE_ELEN_FP_16 (1 << 6) /* Require FP ELEN >= 32.  */
- ```
  ##### 用到的 rtx 种类   
  use_exact_ins   
  use_contiguous_load_insn
