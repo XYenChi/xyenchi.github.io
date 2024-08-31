@@ -7,7 +7,10 @@
 举个例子： 本来是想拿个电路图举例子的，但是发现博客没调好，显示不了图片。等下一次心血来潮的时候修一修吧。
 大致过程就是，选一个参考节点，把所有节点标个号方便表示，给每一条支路都标个方向。找出受控源，列出支路方程，受控源正负极相连的方向如果跟你标的方向相同就写负号，相反就写正号。列出节点电压方程。改写成矩阵形式。就变成了一个方程组解的问题。
 电路部分（线性非齐次） 要写的也太多了。。。再说吧。
-专有名词： 举个例子： 关于射频仿真软件 之前在电子厂干天线的测试和量产前期的失效分析，因为看不到什么前途就在闲的时候看了一些天线仿真教学，但是也没太深入学习就跑路了，机缘巧合之下转行搞计算机。在开始学仿真的时候，学习到的就是不同的电尺寸选择的算法会不一样，还接触到了边界条件这些很有意思的概念。在学习RISCV相关的知识的时候，经常看到的例子就是计算RGB, 但是脑子里好像又有一些矩阵的其他用法，心血来潮，写下这篇博客，如果以后能学习到更多，那本文就是挖的坑，有空就来填，如果以后真的转行成功，在其他方向深入，那本文就是对过去的总结。</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to RISC-V Vector 或 SIMD 类似拓展的应用举例子说明" href=https://xyenchi.github.io/posts/risc-v-vector--%E6%88%96-simd-%E7%B1%BB%E4%BC%BC%E6%8B%93%E5%B1%95%E7%9A%84%E5%BA%94%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86/></a></article><article class=post-entry><header class=entry-header><h2>RVV intrinsic的实现分析</h2></header><div class=entry-content><p>包含的文件 iterator.md
+专有名词： 举个例子： 关于射频仿真软件 之前在电子厂干天线的测试和量产前期的失效分析，因为看不到什么前途就在闲的时候看了一些天线仿真教学，但是也没太深入学习就跑路了，机缘巧合之下转行搞计算机。在开始学仿真的时候，学习到的就是不同的电尺寸选择的算法会不一样，还接触到了边界条件这些很有意思的概念。在学习RISCV相关的知识的时候，经常看到的例子就是计算RGB, 但是脑子里好像又有一些矩阵的其他用法，心血来潮，写下这篇博客，如果以后能学习到更多，那本文就是挖的坑，有空就来填，如果以后真的转行成功，在其他方向深入，那本文就是对过去的总结。</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to RISC-V Vector 或 SIMD 类似拓展的应用举例子说明" href=https://xyenchi.github.io/posts/risc-v-vector--%E6%88%96-simd-%E7%B1%BB%E4%BC%BC%E6%8B%93%E5%B1%95%E7%9A%84%E5%BA%94%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86/></a></article><article class=post-entry><header class=entry-header><h2>RVV intrinsic的实现分析</h2></header><div class=entry-content><p>虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。
+既然我第一行就写明了，那么便不是标题党。
+之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。
+包含的文件 iterator.md
 constraint.md
 riscv-c.cc
 riscv-protos.h
@@ -26,14 +29,14 @@ HI: 16 bits
 SI: 32 bits
 DI: 64 bits
 把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。
-iterator.md constraint.md 在 match_operand 中，可以指定操作数约束(operand constraint)。
+iterator.md 使用lisp声明通用寄存器位宽定义迭代器（iterator）名称
+constraint.md 在 match_operand 中，可以指定操作数约束(operand constraint)。
 约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。
 约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。 说明操作数是否可以是一个内存引用以及其地址类型。 描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。 GCC 中的约束(constraint)使用字符串(string)表示。
 以下是常见用法（部分夹带RISC-V私货方便自己查询）：
 >: memory operand, autoincrement addressing type, including preincrement and postincrement.
 f: floating-point register
-g: general register, memory or integer immediate constant.
-i: Integer immediate operand, sign constant when and after compilering....</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to RVV intrinsic的实现分析" href=https://xyenchi.github.io/rvv_intrinsic_analysis/></a></article></main><footer class=footer><span>&copy; 2024 <a href=https://xyenchi.github.io/>xyenchi's blog</a></span>
+g: general register, memory or integer immediate constant....</p></div><footer class=entry-footer>xyenchi</footer><a class=entry-link aria-label="post link to RVV intrinsic的实现分析" href=https://xyenchi.github.io/rvv_intrinsic_analysis/></a></article></main><footer class=footer><span>&copy; 2024 <a href=https://xyenchi.github.io/>xyenchi's blog</a></span>
 <span>Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
         <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>

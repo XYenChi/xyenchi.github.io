@@ -137,7 +137,10 @@ for example, the 32 of RV32I.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://xyenchi.github.io/rvv_intrinsic_analysis/</guid>
-      <description>包含的文件 iterator.md
+      <description>虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。
+既然我第一行就写明了，那么便不是标题党。
+之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。
+包含的文件 iterator.md
 constraint.md
 riscv-c.cc
 riscv-protos.h
@@ -156,14 +159,14 @@ HI: 16 bits
 SI: 32 bits
 DI: 64 bits
 把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。
-iterator.md constraint.md 在 match_operand 中，可以指定操作数约束(operand constraint)。
+iterator.md 使用lisp声明通用寄存器位宽定义迭代器（iterator）名称
+constraint.md 在 match_operand 中，可以指定操作数约束(operand constraint)。
 约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。
 约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。 说明操作数是否可以是一个内存引用以及其地址类型。 描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。 GCC 中的约束(constraint)使用字符串(string)表示。
 以下是常见用法（部分夹带RISC-V私货方便自己查询）：
 &amp;gt;: memory operand, autoincrement addressing type, including preincrement and postincrement.
 f: floating-point register
-g: general register, memory or integer immediate constant.
-i: Integer immediate operand, sign constant when and after compilering.</description>
+g: general register, memory or integer immediate constant.</description>
     </item>
     
     <item>
