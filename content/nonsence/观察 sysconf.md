@@ -1,6 +1,6 @@
 ---
 title: "观察 sysconf"
-date: "December 28, 2023"
+date: "2023-12-28T11:30:03+00:00"
 draft: false
 ---
 天气勉强晴，空气污染严重。   
