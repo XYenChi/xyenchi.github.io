@@ -9,27 +9,879 @@
       <link>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language><atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Tue, 15 Oct 2024 11:30:03 +0000</lastBuildDate><atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>再次重启每日废话</title>
+      <link>https://xyenchi.github.io/nonsence/20240613/</link>
+      <pubDate>Thu, 13 Jun 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240613/</guid>
+      <description>&lt;p&gt;天气晴&lt;/p&gt;
+&lt;p&gt;下午看到了天上的云有奇妙纹理，像脑花，掏出手机拍了一张，发现手机摄像头的马赛克效果比脑花纹理还清晰。&lt;/p&gt;
+&lt;p&gt;最近把主机转了个方向发现主板在 gprofng 编译的时候会亮过热的红灯，在cyy的建议下把 intel i7 12700 CPU 原装风扇换成了超大风扇，RISC-V qemu system 的性能好多了。既没有了终端显示乱刷问题，编译时间也快了很多。&lt;/p&gt;
+&lt;p&gt;本来之前 gprofng 没啥头绪的，现在貌似觉得还可以研究一下，因为可以根据报错来找到哪里有问题了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>only-riscv 分支的记录</title>
+      <link>https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Mon, 22 Apr 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/</guid>
+      <description>&lt;p&gt;目前成功构建的 patch ：&lt;code&gt;RISC-V: Fix VL operand bug in VSETVL PASS[PR110264]&lt;/code&gt;&lt;br&gt;
+此patch&lt;code&gt;RISC-V: Bugfix for RVV integer reduction in ZVE32/64.&lt;/code&gt;构建失败，但是&lt;code&gt;RISC-V: Fix one typo for reduc expand GET_MODE_CLASS&lt;/code&gt;可以修复。   &lt;br&gt;
+中间夹杂了 &lt;code&gt;RISC-V:Add float16 tuple type support&lt;/code&gt; ,此构建失败报：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/genemit.cc:25:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/genextract.cc:22:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+In file included from ../.././gcc/gcc/genemit.cc:22:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+In file included from ../.././gcc/gcc/genpeep.cc:25:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/rtl.cc:31:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/rtl.cc:28:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+In file included from ../.././gcc/gcc/genpeep.cc:22:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+In file included from ../.././gcc/gcc/genautomata.cc:111:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/genautomata.cc:108:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+g++ -c   -g -O2   -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE   -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H  -DGENERATOR_FILE -I. -Ibuild -I../.././gcc/gcc -I../.././gcc/gcc/build -I../.././gcc/gcc/../include  -I../.././gcc/gcc/../libcpp/include  \
+        -o build/gensupport.o ../.././gcc/gcc/gensupport.cc
+In file included from ../.././gcc/gcc/genpreds.cc:27:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/genoutput.cc:90:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/genpreds.cc:24:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+In file included from ../.././gcc/gcc/genopinit.cc:25:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/genoutput.cc:87:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+In file included from ../.././gcc/gcc/genopinit.cc:22:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+In file included from ../.././gcc/gcc/genrecog.cc:112:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+make[2]: *** [Makefile:2825: build/genextract.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from ../.././gcc/gcc/genrecog.cc:109:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+In file included from ../.././gcc/gcc/genattrtab.cc:109:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+make[2]: *** [Makefile:2825: build/genpeep.o] Error 1
+make[2]: *** [Makefile:2825: build/genemit.o] Error 1
+In file included from ../.././gcc/gcc/genattrtab.cc:106:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+In file included from ../.././gcc/gcc/read-rtl.cc:34:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/read-rtl.cc:31:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+make[2]: *** [Makefile:2825: build/rtl.o] Error 1
+make[2]: *** [Makefile:2825: build/genopinit.o] Error 1
+make[2]: *** [Makefile:2825: build/genoutput.o] Error 1
+make[2]: *** [Makefile:2825: build/genpreds.o] Error 1
+make[2]: *** [Makefile:2825: build/read-rtl.o] Error 1
+make[2]: *** [Makefile:2825: build/genrecog.o] Error 1
+make[2]: *** [Makefile:2825: build/genattrtab.o] Error 1
+make[2]: *** [Makefile:2825: build/genautomata.o] Error 1
+In file included from ../.././gcc/gcc/gensupport.cc:24:
+../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’
+  316 |   ENUM_BITFIELD(machine_mode) mode : 8;
+      |                               ^~~~
+In file included from ../.././gcc/gcc/gensupport.cc:21:
+../.././gcc/gcc/rtl.h: In member function ‘long unsigned int subreg_shape::unique_id() const’:
+../.././gcc/gcc/rtl.h:2160:37: error: static assertion failed: MAX_MACHINE_MODE &amp;lt;= 256
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+../.././gcc/gcc/rtl.h:2160:37: note: the comparison reduces to ‘(284 &amp;lt;= 256)’
+ 2160 |   { STATIC_ASSERT (MAX_MACHINE_MODE &amp;lt;= 256); }
+../.././gcc/gcc/system.h:850:19: note: in definition of macro ‘STATIC_ASSERT’
+  850 |   static_assert ((X), #X)
+      |                   ^
+make[2]: *** [Makefile:2825: build/gensupport.o] Error 1
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;可能是这俩的问题吧： &lt;br&gt;
+&lt;code&gt;Bump up precision size to 16 bits.&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;Machine_Mode: Extend machine_mode from 8 to 16 bits&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>办理业务踩的坑</title>
+      <link>https://xyenchi.github.io/nonsence/%E5%8A%9E%E7%90%86%E4%B8%9A%E5%8A%A1%E8%B8%A9%E7%9A%84%E5%9D%91/</link>
+      <pubDate>Wed, 10 Apr 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/%E5%8A%9E%E7%90%86%E4%B8%9A%E5%8A%A1%E8%B8%A9%E7%9A%84%E5%9D%91/</guid>
+      <description>&lt;p&gt;近日办理业务发现了一年前签合同和协议踩的坑，记录一下，以后也会新增累积，成为游刃有余的老油条。&lt;/p&gt;
+&lt;p&gt;总结以下几条：&lt;br&gt;
+1.条款内容前后文矛盾&lt;br&gt;
+2.暗改合同日期&lt;br&gt;
+3.更换业务内容只签补充协议且执行按照合同正文日期&lt;/p&gt;
+&lt;p&gt;虽然签十个合同办理业务才可能出现这一个案例，但涉及金额较大业务时需要更加谨慎。不过更希望大家不会碰到这些事。&lt;/p&gt;
+&lt;p&gt;具体内容：&lt;br&gt;
+1.条款1写 4.15 - 4.18 是免租期。条款2写租金从4.15开始收取。实际免租期是个幌子。&lt;br&gt;
+2.约定租期1年，但是合同起止时间写 4.15 - 4.30。&lt;br&gt;
+3.网络合同正文写 4.15 ，但是发现宽带不符合办公要求时，办理电信业务租赁线路签补充协议不注明日期，实际执行按照合同正文。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>重启每日废话</title>
+      <link>https://xyenchi.github.io/nonsence/20240402/</link>
+      <pubDate>Tue, 02 Apr 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240402/</guid>
+      <description>&lt;p&gt;天气雨&lt;br&gt;
+怎么还在摘樱桃。&lt;br&gt;
+发现想要根据报错来解决出现的问题的话就会出现本不该是 gcc 12 特性的 patch 被引入。&lt;br&gt;
+于是推倒重来，一个一个标记。&lt;br&gt;
+干的时候又很不耐烦，想要掏出脚本。不过还是不要太激进了，等编译的时候看看书。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>继续移植gprofng</title>
+      <link>https://xyenchi.github.io/nonsence/%E7%BB%A7%E7%BB%AD%E7%A7%BB%E6%A4%8Dgprofng/</link>
+      <pubDate>Fri, 15 Mar 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/%E7%BB%A7%E7%BB%AD%E7%A7%BB%E6%A4%8Dgprofng/</guid>
+      <description>&lt;p&gt;天气晴。&lt;br&gt;
+早上到达武汉非常冷，发现了一个很中二的说法，回笼觉念成回龙决。&lt;br&gt;
+偷一个 &lt;code&gt;/usr/include/sys/ucontext.h&lt;/code&gt; 出来观测，qemu 里面显示得太异常了。大佬告诉我这是 glibc 的内容。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/* struct ucontext definition, RISC-V version.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   Copyright (C) 1997-2023 Free Software Foundation, Inc.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   This file is part of the GNU C Library.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   The GNU C Library is free software; you can redistribute it and/or
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   modify it under the terms of the GNU Lesser General Public
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   License as published by the Free Software Foundation; either
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   version 2.1 of the License, or (at your option) any later version.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   The GNU C Library is distributed in the hope that it will be useful,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   Lesser General Public License for more details.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   You should have received a copy of the GNU Lesser General Public
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   License along with the GNU C Library.  If not, see
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   &amp;lt;https://www.gnu.org/licenses/&amp;gt;.  */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/* Don&amp;#39;t rely on this, the interface is currently messed up and may need to
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;   be broken to be fixed.  */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#ifndef _SYS_UCONTEXT_H
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#define _SYS_UCONTEXT_H 1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;features.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;bits/types/sigset_t.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;bits/types/stack_t.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_gp_state&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;32&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#ifdef __USE_MISC
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define NGREG  32
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define REG_PC 0
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define REG_RA 1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define REG_SP 2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define REG_TP 4
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define REG_S0 8
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define REG_S1 9
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define REG_A0 10
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define REG_S2 18
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;# define REG_NARGS 8
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;greg_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/* Container for all general registers.  */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_gp_state&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;gregset_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/* Container for floating-point state.  */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;union&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_fp_state&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;fpregset_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#endif
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_f_ext_state&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;32&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__fcsr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_d_ext_state&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;32&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__fcsr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_q_ext_state&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;64&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__attribute__&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;__aligned__&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;16&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__fcsr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;cm&#34;&gt;/* Reserved for expansion of sigcontext structure.  Currently zeroed
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       upon signal, and must be zero upon sigreturn.  */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;           &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__glibc_reserved&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;union&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_fp_state&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_f_ext_state&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_d_ext_state&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__riscv_mc_q_ext_state&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__q&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;mcontext_t&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;__riscv_mc_gp_state&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__gregs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;union&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;__riscv_mc_fp_state&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__fpregs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;mcontext_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/* Userlevel context.  */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;ucontext_t&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;__uc_flags&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;ucontext_t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;uc_link&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;stack_t&lt;/span&gt;            &lt;span class=&#34;n&#34;&gt;uc_stack&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;sigset_t&lt;/span&gt;           &lt;span class=&#34;n&#34;&gt;uc_sigmask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;cm&#34;&gt;/* There&amp;#39;s some padding here to allow sigset_t to be expanded in the
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       future.  Though this is unlikely, other architectures put uc_sigmask
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       at the end of this structure and explicitly state it can be
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       expanded, so we didn&amp;#39;t want to box ourselves in here.  */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt;               &lt;span class=&#34;n&#34;&gt;__glibc_reserved&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1024&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;8&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;sizeof&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;sigset_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;cm&#34;&gt;/* We can&amp;#39;t put uc_sigmask at the end of this structure because we need
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       to be able to expand sigcontext in the future.  For example, the
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       vector ISA extension will almost certainly add ISA state.  We want
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       to ensure all user-visible ISA state can be saved and restored via a
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       ucontext, so we&amp;#39;re putting this at the end in order to allow for
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       infinite extensibility.  Since we know this will be extended and we
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       assume sigset_t won&amp;#39;t be extended an extreme amount, we&amp;#39;re
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;       prioritizing this.  */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;mcontext_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uc_mcontext&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;ucontext_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#endif &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;/* sys/ucontext.h */&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>参加玄铁大会</title>
+      <link>https://xyenchi.github.io/nonsence/%E5%8F%82%E5%8A%A0%E7%8E%84%E9%93%81%E5%A4%A7%E4%BC%9A/</link>
+      <pubDate>Thu, 14 Mar 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/%E5%8F%82%E5%8A%A0%E7%8E%84%E9%93%81%E5%A4%A7%E4%BC%9A/</guid>
+      <description>&lt;p&gt;早上到了深圳，参加玄铁大会。&lt;/p&gt;
+&lt;p&gt;拎着 sifive 的袋子走出地铁站被尚未面基过的群友观测到了，好好玩。&lt;/p&gt;
+&lt;p&gt;玄铁大会的会场有好多人参加，玄铁还很贴心地为大家准备了同传，虽然偶尔在听的时候截获到了一些翻译得不太对的地方。觉得同声传译真的很难，因为我对于
+自己没有了解过的领域听中文都会觉得困难，他们还要去翻译自己不了解的领域。&lt;/p&gt;
+&lt;p&gt;中午和很多只在线上水群看到过的群友吃萨利亚，奶油蘑菇汤好喝，芝士焗饭太腻了，吃了几口就吃不下了。&lt;br&gt;
+本地热心群友帮助我找到警局办理了港澳通行证签注，万分感谢！&lt;/p&gt;
+&lt;p&gt;下午参观站台，有真能避障的小车车和人工智障 AI, 还体验了一下 openKylin 运行的小车车游戏的自动模式。&lt;br&gt;
+衷心祝愿 RISC-V 能发展地越来越好。耶！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>总结摘樱桃</title>
+      <link>https://xyenchi.github.io/nonsence/%E6%80%BB%E7%BB%93%E6%91%98%E6%A8%B1%E6%A1%83/</link>
+      <pubDate>Mon, 11 Mar 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/%E6%80%BB%E7%BB%93%E6%91%98%E6%A8%B1%E6%A1%83/</guid>
+      <description>&lt;p&gt;天气晴。&lt;/p&gt;
+&lt;p&gt;近日被摘樱桃此等琐事缠身无法日更。&lt;/p&gt;
+&lt;p&gt;起因是为 ruyisdk 的 gcc 12 支持 RISC-V。&lt;/p&gt;
+&lt;p&gt;经过非常曲折，大概重新摘了 3 遍。&lt;/p&gt;
+&lt;p&gt;第一遍简单在邮件列表根据关键词 RISC-V 按照时间来筛选 patch。&lt;br&gt;
+第一个问题是有作者commit tittle里面写riscv无法筛选出来。&lt;br&gt;
+第二个问题是邮件列表 patch 显示的时间不是按照 commit 生成时间而是根据 commit apply 时间。&lt;/p&gt;
+&lt;p&gt;第二遍根据关键词 riscv 来筛选 patch。 &lt;br&gt;
+导致vector部分大量报错。&lt;/p&gt;
+&lt;p&gt;第三遍写了一个脚本：&lt;br&gt;
+&lt;a href=&#34;https://github.com/XYenChi/EasyCherryPick&#34;&gt;https://github.com/XYenChi/EasyCherryPick&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;README写了用法和原理，日记中不再赘述。&lt;/p&gt;
+&lt;p&gt;虽然操作过程有重名问题导致误删了 patch ，但也还有一些和 Makefile、中端相关的问题。好在最后根据关键词搜 patch 都能解决。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>找到漏摘的樱桃</title>
+      <link>https://xyenchi.github.io/nonsence/20240219/</link>
+      <pubDate>Mon, 19 Feb 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240219/</guid>
+      <description>&lt;p&gt;天气雨    &lt;br&gt;
+终于找到了摘樱桃出的问题，如果早一点切分支搜，很快就能找出来，不知道自己脑子里每天装的是什么水。
+翻译推文的时候也是，命名觉得不对劲但是却不会去发现并修改。大脑不用可能真的会生锈，太恐怖了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>2024开工大吉</title>
+      <link>https://xyenchi.github.io/nonsence/20240218/</link>
+      <pubDate>Sun, 18 Feb 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240218/</guid>
+      <description>&lt;p&gt;天气雨    &lt;br&gt;
+虽然不管究竟是否开工大吉，肯定要嘴硬说一下开工大吉的。&lt;br&gt;
+继续解决 RVV machine mode 报错没有声明的问题。&lt;br&gt;
+研究了 Makefile.in genmodes.cc gengtype 等一系列文件没能发现什么问题。&lt;br&gt;
+现在开始怀疑 riscv 写的相关文件有问题了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>给摘樱桃偷懒想办法</title>
+      <link>https://xyenchi.github.io/nonsence/20240202/</link>
+      <pubDate>Fri, 02 Feb 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240202/</guid>
+      <description>&lt;p&gt;天气雨    &lt;br&gt;
+昨日和今日在想办法解决gcc自动构建的问题。&lt;/p&gt;
+&lt;p&gt;在 github CI上写首先面临着只能选择 gcc 仓库，因为 riscv-gnu-toolgitchain 的 gcc 是 submodule ，push commit 之后无法检测到 submodule 的更新自动跑。&lt;br&gt;
+其次面临的问题是拉取 riscv-gnu-toolchain 的 submodule 所有分支的时间消耗需要将近二十分钟。git cherry-pick commit 可能只需要二十秒。虽然可以用 git clone  &amp;ndash;depth=1 来解决，但是无法切换到我想要的release。 &lt;br&gt;
+最重大的问题就是无法找到 gcc 12.3.0 的 ref 了，在尝试解决的途中发现了 ci 的每一次 step 都会回到初始的仓库路径。&lt;br&gt;
+发现只要我把自己仓库的 master 改成需要测试的代码就行。诶？ &lt;br&gt;
+最近每天都三四点睡，十一二点起。大脑开始刷cache，无端回忆起很多以前的事情。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>继续摘樱桃</title>
+      <link>https://xyenchi.github.io/nonsence/20240131/</link>
+      <pubDate>Wed, 31 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240131/</guid>
+      <description>&lt;p&gt;天气雨&lt;/p&gt;
+&lt;p&gt;今日想找commit history的蛛丝马迹发现gcc12 release之前也有很多 riscv 相关patch不是打在gcc12上的。&lt;br&gt;
+翻车车。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>摘樱桃</title>
+      <link>https://xyenchi.github.io/nonsence/20240130/</link>
+      <pubDate>Tue, 30 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240130/</guid>
+      <description>&lt;p&gt;天气阴转雨&lt;/p&gt;
+&lt;p&gt;近日埋下了好多坑，比如刷路由器，比如给daily nonsense倒序排列。&lt;/p&gt;
+&lt;p&gt;Pick 了 gcc/gcc/Makefile.in 的一个 patch 之后昨天的问题解决了，但是又出现了 machine mode 找不到的问题。&lt;/p&gt;
+&lt;p&gt;晚上吃完麦当劳会办公室发现大家带上了嗷呜一楼避难了，发生火灾56楼确实很可怕。不过生死有命，富贵在天了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>研究 Makefile</title>
+      <link>https://xyenchi.github.io/nonsence/20240129/</link>
+      <pubDate>Mon, 29 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240129/</guid>
+      <description>&lt;p&gt;天气阴转阵雨&lt;/p&gt;
+&lt;p&gt;近日埋下了好多坑，比如刷路由器，比如给daily nonsense倒序排列。&lt;/p&gt;
+&lt;p&gt;今天突然发现了闭源运维与凶恶财务仓库具有并肩的性价比。世间万物果然都是有它的道理在。&lt;/p&gt;
+&lt;p&gt;因为到处搜 no rule to make riscv.(具体啥我忘了).gen.def 成 riscv.o ,发现了 gcc/gcc/ 下其实还有一个 Makefile.in。&lt;br&gt;
+于是在摘与之相关的樱桃，但是不敢乱刷了，算算时间如果解决不了问题可能过年都得在家干活的= =。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>感叹光阴似箭</title>
+      <link>https://xyenchi.github.io/nonsence/20240126/</link>
+      <pubDate>Fri, 26 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240126/</guid>
+      <description>&lt;p&gt;天气晴&lt;/p&gt;
+&lt;p&gt;发现了一个比每天撕一页老黄历更恐怖的事情就是一把撕六页，揉成一大团扔进垃圾桶里。&lt;br&gt;
+近日又迈出了和其他人办业务的重要一步，看起来只要我敢主动打电话都还蛮简单的。&lt;br&gt;
+又可以因为摘樱桃的原因去研究gcc的编译流程了，离开了&lt;code&gt;riscv-gnu-toolchain&lt;/code&gt;还一次都没有成功过，遗憾。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>继续想偷懒</title>
+      <link>https://xyenchi.github.io/nonsence/20240125/</link>
+      <pubDate>Thu, 25 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240125/</guid>
+      <description>&lt;p&gt;天气晴&lt;/p&gt;
+&lt;p&gt;在给自己想一个理由断更，但是没想出来。 &lt;br&gt;
+樱桃摘到了一周前，编译爆炸了，开始debug。   &lt;br&gt;
+找到了 blog sort by time 的方法但是不知道往哪放。   &lt;br&gt;
+&lt;a href=&#34;https://gohugo.io/methods/pages/bydate/&#34;&gt;https://gohugo.io/methods/pages/bydate/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;更新：因为用 github CI拉去上游主题仓库，所以我自己修改主题代码没有用。因为不想自己维护一个主题仓库，所以不按照时间排序了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>想偷懒</title>
+      <link>https://xyenchi.github.io/nonsence/20240124/</link>
+      <pubDate>Wed, 24 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240124/</guid>
+      <description>&lt;p&gt;天气晴&lt;/p&gt;
+&lt;p&gt;在给自己想一个理由断更，但是没想出来。 &lt;br&gt;
+最近在给 gcc 摘 RISC-V 的樱桃，纯纯体力活，不过稍微还是瞟了几眼。&lt;br&gt;
+观测到性价比高的办公室了，也算有着落。&lt;/p&gt;
+&lt;p&gt;更新：性价比高的办公室凉了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>尝试学习 signal 写法</title>
+      <link>https://xyenchi.github.io/nonsence/20240116/</link>
+      <pubDate>Tue, 16 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240116/</guid>
+      <description>&lt;p&gt;天气雨&lt;/p&gt;
+&lt;p&gt;今日观测不同架构 linux kernel 中的源代码关于 signal 的写法，因为不会用，所以也没有看懂。明日继续研究。&lt;br&gt;
+但也算是找到了 &lt;code&gt;uc_mcontext&lt;/code&gt; 的出处？不过并没有理解 gprofng 此处用法是什么，也许我在舍本逐末。&lt;/p&gt;
+&lt;p&gt;又回想起了一些小时候的事情。时间过得可真快。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>尝试阅读 stack unwind</title>
+      <link>https://xyenchi.github.io/nonsence/20240115/</link>
+      <pubDate>Mon, 15 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240115/</guid>
+      <description>&lt;p&gt;天气阴&lt;/p&gt;
+&lt;p&gt;找到了 &lt;code&gt;GET_SP&lt;/code&gt; 的文件。&lt;br&gt;
+&lt;a href=&#34;https://github.com/bminor/binutils-gdb/blob/master/gprofng/libcollector/unwind.c&#34;&gt;https://github.com/bminor/binutils-gdb/blob/master/gprofng/libcollector/unwind.c&lt;/a&gt;  &lt;br&gt;
+观察 Aarch64 代码编造了一些 REG_S0 REG_SP REG_PC，但是非常不 work 。 &lt;br&gt;
+明日继续研究。&lt;/p&gt;
+&lt;p&gt;发现不是很懂 stack unwind，搜到了一些文章，大致了解了一下，近日没有耐心阅读学习，一心想回家过年大呼特呼，而且也不懂该如何在 RISC-V 上使用。&lt;br&gt;
+像 Aarch64 一样简单添加并不能解决问题，SPARC 和 x86 都有大量相关代码。预计我也需要写大量 RISC-V 相关代码。&lt;/p&gt;
+&lt;p&gt;今日观测民生银行大厦其他楼层办公室，物不甚美，胜在价廉。&lt;/p&gt;
+&lt;p&gt;龙龙 和 Pigy 来办公室玩耍，刷 leetcode 题目，好强。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>记录 RISC-V 的 gdb 异常使用 watch</title>
+      <link>https://xyenchi.github.io/nonsence/20240111/</link>
+      <pubDate>Thu, 11 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240111/</guid>
+      <description>&lt;p&gt;天气晴&lt;/p&gt;
+&lt;p&gt;搭建好的qemu system使用watch ncpus可以快速发现被优化，但这完全是我编译的时候忘记了修改 Makefile 里面的 -O0.&lt;br&gt;
+修改完成之后 watchpoint 正在消耗大量时间。&lt;/p&gt;
+&lt;p&gt;结束 watch 之后，传入 -O0 又有了新的报错。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-terminal&#34; data-lang=&#34;terminal&#34;&gt;[root@172 build]# ./gprofng/src/gp-collect-app echo 1
+Creating experiment directory test.6.er (Process ID: 354740) ...
+echo: symbol lookup error: /usr/local/lib/gprofng/libgp-collector.so: undefined symbol: GET_SP
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;找到了 &lt;code&gt;GET_SP&lt;/code&gt; 的文件。&lt;br&gt;
+&lt;a href=&#34;https://github.com/bminor/binutils-gdb/blob/master/gprofng/libcollector/unwind.c&#34;&gt;https://github.com/bminor/binutils-gdb/blob/master/gprofng/libcollector/unwind.c&lt;/a&gt;&lt;br&gt;
+明日继续研究。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#define _GNU_SOURCE
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;sched.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;sys/syscall.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;unistd.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;asm/hwprobe.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ncpus&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;npages&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;page_size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;riscv_hwprobe&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;res&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;res&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;key&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RISCV_HWPROBE_KEY_MVENDORID&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;kt&#34;&gt;cpu_set_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cpu_set&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__riscv_hwprobe&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;riscv_hwprobe&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pairs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pair_count&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cpu_count&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cpus&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;flags&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;syscall&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;__NR_riscv_hwprobe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pairs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pair_count&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cpu_count&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cpus&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;flags&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;CPU_ZERO&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cpu_set&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;CPU_SET&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cpu_set&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__riscv_hwprobe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;res&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cpu_set&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;ncpus&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;sysconf&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_SC_NPROCESSORS_CONF&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;npages&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;sysconf&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_SC_PHYS_PAGES&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;page_size&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;sysconf&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_SC_PAGE_SIZE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;ncpus: %d,&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;npages: %d,&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;page_size: %d&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ncpus&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;npages&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;page_size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;riscv_hwprobe:%x&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;riscv_mvendorid:%x&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;res&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;测试出了新内核可以读取 vendorid 和使用最新最热系统调用。&lt;br&gt;
+重要的是通过例子看懂了 kernel 文档里面的用法。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>解决搭建qemu system遇到的问题</title>
+      <link>https://xyenchi.github.io/nonsence/20240110/</link>
+      <pubDate>Wed, 10 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240110/</guid>
+      <description>&lt;p&gt;天气晴&lt;/p&gt;
+&lt;p&gt;近日听说新的sbi和kernel支持 profile sampling 打算搭建 qemu system 进行实验。&lt;br&gt;
+搭建过程遇到 nfs 的网桥难关。&lt;br&gt;
+今日跨越网桥配置难关。&lt;br&gt;
+&lt;a href=&#34;https://wiki.archlinux.org/title/Systemd-networkd#Bridge_interface&#34;&gt;https://wiki.archlinux.org/title/Systemd-networkd#Bridge_interface&lt;/a&gt;&lt;br&gt;
+在cyy的指导下根据上述链接将网桥绑在网络接口并配置了静态 ip 。&lt;br&gt;
+由于我电脑的home目录是加密的，所以无法 mount nfs。于是将 archriscv 的系统镜像移到了 /var。&lt;/p&gt;
+&lt;p&gt;搭建好的qemu system使用watch ncpus可以快速发现被优化，但这完全是我编译的时候忘记了修改 Makefile 里面的 -O0.&lt;br&gt;
+修改完成之后 watchpoint 正在消耗大量时间。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>搭建qemu跑最新最热linux kernel</title>
+      <link>https://xyenchi.github.io/nonsence/20240109/</link>
+      <pubDate>Tue, 09 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240109/</guid>
+      <description>&lt;p&gt;天气晴&lt;/p&gt;
+&lt;p&gt;近日听说新的sbi和kernel支持 profile sampling 打算搭建 qemu system 进行实验。&lt;br&gt;
+搭建过程遇到 nfs 的网桥难关。今日不打算跨越，明日再跨。&lt;/p&gt;
+&lt;p&gt;手头上的 unmatched 的 sbi 和 kernel 版本都是旧的。无法使用 &lt;code&gt;perf&lt;/code&gt;&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-terminal&#34; data-lang=&#34;terminal&#34;&gt;xyenchi@ubuntu:~$ sudo perf record -a -g
+Error:
+cycles: PMU Hardware doesn&amp;#39;t support sampling/overflow-interrupts. Try &amp;#39;perf stat&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;本可以记录 cross compile linux kernel, 但是更想下班。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>观察 ncpus 为什么会被优化</title>
+      <link>https://xyenchi.github.io/nonsence/20240108/</link>
+      <pubDate>Mon, 08 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240108/</guid>
+      <description>&lt;p&gt;天气阴。&lt;/p&gt;
+&lt;p&gt;今日尝试直接修改 Makefile 在 unmatched 编译，发现 ncpus 不显示 optimized out 了。&lt;br&gt;
+说明 Makefile 的生成脚本确实写糊了，和 x86 一样可以得出值是 0。&lt;/p&gt;
+&lt;p&gt;运行的时候：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(gdb) r ./gprofng/src/gp-collect-app echo 1
+Starting program: /home/xyenchi/binutils-gdb/debug-build/gprofng/src/gp-collect-app ./gprofng/src/gp-collect-app echo 1
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library &amp;#34;/lib/riscv64-linux-gnu/libthread_db.so.1&amp;#34;.
+Creating experiment directory test.1.er (Process ID: 1319751) ...
+process 1319751 is executing new program: /home/xyenchi/binutils-gdb/debug-build/gprofng/src/gp-collect-app
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library &amp;#34;/lib/riscv64-linux-gnu/libthread_db.so.1&amp;#34;.
+Creating experiment directory test.2.er (Process ID: 1319751) ...
+Warning: libgp-collector.so is already defined in one or more LD_PRELOAD environment variables
+process 1319751 is executing new program: /usr/bin/echo
+Error in re-setting breakpoint 1: Function &amp;#34;write_header&amp;#34; not defined.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library &amp;#34;/lib/riscv64-linux-gnu/libthread_db.so.1&amp;#34;.
+1
+[Inferior 1 (process 1319751) exited normally]
+(gdb) p ncpus
+No symbol &amp;#34;ncpus&amp;#34; in current context.
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但是大佬说使用ptrace的程序可能不能用gdb。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>观察编译选项</title>
+      <link>https://xyenchi.github.io/nonsence/20240105/</link>
+      <pubDate>Fri, 05 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240105/</guid>
+      <description>&lt;p&gt;天气晴。&lt;/p&gt;
+&lt;p&gt;今日尝试重新在 unmatched 上传入&lt;code&gt;CFLAG=-O0 CXXFLAG=-O0&lt;/code&gt;不优化编译 gprofng, 发现无法传入。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# -------------------------------------------------
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# Miscellaneous non-standard autoconf-set variables
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# -------------------------------------------------
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# The gcc driver likes to know the arguments it was configured with.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;TOPLEVEL_CONFIGURE_ARGUMENTS&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;../configure --enable-gprofng &lt;span class=&#34;nv&#34;&gt;CFLAG&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;-O0 &lt;span class=&#34;nv&#34;&gt;CXXFLAG&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;-O0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;CFLAGS&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; -g -O2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;LDFLAGS&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;LIBCFLAGS&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;CFLAGS&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;CXXFLAGS&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; -g -O2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>回忆童年</title>
+      <link>https://xyenchi.github.io/nonsence/20240104/</link>
+      <pubDate>Thu, 04 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240104/</guid>
+      <description>&lt;p&gt;天气晴。&lt;/p&gt;
+&lt;p&gt;今日观察东亚时区双周会，无法静心看代码。摸鱼。&lt;br&gt;
+好久没有体验到考 RVFA 时候知识争相进入大脑的感觉了，需要加油。&lt;br&gt;
+昨天晚上回忆起了很多童年往事，因为一个神奇的诱因。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>调试 grofng</title>
+      <link>https://xyenchi.github.io/nonsence/20240103/</link>
+      <pubDate>Wed, 03 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240103/</guid>
+      <description>&lt;p&gt;天气晴。&lt;/p&gt;
+&lt;p&gt;今日尝试：&lt;br&gt;
+将&lt;br&gt;
+如果没有 __SC_CPUID_MAX&lt;br&gt;
+就把 __SC_CPUID_MAX 写成517&lt;br&gt;
+的代码改成了&lt;br&gt;
+如果没有 __SC_CPUID_MAX&lt;br&gt;
+就用 __SC_NPROCESSORS_CONF 读 ncpus&lt;br&gt;
+但是 ncpus 还是显示 0 ，使用 gdb 调试时显示被优化。&lt;br&gt;
+其他使用 syscall 和相同声明方法的 page_size 和 npages gdb 显示 no symbol, 搜索可以发现有些文件使用了它们。&lt;/p&gt;
+&lt;p&gt;今日发现：&lt;br&gt;
+2038年时间可以变成负数。&lt;br&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Year_2038_problem&#34;&gt;https://en.wikipedia.org/wiki/Year_2038_problem&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>观察 inline asm</title>
+      <link>https://xyenchi.github.io/nonsence/20240102/</link>
+      <pubDate>Tue, 02 Jan 2024 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/20240102/</guid>
+      <description>&lt;p&gt;天气雨。&lt;/p&gt;
+&lt;p&gt;今日尝试：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#elif ARCH(RISCV)
+__asm__ __volatile__(&amp;#34;csrr %0, mhartid&amp;#34;    /* RISC-V hart id */
+  			: &amp;#34;=a&amp;#34; (r)
+			: /* input : none */
+			: /* clobbers: none */);    
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;发现 usermode 不可以读 Machine mode 的 CSR。进行了失败的 asm volatile 用法研究。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;_SC_NPROCESSORS_CONF&lt;/code&gt;可以读取 CPU 核数。&lt;/p&gt;
+&lt;p&gt;今日发现：&lt;br&gt;
+&amp;ldquo;`&amp;rsquo;&amp;rdquo; 是英文的一种引用方法。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>观察计算机专有名词</title>
+      <link>https://xyenchi.github.io/nonsence/%E8%A7%82%E5%AF%9F%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D/</link>
+      <pubDate>Fri, 29 Dec 2023 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/%E8%A7%82%E5%AF%9F%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D/</guid>
+      <description>&lt;p&gt;天气阴，空气污染严重。&lt;/p&gt;
+&lt;p&gt;上午去协和医院想进行一个龋齿未雨绸缪地补。牙医看完片子之后说，蛀牙原本而就做过根管治疗了，如果想要补的话得把根管治疗也重做了。建议疼的时候再去直接根管治疗。想想这颗牙做根管治疗已经是十年前了，十年来每一个牙医都要对当时的牙医填充的材料表示一下震惊或者疑惑这到底是什么材料。&lt;/p&gt;
+&lt;p&gt;今日学习：&lt;br&gt;
+RHCT : RISC-V Hypervisor Code Table&lt;br&gt;
+ACPI : Advanced Configuration and Power Interface&lt;br&gt;
+DTS ： Device Tree Source&lt;/p&gt;
+&lt;p&gt;晚上武绿约饭，见到了好久不见的舌头球总肥猫灰熊东东柠柑半壶和半壶未婚妻。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>观察 sysconf</title>
+      <link>https://xyenchi.github.io/nonsence/%E8%A7%82%E5%AF%9F-sysconf/</link>
+      <pubDate>Thu, 28 Dec 2023 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/nonsence/%E8%A7%82%E5%AF%9F-sysconf/</guid>
+      <description>&lt;p&gt;天气勉强晴，空气污染严重。&lt;/p&gt;
+&lt;p&gt;今日学习：&lt;br&gt;
+&lt;code&gt;sysconf()&lt;/code&gt;&lt;br&gt;
+标准C库。行时获取配置信息。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;unistd.h&amp;gt;
+
+long sysconf(int name);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;-1: 不支持&lt;br&gt;
+0： 相关函数或头文件存在，但会在运行时询问支持程度&lt;br&gt;
+除了0或-1之外的值： 支持&lt;/p&gt;
+&lt;p&gt;例子：&lt;br&gt;
+gprofng/src/collctrl.cc&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;cm&#34;&gt;/* get CPU count and processor clock rate */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;ncpumax&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;sysconf&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_SC_CPUID_MAX&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;clock_getres&lt;/code&gt;&lt;br&gt;
+glibc 2.17前是 Real-time library (librt, -lrt)，之后是标准 C 库 (libc, -lc)。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;time.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;clock_getres&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;clockid_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;clockid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;timespec&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_Nullable&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;res&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;clock_gettime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;clockid_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;clockid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;timespec&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;clock_settime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;clockid_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;clockid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;timespec&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;ref：https://man7.org/linux/man-pages/man2/clock_getres.2.html&lt;/p&gt;
+&lt;p&gt;在 Michael Kerrisk 写的《Linux/UNIX System Programming Essentials》看到的小技巧：&lt;br&gt;
+不要在写了大量代码之后编译。&lt;br&gt;
+Use a frequent edit-save-build cycle to catch compiler errors early.&lt;br&gt;
+E.g., run the following in a separate window as you edit:&lt;br&gt;
+&lt;code&gt;$ while inotifywait -q . ; do echo -e &#39;\n\n&#39;; make; done&lt;/code&gt; &lt;br&gt;
+inotifywait is provided in the inotify-tools package&lt;br&gt;
+(The echo command just injects some white space between
+each build)&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>记录 Gnu Modula 2</title>
+      <link>https://xyenchi.github.io/gnu/gcc/modula2/</link>
+      <pubDate>Thu, 16 Nov 2023 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/gnu/gcc/modula2/</guid>
+      <description>&lt;p&gt;Gnu Modula 2 在 gcc 源码目录里，属于处理源代码的前端。根据职业生涯所学从 AST 到 GIMPLE 到 pass 到 RTL, 竟不知从何下手去移植到 RISC-V。&lt;/p&gt;
+&lt;p&gt;查询了一下 modula 2 的用法。和 gcc 较为相似，使用 gm2 编译运行 .mod 文件。&lt;/p&gt;
+&lt;p&gt;猜测是也能在 riscv-gnu-toolchain 里生成可执行文件，类似于 riscv-gnu-unknown-linux/elf-gcc。&lt;/p&gt;
+&lt;p&gt;将 gcc 切换到 devel/modula-2 分支之后，使用 &lt;code&gt;--with=rv64gc --with-abi-lp64d&lt;/code&gt; 编译了一次，缺少某个库而报错。&lt;br&gt;
+意外的是，如果进入 gcc 文件夹，使用 &lt;code&gt;--enable-libgm2 GM2_for_target=riscv&lt;/code&gt; 配置一下之后，编译通过了。&lt;br&gt;
+想到修改 makefile 。添加 makefile 的难处在于，gm2 在 gcc 文件夹中，如何使之脱离 gcc 并能够使用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>debug record</title>
+      <link>https://xyenchi.github.io/debug_record/</link>
+      <pubDate>Mon, 06 Nov 2023 11:30:03 +0000</pubDate>
+      
+      <guid>https://xyenchi.github.io/debug_record/</guid>
+      <description>&lt;h3 id=&#34;工具链&#34;&gt;工具链&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/riscv-collab/riscv-gnu-toolchain&#34;&gt;riscv-gnu-toolchain&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;源码&#34;&gt;源码&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/common/config/riscv/riscv-common.cc&#34;&gt;https://github.com/gcc-mirror/gcc/blob/master/gcc/common/config/riscv/riscv-common.cc&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;方法&#34;&gt;方法&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;./configure --prefix=&amp;quot;$PWD/opt&amp;quot; --with-arch=rv64gc --with-abi=lp64d&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;make -j $(nproc)&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;make linux -j $(nproc)&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;gdb opt/riscv64-unknown-linux-gnu-gcc&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;没想到想办法实现了好几天的 &lt;code&gt;-march=rv64gcv0p7&lt;/code&gt; 解析成 &lt;code&gt;rv64i2p1_m2p0_a2p1_f2p2 _d2p2 _c2p0 _v0p7&lt;/code&gt; 而不是 &lt;code&gt;rv64i2p1_m2p0_a2p1_f2p2_d2p2_c2p0_v0p7_zicsr2p0_zifencei2p0_zve32f1p0_zve32x1p0_zve64d1p0_zve64f1p0_zve64x1p0_zvl128b1p0_zvl32b1p0_zvl64b1p0&lt;/code&gt; 因为 T head 实现方法是 &lt;code&gt;-march=rv64gcXthreadVector&lt;/code&gt; 而搁置了。&lt;/p&gt;
+&lt;p&gt;初期是在 &lt;code&gt;handle_implied_ext&lt;/code&gt; 前面判断版本。但是发现参数 &lt;code&gt;*ext&lt;/code&gt; 在与 &lt;code&gt;riscv_implied_info[]&lt;/code&gt; 比较，没有获取大小版本的机会，于是引入了一个参数指给 &lt;code&gt;riscv_ext_version_table[]&lt;/code&gt;。还用过 &lt;code&gt;get_default_version&lt;/code&gt;，始终卡在不知道获取了哪个扩展的 major_version = 2, minor_version = 0。&lt;/p&gt;
+&lt;p&gt;继而想在&lt;code&gt;parse&lt;/code&gt;调用 &lt;code&gt;handle_implied_ext&lt;/code&gt; 之前判断出大小版本返回 &lt;code&gt;implied_version_p = false&lt;/code&gt;。但是使用前文中的 &lt;code&gt;itr&lt;/code&gt; 调用 &lt;code&gt;lookup()&lt;/code&gt;始终不对。自此编程苦手烂尾。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title></title>
       <link>https://xyenchi.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://xyenchi.github.io/about/</guid>
-      <description>about me XYenChi 和 Chiuan 是中二时期根据反切注音法把自己的中文拼音切了. Oria 是中二时期把Artoria(Fate zero里面的Saber)名字切了art. 因为喜欢的不是Saber, 而是误以为是尼禄也是Saber, 而尼禄是通晓艺术(art)的暴君.
-other 想到想写的再写.
-2024.8.12更新：
-有了一些想写的，于是更新，简化社交。 首先我并不排斥认识新朋友这件事情，同时也没有过多的精力去维护社会关系，所以一切的行为的基准都是“如无必要，勿增实体”。
-如果给社交圈子亲密度评分+-100的话，我会给路人10分，表达我开放、乐于沟通的态度。举个例子就是如果路人找我问路或者求助我会在保证自身安全的前提下帮忙。
-在年纪不断老去、事件不断发生的情况下进行动态增减分。希望大家理解我的局限性，有很多事情我也是后知后觉想明白的，总是在很多年后感叹一句，只缘身在此山中。
-关于人情世故 大体遵循礼尚往来原则。
-首先我主张我自己是一个乐于助人的人，大家有急事找我帮忙尽管开口。但我的原则是救急不救穷，如果发现因为帮助别人而惹麻烦上身的话，会立即终止。
-其次声明我并不是一个大方的人，赠送礼物、请客吃饭等行为必定伴随着认为赠予或请客对象有助于我、我需要求别人办事或者回礼。 同时坚信友情并不是通过吃饭喝酒来维持的，毕竟每个人都有自己的使命，就算是三年没联系的朋友，我也会维持当初的热忱。
-最后，存在亲密度等级高的人，我主动花钱乐呵乐呵的可能性。
-关于消费观 近些年有些虚无主义的趋势，认为一切应以解决生活烦恼为最高位。如果变化了再修改吧。
-关于工作 目前有想要耕耘一生的事业，如果有机会的话我会尽我所能。不会强求什么薪资水平或者受人尊敬，这是一些自身信仰的敏感话题。
-关于恋人 目前并没有另外的一套好感度评级。倾向于能过就过、不能过拉倒。以沫相濡不如相忘于江湖的坚定拥护者，至少现在是。毕竟能相互陪伴过一辈子也是能过？
-关于性格 可能有一些施虐倾向，D指数测试的时候也偏高。我很坦诚，惹了我我肯定会报复的，但不会无声无息地报复。</description>
+      <description>&lt;h3 id=&#34;about-me&#34;&gt;about me&lt;/h3&gt;
+&lt;p&gt;XYenChi 和 Chiuan 是中二时期根据反切注音法把自己的中文拼音切了.
+Oria 是中二时期把Artoria(Fate zero里面的Saber)名字切了art. 因为喜欢的不是Saber, 而是误以为是尼禄也是Saber, 而尼禄是通晓艺术(art)的暴君.&lt;/p&gt;
+&lt;h3 id=&#34;other&#34;&gt;other&lt;/h3&gt;
+&lt;p&gt;想到想写的再写.&lt;/p&gt;
+&lt;p&gt;2024.8.12更新：&lt;br&gt;
+有了一些想写的，于是更新，简化社交。 &lt;br&gt;
+首先我并不排斥认识新朋友这件事情，同时也没有过多的精力去维护社会关系，所以一切的行为的基准都是“如无必要，勿增实体”。&lt;br&gt;
+如果给社交圈子亲密度评分+-100的话，我会给路人10分，表达我开放、乐于沟通的态度。举个例子就是如果路人找我问路或者求助我会在保证自身安全的前提下帮忙。&lt;br&gt;
+在年纪不断老去、事件不断发生的情况下进行动态增减分。希望大家理解我的局限性，有很多事情我也是后知后觉想明白的，总是在很多年后感叹一句，只缘身在此山中。&lt;/p&gt;
+&lt;h4 id=&#34;关于人情世故&#34;&gt;关于人情世故&lt;/h4&gt;
+&lt;p&gt;大体遵循礼尚往来原则。&lt;br&gt;
+首先我主张我自己是一个乐于助人的人，大家有急事找我帮忙尽管开口。但我的原则是救急不救穷，如果发现因为帮助别人而惹麻烦上身的话，会立即终止。&lt;br&gt;
+其次声明我并不是一个大方的人，赠送礼物、请客吃饭等行为必定伴随着认为赠予或请客对象有助于我、我需要求别人办事或者回礼。 &lt;br&gt;
+同时坚信友情并不是通过吃饭喝酒来维持的，毕竟每个人都有自己的使命，就算是三年没联系的朋友，我也会维持当初的热忱。&lt;br&gt;
+最后，存在亲密度等级高的人，我主动花钱乐呵乐呵的可能性。&lt;/p&gt;
+&lt;h4 id=&#34;关于消费观&#34;&gt;关于消费观&lt;/h4&gt;
+&lt;p&gt;近些年有些虚无主义的趋势，认为一切应以解决生活烦恼为最高位。如果变化了再修改吧。&lt;/p&gt;
+&lt;h4 id=&#34;关于工作&#34;&gt;关于工作&lt;/h4&gt;
+&lt;p&gt;目前有想要耕耘一生的事业，如果有机会的话我会尽我所能。不会强求什么薪资水平或者受人尊敬，这是一些自身信仰的敏感话题。&lt;/p&gt;
+&lt;h4 id=&#34;关于恋人&#34;&gt;关于恋人&lt;/h4&gt;
+&lt;p&gt;目前并没有另外的一套好感度评级。倾向于能过就过、不能过拉倒。以沫相濡不如相忘于江湖的坚定拥护者，至少现在是。毕竟能相互陪伴过一辈子也是能过？&lt;/p&gt;
+&lt;h4 id=&#34;关于性格&#34;&gt;关于性格&lt;/h4&gt;
+&lt;p&gt;可能有一些施虐倾向，D指数测试的时候也偏高。我很坦诚，惹了我我肯定会报复的，但不会无声无息地报复。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -38,54 +890,15 @@ other 想到想写的再写.
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://xyenchi.github.io/friends/</guid>
-      <description>my friend link happy to exchange sort by time
-Felix&amp;rsquo;s Blog
-Coelacanthus&amp;rsquo;s Blog
-Yuuta Liang&amp;rsquo;s Blog
-CYY&amp;rsquo;s Blog
-alexiusll&amp;rsquo;s Blog
-ssr&amp;rsquo;s blog</description>
-    </item>
-    
-    <item>
-      <title>2024开工大吉</title>
-      <link>https://xyenchi.github.io/nonsence/20240218/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240218/</guid>
-      <description>天气雨 虽然不管究竟是否开工大吉，肯定要嘴硬说一下开工大吉的。
-继续解决 RVV machine mode 报错没有声明的问题。
-研究了 Makefile.in genmodes.cc gengtype 等一系列文件没能发现什么问题。
-现在开始怀疑 riscv 写的相关文件有问题了。</description>
-    </item>
-    
-    <item>
-      <title>debug record</title>
-      <link>https://xyenchi.github.io/debug_record/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/debug_record/</guid>
-      <description>工具链 riscv-gnu-toolchain
-源码 https://github.com/gcc-mirror/gcc/blob/master/gcc/common/config/riscv/riscv-common.cc
-方法 git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git
-./configure --prefix=&amp;quot;$PWD/opt&amp;quot; --with-arch=rv64gc --with-abi=lp64d
-make -j $(nproc)
-make linux -j $(nproc)
-gdb opt/riscv64-unknown-linux-gnu-gcc
-没想到想办法实现了好几天的 -march=rv64gcv0p7 解析成 rv64i2p1_m2p0_a2p1_f2p2 _d2p2 _c2p0 _v0p7 而不是 rv64i2p1_m2p0_a2p1_f2p2_d2p2_c2p0_v0p7_zicsr2p0_zifencei2p0_zve32f1p0_zve32x1p0_zve64d1p0_zve64f1p0_zve64x1p0_zvl128b1p0_zvl32b1p0_zvl64b1p0 因为 T head 实现方法是 -march=rv64gcXthreadVector 而搁置了。
-初期是在 handle_implied_ext 前面判断版本。但是发现参数 *ext 在与 riscv_implied_info[] 比较，没有获取大小版本的机会，于是引入了一个参数指给 riscv_ext_version_table[]。还用过 get_default_version，始终卡在不知道获取了哪个扩展的 major_version = 2, minor_version = 0。
-继而想在parse调用 handle_implied_ext 之前判断出大小版本返回 implied_version_p = false。但是使用前文中的 itr 调用 lookup()始终不对。自此编程苦手烂尾。</description>
-    </item>
-    
-    <item>
-      <title>only-riscv 分支的记录</title>
-      <link>https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/</guid>
-      <description>目前成功构建的 patch ：RISC-V: Fix VL operand bug in VSETVL PASS[PR110264]
-此patchRISC-V: Bugfix for RVV integer reduction in ZVE32/64.构建失败，但是RISC-V: Fix one typo for reduc expand GET_MODE_CLASS可以修复。 中间夹杂了 RISC-V:Add float16 tuple type support ,此构建失败报：
-../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from ../.././gcc/gcc/genemit.cc:25: ../.././gcc/gcc/rtl.h:316:31: warning: ‘rtx_def::mode’ is too small to hold all values of ‘enum machine_mode’ 316 | ENUM_BITFIELD(machine_mode) mode : 8; | ^~~~ In file included from .</description>
+      <description>&lt;h3 id=&#34;my-friend-link&#34;&gt;my friend link&lt;/h3&gt;
+&lt;p&gt;happy to exchange &lt;br&gt;
+sort by time&lt;br&gt;
+&lt;a href=&#34;https://felixc.at/&#34;&gt;Felix&amp;rsquo;s Blog&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://blog.coelacanthus.moe/&#34;&gt;Coelacanthus&amp;rsquo;s Blog&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://blog.yuuta.moe/&#34;&gt;Yuuta Liang&amp;rsquo;s Blog&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://blog.cyyself.name/&#34;&gt;CYY&amp;rsquo;s Blog&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;http://www.alexiusll.cn/&#34;&gt;alexiusll&amp;rsquo;s Blog&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://leanhe.dev&#34;&gt;ssr&amp;rsquo;s blog&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -94,11 +907,38 @@ gdb opt/riscv64-unknown-linux-gnu-gcc
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://xyenchi.github.io/perf/port-gprofng-for-risc-v/</guid>
-      <description>简单介绍一下 gprofng 的功能 由于 gprofng 可以对可执行程序直接进行分析不需要重新编译源码，所以对闭源软件进行性能评测也很方便。
-对 C、C++、Java 或者 Scala 程序进行性能分析 支持 Pthread、OpenMP 和 Java thread 多线程编程模型 gprofng 主要数据收集命令 gprofng collect app 运行时一般使用程序计数器（PC）采样 (Sample) 简单介绍一下 gprofng 的安装方法 直接用各大发行版的软件包管理器安装 从源码开始编译安装 https://github.com/bminor/binutils-gdb/tree/master/gprofng 简单介绍一下 gprofng 的使用方法 首先收集数据：
-gprofng collect app {your app} eg.
-gprofng collect app echo 1 上述命令会生成 test.n.er 文件夹，里面是收集的数据。 然后进行处理：
-gprofng display text -func -exp -head test.{times}.er/ 简单介绍一下 port 过程干了啥 添加 binutils-gdb 的 &amp;ndash;enable-gprofng 支持的架构 configure.ac中判断是否开启构建 gprofng 的 target 里面添加 riscv64 的 1triplet。</description>
+      <description>&lt;h3 id=&#34;简单介绍一下-gprofng-的功能&#34;&gt;简单介绍一下 gprofng 的功能&lt;/h3&gt;
+&lt;p&gt;由于 gprofng 可以对可执行程序直接进行分析不需要重新编译源码，所以对闭源软件进行性能评测也很方便。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;对 C、C++、Java 或者 Scala 程序进行性能分析&lt;/li&gt;
+&lt;li&gt;支持 Pthread、OpenMP 和 Java thread 多线程编程模型&lt;/li&gt;
+&lt;li&gt;gprofng 主要数据收集命令 gprofng collect app 运行时一般使用程序计数器（PC）采样 (Sample)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;简单介绍一下-gprofng-的安装方法&#34;&gt;简单介绍一下 gprofng 的安装方法&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;直接用各大发行版的软件包管理器安装&lt;/li&gt;
+&lt;li&gt;从源码开始编译安装 &lt;br&gt;
+&lt;a href=&#34;https://github.com/bminor/binutils-gdb/tree/master/gprofng&#34;&gt;https://github.com/bminor/binutils-gdb/tree/master/gprofng&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;简单介绍一下-gprofng-的使用方法&#34;&gt;简单介绍一下 gprofng 的使用方法&lt;/h3&gt;
+&lt;p&gt;首先收集数据：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gprofng collect app &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;your app&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;eg.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gprofng collect app &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;上述命令会生成 test.n.er 文件夹，里面是收集的数据。 &lt;br&gt;
+然后进行处理：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gprofng display text -func -exp -head test.&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;times&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;.er/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;简单介绍一下-port-过程干了啥&#34;&gt;简单介绍一下 port 过程干了啥&lt;/h3&gt;
+&lt;h4 id=&#34;添加-binutils-gdb-的---enable-gprofng-支持的架构&#34;&gt;添加 binutils-gdb 的 &amp;ndash;enable-gprofng 支持的架构&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&#34;https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=configure.ac;h=a390639bfa90a8013da0b6c65aa6f848f1b26759;hb=91b999864f9831287f2ea6f960e8fa98e7b13ee9&#34;&gt;configure.ac&lt;/a&gt;中判断是否开启构建 gprofng 的 target 里面添加 riscv64 的 &lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;triplet。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/Writing-configure_002eac.html&#34;&gt;gnu configure.ac 的介绍官网链接&lt;/a&gt;&lt;br&gt;
+虽然很短一段但是翻译过来放在我的博客文章中却可以显得我的博客很长：&lt;br&gt;
+新建名为 &lt;em&gt;configure.ac&lt;/em&gt; 、包含调用 Autoconf 用来检测软件包所需或者可以使用的系统特性的宏的文件来给软件包生成 &lt;em&gt;configure&lt;/em&gt; 脚本。&lt;br&gt;
+从描述上看，Autoconf 已有的宏可以检测多种特性；详见&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/Existing-Tests.html#Existing-Tests&#34;&gt;已有检测&lt;/a&gt;&lt;br&gt;
+也可以使用 Autoconf 模版来生成一般性检测宏；详见&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/Writing-Tests.html#Writing-Tests&#34;&gt;写检测&lt;/a&gt;&lt;br&gt;
+对于特殊的特性，&lt;em&gt;configure.ac&lt;/em&gt; 可能需要手写 shell 命令；详见&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/Portable-Shell.html#Portable-Shell&#34;&gt;可移植 shell&lt;/a&gt;&lt;br&gt;
+&lt;em&gt;autoscan&lt;/em&gt; 程序可以帮助你快速入门写 &lt;em&gt;configure.ac&lt;/em&gt; ，详见&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/autoscan-Invocation.html#autoscan-Invocation&#34;&gt;autoscan 调用&lt;/a&gt;;&lt;br&gt;
+同理在 gprofng 文件夹中的 configure.ac 中也添加 RISC-V 架构相关配置信息。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -107,15 +947,27 @@ gprofng display text -func -exp -head test.{times}.er/ 简单介绍一下 port �
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://xyenchi.github.io/posts/risc-v-vector--%E6%88%96-simd-%E7%B1%BB%E4%BC%BC%E6%8B%93%E5%B1%95%E7%9A%84%E5%BA%94%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86/</guid>
-      <description>线性代数部分 专有名词： 线性方程组
-齐次线性方程组
-增广矩阵
-还没有想好次级标题叫什么名字 不知道有没有必要从线性方程的求解开始讲起，简单带过一下好了。想象有很多未知数，如果没有限制条件，未知数的结果就想怎么编就怎么编，但是如果用方程组来当它们的限制条件，就可以缩小范围。用线性代数的方法求解就是，把未知数的位置对齐，将系数收集起来，称之为系数矩阵，对系数矩阵进行行变换化简，得到线性无关行向量个数，也就是矩阵的秩。秩小于未知数个数时，相当于限制条件没有太多，可以在一定范围内瞎编。而秩等于未知数个数时，想方便理解的话就还原一下原本的方程，如果是齐次线性方程，最后一行的未知数 x 常数之后还是等于0, 只能未知数自己也是0。以前学的教材上还有增广矩阵这个概念用来求等式右边不为0的情况，但是规律公式啥的都很难记，还是行变换之后想象一下原本的方程简单。
-电路部分（线性齐次） 专有名词： 基尔霍夫电流定律 基尔霍夫电压定律 节点分析
-举个例子： 本来是想拿个电路图举例子的，但是发现博客没调好，显示不了图片。等下一次心血来潮的时候修一修吧。
-大致过程就是，选一个参考节点，把所有节点标个号方便表示，给每一条支路都标个方向。找出受控源，列出支路方程，受控源正负极相连的方向如果跟你标的方向相同就写负号，相反就写正号。列出节点电压方程。改写成矩阵形式。就变成了一个方程组解的问题。
-电路部分（线性非齐次） 要写的也太多了。。。再说吧。
-专有名词： 举个例子： 关于射频仿真软件 之前在电子厂干天线的测试和量产前期的失效分析，因为看不到什么前途就在闲的时候看了一些天线仿真教学，但是也没太深入学习就跑路了，机缘巧合之下转行搞计算机。在开始学仿真的时候，学习到的就是不同的电尺寸选择的算法会不一样，还接触到了边界条件这些很有意思的概念。在学习RISCV相关的知识的时候，经常看到的例子就是计算RGB, 但是脑子里好像又有一些矩阵的其他用法，心血来潮，写下这篇博客，如果以后能学习到更多，那本文就是挖的坑，有空就来填，如果以后真的转行成功，在其他方向深入，那本文就是对过去的总结。</description>
+      <description>&lt;h3 id=&#34;线性代数部分&#34;&gt;线性代数部分&lt;/h3&gt;
+&lt;h4 id=&#34;专有名词&#34;&gt;专有名词：&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/zh-cn/%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84&#34;&gt;线性方程组&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://zh.wikipedia.org/zh-cn/%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84#%E9%BD%90%E6%AC%A1%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84&#34;&gt;齐次线性方程组&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%A2%9E%E5%B9%BF%E7%9F%A9%E9%98%B5&#34;&gt;增广矩阵&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;还没有想好次级标题叫什么名字&#34;&gt;还没有想好次级标题叫什么名字&lt;/h4&gt;
+&lt;p&gt;不知道有没有必要从线性方程的求解开始讲起，简单带过一下好了。想象有很多未知数，如果没有限制条件，未知数的结果就想怎么编就怎么编，但是如果用方程组来当它们的限制条件，就可以缩小范围。用线性代数的方法求解就是，把未知数的位置对齐，将系数收集起来，称之为系数矩阵，对系数矩阵进行行变换化简，得到线性无关行向量个数，也就是矩阵的秩。秩小于未知数个数时，相当于限制条件没有太多，可以在一定范围内瞎编。而秩等于未知数个数时，想方便理解的话就还原一下原本的方程，如果是齐次线性方程，最后一行的未知数 x 常数之后还是等于0, 只能未知数自己也是0。以前学的教材上还有增广矩阵这个概念用来求等式右边不为0的情况，但是规律公式啥的都很难记，还是行变换之后想象一下原本的方程简单。&lt;/p&gt;
+&lt;h3 id=&#34;电路部分线性齐次&#34;&gt;电路部分（线性齐次）&lt;/h3&gt;
+&lt;h4 id=&#34;专有名词-1&#34;&gt;专有名词：&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/zh-hans/%E5%9F%BA%E7%88%BE%E9%9C%8D%E5%A4%AB%E9%9B%BB%E8%B7%AF%E5%AE%9A%E5%BE%8B#%E5%9F%BA%E7%88%BE%E9%9C%8D%E5%A4%AB%E9%9B%BB%E6%B5%81%E5%AE%9A%E5%BE%8B&#34;&gt;基尔霍夫电流定律&lt;/a&gt;
+&lt;a href=&#34;https://zh.wikipedia.org/zh-hans/%E5%9F%BA%E7%88%BE%E9%9C%8D%E5%A4%AB%E9%9B%BB%E8%B7%AF%E5%AE%9A%E5%BE%8B#%E5%9F%BA%E7%88%BE%E9%9C%8D%E5%A4%AB%E9%9B%BB%E5%A3%93%E5%AE%9A%E5%BE%8B&#34;&gt;基尔霍夫电压定律&lt;/a&gt;
+&lt;a href=&#34;https://zh.wikipedia.org/zh-hans/%E7%AF%80%E9%BB%9E%E5%88%86%E6%9E%90&#34;&gt;节点分析&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;举个例子&#34;&gt;举个例子：&lt;/h4&gt;
+&lt;p&gt;本来是想拿个电路图举例子的，但是发现博客没调好，显示不了图片。等下一次心血来潮的时候修一修吧。&lt;br&gt;
+大致过程就是，选一个参考节点，把所有节点标个号方便表示，给每一条支路都标个方向。找出受控源，列出支路方程，受控源正负极相连的方向如果跟你标的方向相同就写负号，相反就写正号。列出节点电压方程。改写成矩阵形式。就变成了一个方程组解的问题。&lt;/p&gt;
+&lt;h3 id=&#34;电路部分线性非齐次&#34;&gt;电路部分（线性非齐次）&lt;/h3&gt;
+&lt;p&gt;要写的也太多了。。。再说吧。&lt;/p&gt;
+&lt;h4 id=&#34;专有名词-2&#34;&gt;专有名词：&lt;/h4&gt;
+&lt;h4 id=&#34;举个例子-1&#34;&gt;举个例子：&lt;/h4&gt;
+&lt;h3 id=&#34;关于射频仿真软件&#34;&gt;关于射频仿真软件&lt;/h3&gt;
+&lt;p&gt;之前在电子厂干天线的测试和量产前期的失效分析，因为看不到什么前途就在闲的时候看了一些天线仿真教学，但是也没太深入学习就跑路了，机缘巧合之下转行搞计算机。在开始学仿真的时候，学习到的就是不同的电尺寸选择的算法会不一样，还接触到了边界条件这些很有意思的概念。在学习RISCV相关的知识的时候，经常看到的例子就是计算RGB, 但是脑子里好像又有一些矩阵的其他用法，心血来潮，写下这篇博客，如果以后能学习到更多，那本文就是挖的坑，有空就来填，如果以后真的转行成功，在其他方向深入，那本文就是对过去的总结。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -124,11 +976,17 @@ gprofng display text -func -exp -head test.{times}.er/ 简单介绍一下 port �
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://xyenchi.github.io/note/rvfa%E8%AF%BE%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
-      <description>timeline 1980: start around, RISC-V is the fifth generation of a research project.
-2010: RISC-V is the result of an evolving project.
-2011: The first version of the RISC-V ISA was released.
-name the number just after &amp;ldquo;RV&amp;rdquo;: XLEN: in the Unprivileged Specification document. represents the width of registers and not the width of the instructions. Not all instruction width are allowed, only multiple of 16 bits wide.
-for example, the 32 of RV32I.</description>
+      <description>&lt;h3 id=&#34;timeline&#34;&gt;timeline&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;1980&lt;/strong&gt;:   start around, RISC-V is the fifth generation of a research project.&lt;br&gt;
+&lt;strong&gt;2010&lt;/strong&gt;:   RISC-V is the result of an evolving project.&lt;br&gt;
+&lt;strong&gt;2011&lt;/strong&gt;:   The first version of the RISC-V ISA was released.&lt;/p&gt;
+&lt;h3 id=&#34;name&#34;&gt;name&lt;/h3&gt;
+&lt;p&gt;the number just after &amp;ldquo;RV&amp;rdquo;:
+&lt;em&gt;&lt;strong&gt;XLEN&lt;/strong&gt;&lt;/em&gt;: in the Unprivileged Specification document.
+represents &lt;em&gt;&lt;strong&gt;the width of registers and not the width of the instructions&lt;/strong&gt;&lt;/em&gt;. Not all instruction width are allowed, only multiple of 16 bits wide.&lt;br&gt;
+for example, the 32 of RV32I.    &lt;br&gt;
+&lt;em&gt;&lt;strong&gt;RV64G&lt;/strong&gt;&lt;/em&gt;:&lt;br&gt;
+RV64IMAFDZicsr_Zifencei&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -137,36 +995,98 @@ for example, the 32 of RV32I.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://xyenchi.github.io/rvv_intrinsic_analysis/</guid>
-      <description>虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。
-既然我第一行就写明了，那么便不是标题党。
-之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。
-包含的文件 iterator.md
-constraint.md
-riscv-c.cc
-riscv-protos.h
-riscv-vector-builtins-bases.cc
-riscv-vector-builtins-bases.h
-riscv-vector-builtins-functions.def
-riscv-vector-builtins-shapes.cc
-riscv-vector-builtins-shapes.h
-riscv-vector-builtins-types.def riscv-vector-builtins.cc
-riscv-vector-builtins.h
-riscv.md
-vector-iterators.md
-vector.md
-Acronyms QI: 8 bits
-HI: 16 bits
-SI: 32 bits
-DI: 64 bits
-把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。
-iterator.md 使用lisp声明通用寄存器位宽定义迭代器（iterator）名称
-constraint.md 在 match_operand 中，可以指定操作数约束(operand constraint)。
-约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。
-约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。 说明操作数是否可以是一个内存引用以及其地址类型。 描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。 GCC 中的约束(constraint)使用字符串(string)表示。
-以下是常见用法（部分夹带RISC-V私货方便自己查询）：
-&amp;gt;: memory operand, autoincrement addressing type, including preincrement and postincrement.
-f: floating-point register
-g: general register, memory or integer immediate constant.</description>
+      <description>&lt;p&gt;虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。&lt;br&gt;
+既然我第一行就写明了，那么便不是标题党。&lt;br&gt;
+之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。&lt;/p&gt;
+&lt;h3 id=&#34;包含的文件&#34;&gt;包含的文件&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/iterator.md&#34;&gt;iterator.md&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/constraint.md&#34;&gt;constraint.md&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-c.cc&#34;&gt;riscv-c.cc&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-protos.h&#34;&gt;riscv-protos.h&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-bases.cc&#34;&gt;riscv-vector-builtins-bases.cc&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-bases.h&#34;&gt;riscv-vector-builtins-bases.h&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-functions.def&#34;&gt;riscv-vector-builtins-functions.def&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-shapes.cc&#34;&gt;riscv-vector-builtins-shapes.cc&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-shapes.h&#34;&gt;riscv-vector-builtins-shapes.h&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-types.def&#34;&gt;riscv-vector-builtins-types.def&lt;/a&gt; &lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins.cc&#34;&gt;riscv-vector-builtins.cc&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins.h&#34;&gt;riscv-vector-builtins.h&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv.md&#34;&gt;riscv.md&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector-iterators.md&#34;&gt;vector-iterators.md&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector.md&#34;&gt;vector.md&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;acronyms&#34;&gt;Acronyms&lt;/h3&gt;
+&lt;p&gt;QI: 8 bits&lt;br&gt;
+HI: 16 bits&lt;br&gt;
+SI: 32 bits&lt;br&gt;
+DI: 64 bits&lt;br&gt;
+把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。&lt;/p&gt;
+&lt;h4 id=&#34;iteratormd&#34;&gt;iterator.md&lt;/h4&gt;
+&lt;p&gt;使用lisp声明通用寄存器位宽定义迭代器（iterator）名称&lt;/p&gt;
+&lt;h4 id=&#34;constraintmd&#34;&gt;constraint.md&lt;/h4&gt;
+&lt;p&gt;在 match_operand 中，可以指定操作数约束(operand  constraint)。&lt;br&gt;
+约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。&lt;/li&gt;
+&lt;li&gt;说明操作数是否可以是一个内存引用以及其地址类型。&lt;/li&gt;
+&lt;li&gt;描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;GCC 中的约束(constraint)使用字符串(string)表示。&lt;br&gt;
+以下是常见用法（部分夹带RISC-V私货方便自己查询）：&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;&amp;gt;&lt;/strong&gt;&lt;/em&gt;:   memory operand, autoincrement addressing type, including preincrement and postincrement.&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;f&lt;/strong&gt;&lt;/em&gt;:   floating-point register&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;g&lt;/strong&gt;&lt;/em&gt;:   general register, memory or integer immediate constant.&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;i&lt;/strong&gt;&lt;/em&gt;:   Integer immediate operand, sign constant when and after compilering.&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;j&lt;/strong&gt;&lt;/em&gt;:   SIBCALL_REGS&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;l&lt;/strong&gt;&lt;/em&gt;:   JALR_REGS&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;n&lt;/strong&gt;&lt;/em&gt;:   known value integer immediate operand&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;p&lt;/strong&gt;&lt;/em&gt;:   memory address operand&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;x&lt;/strong&gt;&lt;/em&gt;:   all operand&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;I&lt;/strong&gt;&lt;/em&gt;:   12-bit integer signed immediate
+&lt;em&gt;&lt;strong&gt;J&lt;/strong&gt;&lt;/em&gt;:   integer zero&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;K&lt;/strong&gt;&lt;/em&gt;:   5-bit unsigned immediate for CSR access instructions   &lt;br&gt;
+&lt;em&gt;&lt;strong&gt;L&lt;/strong&gt;&lt;/em&gt;:   U-type 20-bit signed immediate   &lt;br&gt;
+&lt;em&gt;&lt;strong&gt;Ds3&lt;/strong&gt;&lt;/em&gt;:   1, 2 or 3 immediate&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;DsS&lt;/strong&gt;&lt;/em&gt;:   31 immediate&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;DsD&lt;/strong&gt;&lt;/em&gt;:   63 immediate&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;DbS&lt;/strong&gt;&lt;/em&gt;:&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;DnS&lt;/strong&gt;&lt;/em&gt;:&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;D03&lt;/strong&gt;&lt;/em&gt;:   0, 1, 2 or 3 immediate&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;DsA&lt;/strong&gt;&lt;/em&gt;:   0 - 10 immediate&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;G&lt;/strong&gt;&lt;/em&gt;:&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;A&lt;/strong&gt;&lt;/em&gt;:   An address that is held in a general-purpose register.&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;S&lt;/strong&gt;&lt;/em&gt;:   A constraint that matches an absolute symbolic address.&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;U&lt;/strong&gt;&lt;/em&gt;:   A PLT-indirect call address.&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;T&lt;/strong&gt;&lt;/em&gt;:&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;vr&lt;/strong&gt;&lt;/em&gt;:   vector register   &lt;br&gt;
+&lt;em&gt;&lt;strong&gt;vd&lt;/strong&gt;&lt;/em&gt;:   vector register except mask register&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;vm&lt;/strong&gt;&lt;/em&gt;:   vector mask register&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;vp&lt;/strong&gt;&lt;/em&gt;:   poly int&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;vu&lt;/strong&gt;&lt;/em&gt;:   undefined vector value&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;vi&lt;/strong&gt;&lt;/em&gt;:   vector 5-bit signed immediate&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;vj&lt;/strong&gt;&lt;/em&gt;:   vector negated 5-bit signed immediate&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;vk&lt;/strong&gt;&lt;/em&gt;:   vector 5-bit unsigned immediate&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;Wc0&lt;/strong&gt;&lt;/em&gt;:   vector of immediate all zeros&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;Wc1&lt;/strong&gt;&lt;/em&gt;:   vector of immediate all ones&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;Wb1&lt;/strong&gt;&lt;/em&gt;:   BOOL vector of {&amp;hellip;,0,&amp;hellip;0,1}&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;Wdm&lt;/strong&gt;&lt;/em&gt;:   Vector duplicate memory operand&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;th_f_fmv&lt;/strong&gt;&lt;/em&gt;:   floating-point register for XTheadFmv&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;th_r_fmv&lt;/strong&gt;&lt;/em&gt;:   integer register for XTheadFmv&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;vmWc1&lt;/strong&gt;&lt;/em&gt;:&lt;br&gt;
+vector mask register + a vector of immediate all ones&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;rK&lt;/strong&gt;&lt;/em&gt;:&lt;br&gt;
+register operand using general register + 5-bit unsigned immediate for CSR access instructiosn&lt;/li&gt;
+&lt;li&gt;约束修饰字符 (Constraint Modifier Characters)&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;=&lt;/strong&gt;&lt;/em&gt;:操作数只写&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;+&lt;/strong&gt;&lt;/em&gt;:操作可读可写&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;&amp;amp;&lt;/strong&gt;&lt;/em&gt;:在某些约束选择(constraint alternative)中，该操作数是前面某个clobber的操作数，作为指令的输入操作数，该操作数在指令结束之前它的值已经被修改，因此，该操作数可能不在原来使用的寄存器或内存地址中存储   &lt;br&gt;
+&lt;em&gt;&lt;strong&gt;%&lt;/strong&gt;&lt;/em&gt;:可交换，该操作数及其之后的操作数可以进行交换&lt;br&gt;
+eg. 操作数1的约束为 &amp;lsquo;%0&amp;rsquo;，表示与操作数0的约束相同。&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;#&lt;/strong&gt;&lt;/em&gt;:直到逗号的所有字符在进行约束处理时将被忽略，这些字符只对寄存器选择起作用&lt;br&gt;
+&lt;em&gt;&lt;strong&gt;*:&lt;/strong&gt;&lt;/em&gt; 直到逗号的所有字符在进行约束处理是将被忽略，这些字符在寄存器选择是也将被忽略。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;riscv-ccc&#34;&gt;riscv-c.cc&lt;/h4&gt;
+&lt;p&gt;riscv intrinsic 相关。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -175,9 +1095,15 @@ g: general register, memory or integer immediate constant.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://xyenchi.github.io/perf/unmatched-javascript-%E5%BC%95%E6%93%8E-benchmark-%E8%B7%91%E5%88%86/</guid>
-      <description>unmatched 的系统信息 Linux milk 5.19.2-arch1-1 #1 SMP PREEMPT Fri, 19 Aug 2022 19:44:19 +0000 riscv64 GNU/Linux python 版本 :Python 3.10.6
-v8 arch riscv 的 unmatched 上面并没有 v8 直接装来用，所以需要构建一个。放一个 v8 官方网站的构建教程做参考。但是这样以我的水平并不能糊出来一个 PKGBUILD ，于是在 AUR 库找到了 v8-r 这个包，用PARU -G v8-r命令把 PKGBUILD 及相关文件获取到本地或者性能更优的编译机器。修改PKGBUILD中的arch为riscv64。参考 arch 跨平台打包教程。进行第一次 extra-riscv64-build -- -d &amp;quot;/tmp/cache:/var/cache/pacman/pkg&amp;quot;,报错如下：
-==&amp;gt; Starting prepare()... -&amp;gt; Fetching V8 code /build/v8-r/src/depot_tools/vpython3: line 45: /build/v8-r/src/depot_tools/.cipd_bin/vpython3: No such file or directory ==&amp;gt; ERROR: A failure occurred in prepare(). Aborting... 在谷歌源码站找到vpython3。第 45 行的上下文：</description>
+      <description>&lt;p&gt;unmatched 的系统信息 &lt;code&gt;Linux milk 5.19.2-arch1-1 #1 SMP PREEMPT Fri, 19 Aug 2022 19:44:19 +0000 riscv64 GNU/Linux&lt;/code&gt; python 版本 :&lt;code&gt;Python 3.10.6&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;v8&#34;&gt;v8&lt;/h3&gt;
+&lt;p&gt;arch riscv 的 unmatched 上面并没有 v8 直接装来用，所以需要构建一个。放一个 &lt;a href=&#34;https://v8.dev/docs/build&#34;&gt;v8 官方网站的构建教程&lt;/a&gt;做参考。但是这样以我的水平并不能糊出来一个 PKGBUILD ，于是在 AUR 库找到了 v8-r 这个包，用&lt;code&gt;PARU -G v8-r&lt;/code&gt;命令把 PKGBUILD 及相关文件获取到本地或者性能更优的编译机器。修改&lt;code&gt;PKGBUILD&lt;/code&gt;中的arch为&lt;code&gt;riscv64&lt;/code&gt;。参考&lt;a href=&#34;https://github.com/felixonmars/archriscv-packages/wiki/archbuild-%E4%BD%BF%E7%94%A8%E5%8F%82%E8%80%83#%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%89%93%E5%8C%85&#34;&gt; arch 跨平台打包教程&lt;/a&gt;。进行第一次 &lt;code&gt;extra-riscv64-build -- -d &amp;quot;/tmp/cache:/var/cache/pacman/pkg&amp;quot;&lt;/code&gt;,报错如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;==&amp;gt; Starting prepare()...
+  -&amp;gt; Fetching V8 code
+/build/v8-r/src/depot_tools/vpython3: line 45: /build/v8-r/src/depot_tools/.cipd_bin/vpython3: No such file or directory
+==&amp;gt; ERROR: A failure occurred in prepare().
+    Aborting...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在&lt;a href=&#34;https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/refs/heads/main/vpython3&#34;&gt;谷歌源码站&lt;/a&gt;找到vpython3。第 45 行的上下文：&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -186,385 +1112,27 @@ v8 arch riscv 的 unmatched 上面并没有 v8 直接装来用，所以需要构
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://xyenchi.github.io/perf/unmatched-%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C-fpmark/</guid>
-      <description>现有如下两块 unmatched 用来跑 benchmark, 一台叫 lemontea, 另一台叫 milk 。
-lemontea 系统信息，clang 版本，gcc 版本如下：
-[root@lemontea ~]# uname -a Linux lemontea 5.18.3-arch1-1 #1 SMP PREEMPT Sun, 12 Jun 2022 18:42:25 +0000 riscv64 GNU/Linux [root@lemontea ~]# clang -v clang version 13.0.1 Target: riscv64-unknown-linux-gnu Thread model: posix InstalledDir: /usr/bin Found candidate GCC installation: /usr/bin/../lib/gcc/riscv64-unknown-linux-gnu/12.1.0 Selected GCC installation: /usr/bin/../lib/gcc/riscv64-unknown-linux-gnu/12.1.0 [root@lemontea ~]# gcc -v Using built-in specs. COLLECT_GCC=gcc COLLECT_LTO_WRAPPER=/usr/lib/gcc/riscv64-unknown-linux-gnu/12.1.0/lto-wrapper Target: riscv64-unknown-linux-gnu Configured with: /build/gcc/src/gcc/configure --enable-languages=c,c++,fortran,go,lto,objc,obj-c++ --enable-bootstrap --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.</description>
-    </item>
-    
-    <item>
-      <title>再次重启每日废话</title>
-      <link>https://xyenchi.github.io/nonsence/20240613/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240613/</guid>
-      <description>天气晴
-下午看到了天上的云有奇妙纹理，像脑花，掏出手机拍了一张，发现手机摄像头的马赛克效果比脑花纹理还清晰。
-最近把主机转了个方向发现主板在 gprofng 编译的时候会亮过热的红灯，在cyy的建议下把 intel i7 12700 CPU 原装风扇换成了超大风扇，RISC-V qemu system 的性能好多了。既没有了终端显示乱刷问题，编译时间也快了很多。
-本来之前 gprofng 没啥头绪的，现在貌似觉得还可以研究一下，因为可以根据报错来找到哪里有问题了。</description>
-    </item>
-    
-    <item>
-      <title>办理业务踩的坑</title>
-      <link>https://xyenchi.github.io/nonsence/%E5%8A%9E%E7%90%86%E4%B8%9A%E5%8A%A1%E8%B8%A9%E7%9A%84%E5%9D%91/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/%E5%8A%9E%E7%90%86%E4%B8%9A%E5%8A%A1%E8%B8%A9%E7%9A%84%E5%9D%91/</guid>
-      <description>近日办理业务发现了一年前签合同和协议踩的坑，记录一下，以后也会新增累积，成为游刃有余的老油条。
-总结以下几条：
-1.条款内容前后文矛盾
-2.暗改合同日期
-3.更换业务内容只签补充协议且执行按照合同正文日期
-虽然签十个合同办理业务才可能出现这一个案例，但涉及金额较大业务时需要更加谨慎。不过更希望大家不会碰到这些事。
-具体内容：
-1.条款1写 4.15 - 4.18 是免租期。条款2写租金从4.15开始收取。实际免租期是个幌子。
-2.约定租期1年，但是合同起止时间写 4.15 - 4.30。
-3.网络合同正文写 4.15 ，但是发现宽带不符合办公要求时，办理电信业务租赁线路签补充协议不注明日期，实际执行按照合同正文。</description>
-    </item>
-    
-    <item>
-      <title>参加玄铁大会</title>
-      <link>https://xyenchi.github.io/nonsence/%E5%8F%82%E5%8A%A0%E7%8E%84%E9%93%81%E5%A4%A7%E4%BC%9A/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/%E5%8F%82%E5%8A%A0%E7%8E%84%E9%93%81%E5%A4%A7%E4%BC%9A/</guid>
-      <description>早上到了深圳，参加玄铁大会。
-拎着 sifive 的袋子走出地铁站被尚未面基过的群友观测到了，好好玩。
-玄铁大会的会场有好多人参加，玄铁还很贴心地为大家准备了同传，虽然偶尔在听的时候截获到了一些翻译得不太对的地方。觉得同声传译真的很难，因为我对于 自己没有了解过的领域听中文都会觉得困难，他们还要去翻译自己不了解的领域。
-中午和很多只在线上水群看到过的群友吃萨利亚，奶油蘑菇汤好喝，芝士焗饭太腻了，吃了几口就吃不下了。
-本地热心群友帮助我找到警局办理了港澳通行证签注，万分感谢！
-下午参观站台，有真能避障的小车车和人工智障 AI, 还体验了一下 openKylin 运行的小车车游戏的自动模式。
-衷心祝愿 RISC-V 能发展地越来越好。耶！</description>
-    </item>
-    
-    <item>
-      <title>回忆童年</title>
-      <link>https://xyenchi.github.io/nonsence/20240104/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240104/</guid>
-      <description>天气晴。
-今日观察东亚时区双周会，无法静心看代码。摸鱼。
-好久没有体验到考 RVFA 时候知识争相进入大脑的感觉了，需要加油。
-昨天晚上回忆起了很多童年往事，因为一个神奇的诱因。</description>
-    </item>
-    
-    <item>
-      <title>尝试学习 signal 写法</title>
-      <link>https://xyenchi.github.io/nonsence/20240116/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240116/</guid>
-      <description>天气雨
-今日观测不同架构 linux kernel 中的源代码关于 signal 的写法，因为不会用，所以也没有看懂。明日继续研究。
-但也算是找到了 uc_mcontext 的出处？不过并没有理解 gprofng 此处用法是什么，也许我在舍本逐末。
-又回想起了一些小时候的事情。时间过得可真快。</description>
-    </item>
-    
-    <item>
-      <title>尝试阅读 stack unwind</title>
-      <link>https://xyenchi.github.io/nonsence/20240115/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240115/</guid>
-      <description>天气阴
-找到了 GET_SP 的文件。
-https://github.com/bminor/binutils-gdb/blob/master/gprofng/libcollector/unwind.c 观察 Aarch64 代码编造了一些 REG_S0 REG_SP REG_PC，但是非常不 work 。 明日继续研究。
-发现不是很懂 stack unwind，搜到了一些文章，大致了解了一下，近日没有耐心阅读学习，一心想回家过年大呼特呼，而且也不懂该如何在 RISC-V 上使用。
-像 Aarch64 一样简单添加并不能解决问题，SPARC 和 x86 都有大量相关代码。预计我也需要写大量 RISC-V 相关代码。
-今日观测民生银行大厦其他楼层办公室，物不甚美，胜在价廉。
-龙龙 和 Pigy 来办公室玩耍，刷 leetcode 题目，好强。</description>
-    </item>
-    
-    <item>
-      <title>总结摘樱桃</title>
-      <link>https://xyenchi.github.io/nonsence/%E6%80%BB%E7%BB%93%E6%91%98%E6%A8%B1%E6%A1%83/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/%E6%80%BB%E7%BB%93%E6%91%98%E6%A8%B1%E6%A1%83/</guid>
-      <description>天气晴。
-近日被摘樱桃此等琐事缠身无法日更。
-起因是为 ruyisdk 的 gcc 12 支持 RISC-V。
-经过非常曲折，大概重新摘了 3 遍。
-第一遍简单在邮件列表根据关键词 RISC-V 按照时间来筛选 patch。
-第一个问题是有作者commit tittle里面写riscv无法筛选出来。
-第二个问题是邮件列表 patch 显示的时间不是按照 commit 生成时间而是根据 commit apply 时间。
-第二遍根据关键词 riscv 来筛选 patch。 导致vector部分大量报错。
-第三遍写了一个脚本：
-https://github.com/XYenChi/EasyCherryPick
-README写了用法和原理，日记中不再赘述。
-虽然操作过程有重名问题导致误删了 patch ，但也还有一些和 Makefile、中端相关的问题。好在最后根据关键词搜 patch 都能解决。</description>
-    </item>
-    
-    <item>
-      <title>想偷懒</title>
-      <link>https://xyenchi.github.io/nonsence/20240124/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240124/</guid>
-      <description>天气晴
-在给自己想一个理由断更，但是没想出来。 最近在给 gcc 摘 RISC-V 的樱桃，纯纯体力活，不过稍微还是瞟了几眼。
-观测到性价比高的办公室了，也算有着落。
-更新：性价比高的办公室凉了。</description>
-    </item>
-    
-    <item>
-      <title>感叹光阴似箭</title>
-      <link>https://xyenchi.github.io/nonsence/20240126/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240126/</guid>
-      <description>天气晴
-发现了一个比每天撕一页老黄历更恐怖的事情就是一把撕六页，揉成一大团扔进垃圾桶里。
-近日又迈出了和其他人办业务的重要一步，看起来只要我敢主动打电话都还蛮简单的。
-又可以因为摘樱桃的原因去研究gcc的编译流程了，离开了riscv-gnu-toolchain还一次都没有成功过，遗憾。</description>
-    </item>
-    
-    <item>
-      <title>找到漏摘的樱桃</title>
-      <link>https://xyenchi.github.io/nonsence/20240219/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240219/</guid>
-      <description>天气雨 终于找到了摘樱桃出的问题，如果早一点切分支搜，很快就能找出来，不知道自己脑子里每天装的是什么水。 翻译推文的时候也是，命名觉得不对劲但是却不会去发现并修改。大脑不用可能真的会生锈，太恐怖了。</description>
-    </item>
-    
-    <item>
-      <title>搭建qemu跑最新最热linux kernel</title>
-      <link>https://xyenchi.github.io/nonsence/20240109/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240109/</guid>
-      <description>天气晴
-近日听说新的sbi和kernel支持 profile sampling 打算搭建 qemu system 进行实验。
-搭建过程遇到 nfs 的网桥难关。今日不打算跨越，明日再跨。
-手头上的 unmatched 的 sbi 和 kernel 版本都是旧的。无法使用 perf
-xyenchi@ubuntu:~$ sudo perf record -a -g Error: cycles: PMU Hardware doesn&amp;#39;t support sampling/overflow-interrupts. Try &amp;#39;perf stat&amp;#39; 本可以记录 cross compile linux kernel, 但是更想下班。</description>
-    </item>
-    
-    <item>
-      <title>摘樱桃</title>
-      <link>https://xyenchi.github.io/nonsence/20240130/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240130/</guid>
-      <description>天气阴转雨
-近日埋下了好多坑，比如刷路由器，比如给daily nonsense倒序排列。
-Pick 了 gcc/gcc/Makefile.in 的一个 patch 之后昨天的问题解决了，但是又出现了 machine mode 找不到的问题。
-晚上吃完麦当劳会办公室发现大家带上了嗷呜一楼避难了，发生火灾56楼确实很可怕。不过生死有命，富贵在天了。</description>
-    </item>
-    
-    <item>
-      <title>研究 Makefile</title>
-      <link>https://xyenchi.github.io/nonsence/20240129/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240129/</guid>
-      <description>天气阴转阵雨
-近日埋下了好多坑，比如刷路由器，比如给daily nonsense倒序排列。
-今天突然发现了闭源运维与凶恶财务仓库具有并肩的性价比。世间万物果然都是有它的道理在。
-因为到处搜 no rule to make riscv.(具体啥我忘了).gen.def 成 riscv.o ,发现了 gcc/gcc/ 下其实还有一个 Makefile.in。
-于是在摘与之相关的樱桃，但是不敢乱刷了，算算时间如果解决不了问题可能过年都得在家干活的= =。</description>
-    </item>
-    
-    <item>
-      <title>给摘樱桃偷懒想办法</title>
-      <link>https://xyenchi.github.io/nonsence/20240202/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240202/</guid>
-      <description>天气雨 昨日和今日在想办法解决gcc自动构建的问题。
-在 github CI上写首先面临着只能选择 gcc 仓库，因为 riscv-gnu-toolgitchain 的 gcc 是 submodule ，push commit 之后无法检测到 submodule 的更新自动跑。
-其次面临的问题是拉取 riscv-gnu-toolchain 的 submodule 所有分支的时间消耗需要将近二十分钟。git cherry-pick commit 可能只需要二十秒。虽然可以用 git clone &amp;ndash;depth=1 来解决，但是无法切换到我想要的release。 最重大的问题就是无法找到 gcc 12.3.0 的 ref 了，在尝试解决的途中发现了 ci 的每一次 step 都会回到初始的仓库路径。
-发现只要我把自己仓库的 master 改成需要测试的代码就行。诶？ 最近每天都三四点睡，十一二点起。大脑开始刷cache，无端回忆起很多以前的事情。</description>
-    </item>
-    
-    <item>
-      <title>继续想偷懒</title>
-      <link>https://xyenchi.github.io/nonsence/20240125/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240125/</guid>
-      <description>天气晴
-在给自己想一个理由断更，但是没想出来。 樱桃摘到了一周前，编译爆炸了，开始debug。 找到了 blog sort by time 的方法但是不知道往哪放。 https://gohugo.io/methods/pages/bydate/
-更新：因为用 github CI拉去上游主题仓库，所以我自己修改主题代码没有用。因为不想自己维护一个主题仓库，所以不按照时间排序了。</description>
-    </item>
-    
-    <item>
-      <title>继续摘樱桃</title>
-      <link>https://xyenchi.github.io/nonsence/20240131/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240131/</guid>
-      <description>天气雨
-今日想找commit history的蛛丝马迹发现gcc12 release之前也有很多 riscv 相关patch不是打在gcc12上的。
-翻车车。</description>
-    </item>
-    
-    <item>
-      <title>继续移植gprofng</title>
-      <link>https://xyenchi.github.io/nonsence/%E7%BB%A7%E7%BB%AD%E7%A7%BB%E6%A4%8Dgprofng/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/%E7%BB%A7%E7%BB%AD%E7%A7%BB%E6%A4%8Dgprofng/</guid>
-      <description>天气晴。
-早上到达武汉非常冷，发现了一个很中二的说法，回笼觉念成回龙决。
-偷一个 /usr/include/sys/ucontext.h 出来观测，qemu 里面显示得太异常了。大佬告诉我这是 glibc 的内容。
-/* struct ucontext definition, RISC-V version. Copyright (C) 1997-2023 Free Software Foundation, Inc. This file is part of the GNU C Library. The GNU C Library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.</description>
-    </item>
-    
-    <item>
-      <title>观察 inline asm</title>
-      <link>https://xyenchi.github.io/nonsence/20240102/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240102/</guid>
-      <description>天气雨。
-今日尝试：
-#elif ARCH(RISCV) __asm__ __volatile__(&amp;#34;csrr %0, mhartid&amp;#34; /* RISC-V hart id */ : &amp;#34;=a&amp;#34; (r) : /* input : none */ : /* clobbers: none */); 发现 usermode 不可以读 Machine mode 的 CSR。进行了失败的 asm volatile 用法研究。
-_SC_NPROCESSORS_CONF可以读取 CPU 核数。
-今日发现：
-&amp;ldquo;`&amp;rsquo;&amp;rdquo; 是英文的一种引用方法。</description>
-    </item>
-    
-    <item>
-      <title>观察 ncpus 为什么会被优化</title>
-      <link>https://xyenchi.github.io/nonsence/20240108/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240108/</guid>
-      <description>天气阴。
-今日尝试直接修改 Makefile 在 unmatched 编译，发现 ncpus 不显示 optimized out 了。
-说明 Makefile 的生成脚本确实写糊了，和 x86 一样可以得出值是 0。
-运行的时候：
-(gdb) r ./gprofng/src/gp-collect-app echo 1 Starting program: /home/xyenchi/binutils-gdb/debug-build/gprofng/src/gp-collect-app ./gprofng/src/gp-collect-app echo 1 [Thread debugging using libthread_db enabled] Using host libthread_db library &amp;#34;/lib/riscv64-linux-gnu/libthread_db.so.1&amp;#34;. Creating experiment directory test.1.er (Process ID: 1319751) ... process 1319751 is executing new program: /home/xyenchi/binutils-gdb/debug-build/gprofng/src/gp-collect-app [Thread debugging using libthread_db enabled] Using host libthread_db library &amp;#34;/lib/riscv64-linux-gnu/libthread_db.so.1&amp;#34;. Creating experiment directory test.2.er (Process ID: 1319751) .</description>
-    </item>
-    
-    <item>
-      <title>观察 sysconf</title>
-      <link>https://xyenchi.github.io/nonsence/%E8%A7%82%E5%AF%9F-sysconf/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/%E8%A7%82%E5%AF%9F-sysconf/</guid>
-      <description>天气勉强晴，空气污染严重。
-今日学习：
-sysconf()
-标准C库。行时获取配置信息。
-#include &amp;lt;unistd.h&amp;gt; long sysconf(int name); -1: 不支持
-0： 相关函数或头文件存在，但会在运行时询问支持程度
-除了0或-1之外的值： 支持
-例子：
-gprofng/src/collctrl.cc
-/* get CPU count and processor clock rate */ ncpumax = sysconf (_SC_CPUID_MAX); clock_getres
-glibc 2.17前是 Real-time library (librt, -lrt)，之后是标准 C 库 (libc, -lc)。
-#include &amp;lt;time.h&amp;gt; int clock_getres(clockid_t clockid, struct timespec *_Nullable res); int clock_gettime(clockid_t clockid, struct timespec *tp); int clock_settime(clockid_t clockid, const struct timespec *tp); ref：https://man7.org/linux/man-pages/man2/clock_getres.2.html
-在 Michael Kerrisk 写的《Linux/UNIX System Programming Essentials》看到的小技巧：</description>
-    </item>
-    
-    <item>
-      <title>观察编译选项</title>
-      <link>https://xyenchi.github.io/nonsence/20240105/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240105/</guid>
-      <description>天气晴。
-今日尝试重新在 unmatched 上传入CFLAG=-O0 CXXFLAG=-O0不优化编译 gprofng, 发现无法传入。
-# ------------------------------------------------- # Miscellaneous non-standard autoconf-set variables # ------------------------------------------------- # The gcc driver likes to know the arguments it was configured with. TOPLEVEL_CONFIGURE_ARGUMENTS=../configure --enable-gprofng CFLAG=-O0 CXXFLAG=-O0 CFLAGS = -g -O2 LDFLAGS = LIBCFLAGS = $(CFLAGS) CXXFLAGS = -g -O2 </description>
-    </item>
-    
-    <item>
-      <title>观察计算机专有名词</title>
-      <link>https://xyenchi.github.io/nonsence/%E8%A7%82%E5%AF%9F%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/%E8%A7%82%E5%AF%9F%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%93%E6%9C%89%E5%90%8D%E8%AF%8D/</guid>
-      <description>天气阴，空气污染严重。
-上午去协和医院想进行一个龋齿未雨绸缪地补。牙医看完片子之后说，蛀牙原本而就做过根管治疗了，如果想要补的话得把根管治疗也重做了。建议疼的时候再去直接根管治疗。想想这颗牙做根管治疗已经是十年前了，十年来每一个牙医都要对当时的牙医填充的材料表示一下震惊或者疑惑这到底是什么材料。
-今日学习：
-RHCT : RISC-V Hypervisor Code Table
-ACPI : Advanced Configuration and Power Interface
-DTS ： Device Tree Source
-晚上武绿约饭，见到了好久不见的舌头球总肥猫灰熊东东柠柑半壶和半壶未婚妻。</description>
-    </item>
-    
-    <item>
-      <title>解决搭建qemu system遇到的问题</title>
-      <link>https://xyenchi.github.io/nonsence/20240110/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240110/</guid>
-      <description>天气晴
-近日听说新的sbi和kernel支持 profile sampling 打算搭建 qemu system 进行实验。
-搭建过程遇到 nfs 的网桥难关。
-今日跨越网桥配置难关。
-https://wiki.archlinux.org/title/Systemd-networkd#Bridge_interface
-在cyy的指导下根据上述链接将网桥绑在网络接口并配置了静态 ip 。
-由于我电脑的home目录是加密的，所以无法 mount nfs。于是将 archriscv 的系统镜像移到了 /var。
-搭建好的qemu system使用watch ncpus可以快速发现被优化，但这完全是我编译的时候忘记了修改 Makefile 里面的 -O0.
-修改完成之后 watchpoint 正在消耗大量时间。</description>
-    </item>
-    
-    <item>
-      <title>记录 Gnu Modula 2</title>
-      <link>https://xyenchi.github.io/gnu/gcc/modula2/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/gnu/gcc/modula2/</guid>
-      <description>Gnu Modula 2 在 gcc 源码目录里，属于处理源代码的前端。根据职业生涯所学从 AST 到 GIMPLE 到 pass 到 RTL, 竟不知从何下手去移植到 RISC-V。
-查询了一下 modula 2 的用法。和 gcc 较为相似，使用 gm2 编译运行 .mod 文件。
-猜测是也能在 riscv-gnu-toolchain 里生成可执行文件，类似于 riscv-gnu-unknown-linux/elf-gcc。
-将 gcc 切换到 devel/modula-2 分支之后，使用 --with=rv64gc --with-abi-lp64d 编译了一次，缺少某个库而报错。
-意外的是，如果进入 gcc 文件夹，使用 --enable-libgm2 GM2_for_target=riscv 配置一下之后，编译通过了。
-想到修改 makefile 。添加 makefile 的难处在于，gm2 在 gcc 文件夹中，如何使之脱离 gcc 并能够使用。</description>
-    </item>
-    
-    <item>
-      <title>记录 RISC-V 的 gdb 异常使用 watch</title>
-      <link>https://xyenchi.github.io/nonsence/20240111/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240111/</guid>
-      <description>天气晴
-搭建好的qemu system使用watch ncpus可以快速发现被优化，但这完全是我编译的时候忘记了修改 Makefile 里面的 -O0.
-修改完成之后 watchpoint 正在消耗大量时间。
-结束 watch 之后，传入 -O0 又有了新的报错。
-[root@172 build]# ./gprofng/src/gp-collect-app echo 1 Creating experiment directory test.6.er (Process ID: 354740) ... echo: symbol lookup error: /usr/local/lib/gprofng/libgp-collector.so: undefined symbol: GET_SP 找到了 GET_SP 的文件。
-https://github.com/bminor/binutils-gdb/blob/master/gprofng/libcollector/unwind.c
-明日继续研究。
-#define _GNU_SOURCE #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;sched.h&amp;gt; #include &amp;lt;sys/syscall.h&amp;gt; #include &amp;lt;unistd.h&amp;gt; #include &amp;lt;asm/hwprobe.h&amp;gt; void main() { int ncpus; int npages; int page_size; struct riscv_hwprobe res; res.key = RISCV_HWPROBE_KEY_MVENDORID; cpu_set_t cpu_set; int __riscv_hwprobe (struct riscv_hwprobe *pairs, long pair_count, long cpu_count, unsigned long *cpus, unsigned long flags) { return syscall(__NR_riscv_hwprobe, pairs, pair_count, cpu_count, cpus, flags); } CPU_ZERO(&amp;amp;cpu_set); CPU_SET(0, &amp;amp;cpu_set); long ret = __riscv_hwprobe(&amp;amp;res, 1, 1, &amp;amp;cpu_set, 0); ncpus = sysconf (_SC_NPROCESSORS_CONF); npages = sysconf (_SC_PHYS_PAGES); page_size = sysconf (_SC_PAGE_SIZE); printf(&amp;#34;ncpus: %d,\nnpages: %d,\npage_size: %d\n&amp;#34;, ncpus, npages, page_size); printf(&amp;#34;riscv_hwprobe:%x\n&amp;#34;, ret); printf(&amp;#34;riscv_mvendorid:%x\n&amp;#34;, res.</description>
-    </item>
-    
-    <item>
-      <title>调试 grofng</title>
-      <link>https://xyenchi.github.io/nonsence/20240103/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240103/</guid>
-      <description>天气晴。
-今日尝试：
-将
-如果没有 __SC_CPUID_MAX
-就把 __SC_CPUID_MAX 写成517
-的代码改成了
-如果没有 __SC_CPUID_MAX
-就用 __SC_NPROCESSORS_CONF 读 ncpus
-但是 ncpus 还是显示 0 ，使用 gdb 调试时显示被优化。
-其他使用 syscall 和相同声明方法的 page_size 和 npages gdb 显示 no symbol, 搜索可以发现有些文件使用了它们。
-今日发现：
-2038年时间可以变成负数。
-https://en.wikipedia.org/wiki/Year_2038_problem</description>
-    </item>
-    
-    <item>
-      <title>重启每日废话</title>
-      <link>https://xyenchi.github.io/nonsence/20240402/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://xyenchi.github.io/nonsence/20240402/</guid>
-      <description>天气雨
-怎么还在摘樱桃。
-发现想要根据报错来解决出现的问题的话就会出现本不该是 gcc 12 特性的 patch 被引入。
-于是推倒重来，一个一个标记。
-干的时候又很不耐烦，想要掏出脚本。不过还是不要太激进了，等编译的时候看看书。</description>
+      <description>&lt;p&gt;现有如下两块 unmatched 用来跑 benchmark, 一台叫 lemontea, 另一台叫 milk 。&lt;/p&gt;
+&lt;p&gt;lemontea 系统信息，clang 版本，gcc 版本如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;root@lemontea ~&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# uname -a&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Linux lemontea 5.18.3-arch1-1 &lt;span class=&#34;c1&#34;&gt;#1 SMP PREEMPT Sun, 12 Jun 2022 18:42:25 +0000 riscv64 GNU/Linux&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;root@lemontea ~&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# clang -v&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;clang version 13.0.1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Target: riscv64-unknown-linux-gnu
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Thread model: posix
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;InstalledDir: /usr/bin
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Found candidate GCC installation: /usr/bin/../lib/gcc/riscv64-unknown-linux-gnu/12.1.0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Selected GCC installation: /usr/bin/../lib/gcc/riscv64-unknown-linux-gnu/12.1.0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;root@lemontea ~&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# gcc -v&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Using built-in specs.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;COLLECT_GCC&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;gcc
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;COLLECT_LTO_WRAPPER&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/lib/gcc/riscv64-unknown-linux-gnu/12.1.0/lto-wrapper
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Target: riscv64-unknown-linux-gnu
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Configured with: /build/gcc/src/gcc/configure --enable-languages&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;c,c++,fortran,go,lto,objc,obj-c++ --enable-bootstrap --prefix&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr --libdir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/lib --libexecdir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/lib --mandir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/share/man --infodir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/share/info --with-bugurl&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;https://bugs.archlinux.org/ --with-linker-hash-style&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;gnu --with-system-zlib --enable-__cxa_atexit --enable-cet&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;auto --enable-checking&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;release --enable-clocale&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;gnu --enable-default-pie --enable-default-ssp --enable-gnu-indirect-function --enable-gnu-unique-object --enable-linker-build-id --enable-lto --disable-multilib --enable-plugin --enable-shared --enable-threads&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;posix --disable-libssp --disable-libstdcxx-pch --disable-werror --enable-link-serialization&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Thread model: posix
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Supported LTO compression algorithms: zlib zstd
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gcc version 12.1.0 &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;GCC&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;milk 系统信息，clang 版本，gcc 版本如下：&lt;/p&gt;</description>
     </item>
     
   </channel>
