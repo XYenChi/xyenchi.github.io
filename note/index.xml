@@ -13,6 +13,13 @@
     <language>en</language>
     <atom:link href="https://xyenchi.github.io/note/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>C&#43;&#43;学习笔记</title>
+      <link>https://xyenchi.github.io/note/c&#43;&#43;%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://xyenchi.github.io/note/c&#43;&#43;%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>&lt;p&gt;最近开始学C++，做一下记录。大学其实学过一点，但是因为专业是物联网工程所以C++课比软件工程课时少，没学完，而且没咋用忘光了。&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>RVFA课程学习笔记</title>
       <link>https://xyenchi.github.io/note/rvfa%E8%AF%BE%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
