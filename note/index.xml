@@ -5,16 +5,17 @@
     <link>https://xyenchi.github.io/note/</link>
     <description>Recent content in Notes on xyenchi&#39;s blog</description>
     <image>
+      <title>xyenchi&#39;s blog</title>
       <url>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en</language><atom:link href="https://xyenchi.github.io/note/index.xml" rel="self" type="application/rss+xml" />
+    <generator>Hugo -- 0.140.1</generator>
+    <language>en</language>
+    <atom:link href="https://xyenchi.github.io/note/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>RVFA课程学习笔记</title>
       <link>https://xyenchi.github.io/note/rvfa%E8%AF%BE%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>https://xyenchi.github.io/note/rvfa%E8%AF%BE%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
       <description>&lt;h3 id=&#34;timeline&#34;&gt;timeline&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;1980&lt;/strong&gt;:   start around, RISC-V is the fifth generation of a research project.&lt;br&gt;
@@ -28,6 +29,5 @@ for example, the 32 of RV32I.    &lt;br&gt;
 &lt;em&gt;&lt;strong&gt;RV64G&lt;/strong&gt;&lt;/em&gt;:&lt;br&gt;
 RV64IMAFDZicsr_Zifencei&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>
