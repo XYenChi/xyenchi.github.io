@@ -11,8 +11,20 @@
     </image>
     <generator>Hugo -- 0.140.2</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 02 Jan 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jan 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/nonsence/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2025年1月4日流水账</title>
+      <link>https://xyenchi.github.io/nonsence/20250104/</link>
+      <pubDate>Sat, 04 Jan 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20250104/</guid>
+      <description>&lt;p&gt;昨日睡了一整个白天，但是晚上四点睡觉，竟然早上九点半起床成功了，说明生物节律论不适于我。&lt;br&gt;
+在家摸鱼一上午后下午前往办公室配置vscode。&lt;br&gt;
+家里的vscode连ArchLinux的WSL2使用extension都没有什么问题，但是办公室的ArchLinux主机却会报配置文件的问题。&lt;br&gt;
+根据部分报错搜到了code-features这个包，安装之后还是报没有配置文件。&lt;br&gt;
+经sequencer提醒，ArchLinux上应当&lt;code&gt;pacman -S codium&lt;/code&gt;，而我&lt;code&gt;pacman -S code&lt;/code&gt;。经过查询vscodium才是真正符合开源协议的软件。&lt;br&gt;
+sequencer嘲笑我入职两年了连环境都不会配，但我觉得这是一个常识性问题，知道了即可，不认可他的嘲笑。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>2025年1月2日流水账</title>
       <link>https://xyenchi.github.io/nonsence/20250102/</link>
