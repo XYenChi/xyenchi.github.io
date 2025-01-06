@@ -11,8 +11,24 @@
     </image>
     <generator>Hugo -- 0.140.2</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 04 Jan 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jan 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/nonsence/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2025年1月6日记录</title>
+      <link>https://xyenchi.github.io/nonsence/20250106/</link>
+      <pubDate>Mon, 06 Jan 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20250106/</guid>
+      <description>&lt;p&gt;今天实习生妹妹问了一个我无法解决的问题。&lt;br&gt;
+用riscv-gnu-toolchain编译出来的gcc和gdb，可以编译出可执行文件，但无法通过qemu运行。
+使用riscv-unknown-gnu-linux-gdb run该可执行文件会报错&lt;code&gt;don&#39;t know how to run&lt;/code&gt;&lt;br&gt;
+使用&lt;code&gt;$RISCV/bin/qemu-riscv64 -D -L $RISCV/sysroot {executable file}&lt;/code&gt; 报错
+&lt;code&gt;Error while loading /path/sysroot: Exec format error&lt;/code&gt; &lt;br&gt;
+使用 &lt;code&gt;file {executable file}&lt;/code&gt; 显示&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ELF 64-bit LSB executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked,
+interpreter /lib/ld-linux-riscv64-lp64d.so.1, for GNU/Linux 4.15.0, not stripped
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;编译时加上&lt;code&gt;-static&lt;/code&gt;参数只会改变&lt;code&gt;file&lt;/code&gt;时链接方式的描述。&lt;br&gt;
+暂时无法解决，有待咨询其他人。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>2025年1月4日流水账</title>
       <link>https://xyenchi.github.io/nonsence/20250104/</link>
