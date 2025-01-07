@@ -3,7 +3,9 @@
 用riscv-gnu-toolchain编译出来的gcc和gdb，可以编译出可执行文件，但无法通过qemu运行。 使用riscv-unknown-gnu-linux-gdb run该可执行文件会报错don't know how to run
 使用$RISCV/bin/qemu-riscv64 -D -L $RISCV/sysroot {executable file} 报错 Error while loading /path/sysroot: Exec format error 使用 file {executable file} 显示
 ELF 64-bit LSB executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, for GNU/Linux 4.15.0, not stripped 编译时加上-static参数只会改变file时链接方式的描述。
-暂时无法解决，有待咨询其他人。</p></div><footer class=entry-footer><span title='2025-01-06 11:30:03 +0000 UTC'>January 6, 2025</span>&nbsp;·&nbsp;xyenchi</footer><a class=entry-link aria-label="post link to 2025年1月6日记录" href=https://xyenchi.github.io/nonsence/20250106/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>2025年1月4日流水账</h2></header><div class=entry-content><p>昨日睡了一整个白天，但是晚上四点睡觉，竟然早上九点半起床成功了，说明生物节律论不适于我。
+暂时无法解决，有待咨询其他人。
+看到实习生妹妹微信群里问队友，队友虽然没解释为啥，但是教她使用gdbserver。
+我之前想的是用qemu起一个riscv64的linux来用，现在学习到了简单方法，taget sim。</p></div><footer class=entry-footer><span title='2025-01-06 11:30:03 +0000 UTC'>January 6, 2025</span>&nbsp;·&nbsp;xyenchi</footer><a class=entry-link aria-label="post link to 2025年1月6日记录" href=https://xyenchi.github.io/nonsence/20250106/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>2025年1月4日流水账</h2></header><div class=entry-content><p>昨日睡了一整个白天，但是晚上四点睡觉，竟然早上九点半起床成功了，说明生物节律论不适于我。
 在家摸鱼一上午后下午前往办公室配置vscode。
 家里的vscode连ArchLinux的WSL2使用extension都没有什么问题，但是办公室的ArchLinux主机却会报配置文件的问题。
 根据部分报错搜到了code-features这个包，安装之后还是报没有配置文件。

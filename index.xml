@@ -27,7 +27,9 @@
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ELF 64-bit LSB executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked,
 interpreter /lib/ld-linux-riscv64-lp64d.so.1, for GNU/Linux 4.15.0, not stripped
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;编译时加上&lt;code&gt;-static&lt;/code&gt;参数只会改变&lt;code&gt;file&lt;/code&gt;时链接方式的描述。&lt;br&gt;
-暂时无法解决，有待咨询其他人。&lt;/p&gt;</description>
+暂时无法解决，有待咨询其他人。&lt;/p&gt;
+&lt;p&gt;看到实习生妹妹微信群里问队友，队友虽然没解释为啥，但是教她使用&lt;code&gt;gdbserver&lt;/code&gt;。&lt;br&gt;
+我之前想的是用qemu起一个riscv64的linux来用，现在学习到了简单方法，&lt;code&gt;taget sim&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
     <item>
       <title>2025年1月4日流水账</title>
