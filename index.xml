@@ -11,8 +11,21 @@
     </image>
     <generator>Hugo -- 0.140.2</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 07 Jan 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jan 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2025年1月13日记录</title>
+      <link>https://xyenchi.github.io/nonsence/20250113/</link>
+      <pubDate>Mon, 13 Jan 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20250113/</guid>
+      <description>&lt;p&gt;今日无法写 &lt;code&gt;riscv-vector-fuzzing-test&lt;/code&gt; 的 C++，想到把&lt;code&gt;sifive-intrinsic-doc&lt;/code&gt;无法成功生成 instruction attribute 的脚本修好。&lt;br&gt;
+一直以为是 python 跨文件夹调用的问题，尝试了诸如：
+1.加&lt;code&gt;sys.path&lt;/code&gt;。&lt;br&gt;
+2.在各个路过的文件夹中新增&lt;code&gt;__init__.py&lt;/code&gt;文件&lt;br&gt;
+3.在&lt;code&gt;sifive_specific&lt;/code&gt;文件夹中加入调用文件对应路径的软链接&lt;br&gt;
+然而并没有什么效果，现在怀疑可能是不同指令添加 &lt;code&gt;insn_attrs&lt;/code&gt; 的过程随意初始化了，导致有些attribute可以成功append，有些失踪。&lt;br&gt;
+把 rif 给李秦君看一下，给他解释的时候想到，现在的问题可能是 tuple type 在 &lt;code&gt;CustomOperator.def&lt;/code&gt; 里的 input_nfield 和 output_nfield 其他的指令并没有这两项。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>2025年1月7日记录</title>
       <link>https://xyenchi.github.io/nonsence/20250107/</link>
