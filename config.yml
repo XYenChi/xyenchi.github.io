@@ -1,6 +1,6 @@
 baseURL: "https://xyenchi.github.io"
 title: "xyenchi's blog"
-paginate: 5
+pagination.pagerSize: 5
 theme: PaperMod
 
 enableRobotsTXT: true
