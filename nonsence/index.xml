@@ -11,8 +11,49 @@
     </image>
     <generator>Hugo -- 0.145.0</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 12 Mar 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 16 Mar 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/nonsence/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>整理碎片</title>
+      <link>https://xyenchi.github.io/nonsence/20250316/</link>
+      <pubDate>Sun, 16 Mar 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20250316/</guid>
+      <description>&lt;p&gt;SIGABRT 程序的异常终止，如调用abort&lt;br&gt;
+SIGFPE 错误的算数运算，如除0或导致溢出&lt;br&gt;
+SIGILL 检测非法指令&lt;br&gt;
+SIGEGV 非法访问内存&lt;br&gt;
+SIGTERM 发送到程序的终止请求&lt;/p&gt;
+&lt;p&gt;新旧版intrinsic tail policy 对照表：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;&lt;/th&gt;
+          &lt;th&gt;TAMA&lt;/th&gt;
+          &lt;th&gt;TUMA&lt;/th&gt;
+          &lt;th&gt;TUMU&lt;/th&gt;
+          &lt;th&gt;TAMU&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Vm=0&lt;/td&gt;
+          &lt;td&gt;_m&lt;/td&gt;
+          &lt;td&gt;_tum&lt;/td&gt;
+          &lt;td&gt;_tumu&lt;/td&gt;
+          &lt;td&gt;_mu&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Vm=1&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;_tu&lt;/td&gt;
+          &lt;td&gt;_tu&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;rvv-intrinsic-doc的对照：&lt;br&gt;
+InstInfo.get(SEW, LMUL, [&amp;ldquo;OP&amp;rdquo;], inst_type, mem_type, extra_attr, required_ext=required_ext)&lt;/p&gt;</description>
+    </item>
     <item>
       <title>进行近期总结</title>
       <link>https://xyenchi.github.io/nonsence/20250312/</link>
