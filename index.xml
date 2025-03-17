@@ -52,7 +52,39 @@ SIGTERM 发送到程序的终止请求&lt;/p&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;rvv-intrinsic-doc的对照：&lt;br&gt;
-InstInfo.get(SEW, LMUL, [&amp;ldquo;OP&amp;rdquo;], inst_type, mem_type, extra_attr, required_ext=required_ext)&lt;/p&gt;</description>
+InstInfo.get(SEW, LMUL, [&amp;ldquo;OP&amp;rdquo;], inst_type, mem_type, extra_attr, required_ext=required_ext)&lt;/p&gt;
+&lt;p&gt;vfmv 和 vmv 类型(不一定对)：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;指令&lt;/th&gt;
+          &lt;th&gt;操作数类型  ｜&lt;/th&gt;
+          &lt;th&gt;&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;｜ vfmv ｜ f_s ｜ v_f ｜&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;s_f&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;vmv&lt;/td&gt;
+          &lt;td&gt;s_x&lt;/td&gt;
+          &lt;td&gt;x_s&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;v_x&lt;/td&gt;
+          &lt;td&gt;v_i&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</description>
     </item>
     <item>
       <title>进行近期总结</title>
