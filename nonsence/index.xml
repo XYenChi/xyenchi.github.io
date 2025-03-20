@@ -11,8 +11,21 @@
     </image>
     <generator>Hugo -- 0.145.0</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 16 Mar 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 20 Mar 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/nonsence/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>真的日更</title>
+      <link>https://xyenchi.github.io/nonsence/20250320/</link>
+      <pubDate>Thu, 20 Mar 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20250320/</guid>
+      <description>&lt;p&gt;今日终于结束了 RVI hackathon hub 相关的时间和场地事宜。&lt;br&gt;
+看了眼 codasip 和 andes 出的题目，范围好窄，而且和联动单位风格不太搭，在筹备别的题目了。&lt;/p&gt;
+&lt;p&gt;给gcc提交xuantie的-mcpu patch玄铁的人回话了，果然说和他们的spec、命名方式啥的不一样。
+但其实他们的tune info也没有写指令cost。&lt;/p&gt;
+&lt;p&gt;发现了一份gcc代码编辑器的&lt;a href=&#34;https://gcc.gnu.org/wiki/FormattingCodeForGCC&#34;&gt;配置&lt;/a&gt;，还蛮有用的。&lt;/p&gt;
+&lt;p&gt;说完我把mac的IDE配了一下，里面gcc的.md文件格式把blog的.md文件格式创了。&lt;/p&gt;
+&lt;p&gt;最近在思考是不是在无法赚钱无法提升能力的事情上花了太多时间精力。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>整理碎片</title>
       <link>https://xyenchi.github.io/nonsence/20250316/</link>
