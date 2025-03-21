@@ -11,8 +11,33 @@
     </image>
     <generator>Hugo -- 0.145.0</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 20 Mar 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 21 Mar 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>真的日更</title>
+      <link>https://xyenchi.github.io/nonsence/20250321/</link>
+      <pubDate>Fri, 21 Mar 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20250321/</guid>
+      <description>&lt;p&gt;PyCharm选中多行快捷键： alt+shift+insert 切换到 colume 模式&lt;br&gt;
+PyCharm全选并删除光标之前的内容 ： ctrl+shift+home / command+shift+⬆️&lt;br&gt;
+mac VScode打开md文件预览快捷键：command+k v&lt;/p&gt;
+&lt;p&gt;上次参加龙哥的gcc培训，听起来三星的人水平不低，而且想学习优化相关知识，但我没有。&lt;br&gt;
+按照老板的规划，八月份可能就轮到我了。&lt;br&gt;
+在龙哥讲课的时候翻看了gcc源代码，发现gcc riscv intrinisc tail policy没有我的测试用例
+写得激进。或许测不过的部分原因找到了= =0&lt;br&gt;
+继续研究 riscv-intrinsic-fuzzeing-test 的写法。&lt;br&gt;
+TypeInfo貌似是intrinsic操作数的类型信息，但我不敢确定。 &lt;br&gt;
+在jpgg和soha的帮助下了解了下列代码的奇妙用法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;enum&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;TypeClass&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;SIGNED_INT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;UNSIGNED_INT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;FLOAT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;BOOL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;NumberOfTypeClasses&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;NumberOfTypeClasses&lt;/code&gt;可以用来表示&lt;code&gt;TypeClass&lt;/code&gt;这个enum的总数。&lt;br&gt;
+现在卡在代表vlseg的 new vl 类型 &lt;code&gt;size_t *&lt;/code&gt; 的 SizePtr无法识别。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>真的日更</title>
       <link>https://xyenchi.github.io/nonsence/20250320/</link>
