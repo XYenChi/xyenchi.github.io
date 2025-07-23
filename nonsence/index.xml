@@ -9,10 +9,29 @@
       <url>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- 0.145.0</generator>
+    <generator>Hugo -- 0.148.1</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 26 Mar 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 19 Jun 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/nonsence/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>mask intrinsic</title>
+      <link>https://xyenchi.github.io/nonsence/20250619/</link>
+      <pubDate>Thu, 19 Jun 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20250619/</guid>
+      <description>&lt;p&gt;今日我发现riscv gnu toolchain使用gcc 15.0 release构建出来riscv64-unknown-elf-gcc和riscv64-unknown-linux-gnu-gcc编译出来的测试vmsbf intrinsic程序跑的结果不一致，我大受震撼第二次。&lt;br&gt;
+发现的起因是K1开发板gcc版本为15.1.0与我使用gcc15交叉编译测试结果不一致，但与ta=1s没关系，我大受震撼第一次。&lt;br&gt;
+由于我之前对riscv-gnu-toolchain进行了大量不可描述操作，于是进行删库跑路，没想到clone仓库和submodule就花了整整一天，网上冲浪越来越难了。由于glibc的字母排在newlib前面，于是submodule先clone下来进行了一次make linux，发现和riscv64-unknown-elf-gcc、K1的native gcc结果都不一样。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>mask intrinsic</title>
+      <link>https://xyenchi.github.io/nonsence/20250618/</link>
+      <pubDate>Wed, 18 Jun 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20250618/</guid>
+      <description>&lt;p&gt;vmsbf.m 是把第一个1之前所有的元素置0&lt;br&gt;
+__riscv_vmsbf_m_b1_m(vm, vs2,vl) vm在前，vs2在后。&lt;br&gt;
+vfirst是找到mask寄存器中的第一个1，返回index到通用寄存器。&lt;br&gt;
+但是RISC-V是大端序，用intrinsic不是，（划掉。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>工作日更</title>
       <link>https://xyenchi.github.io/nonsence/20250326/</link>
