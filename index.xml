@@ -9,10 +9,38 @@
       <url>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.148.2</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 19 Jun 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 23 Jul 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>博客日更改为月更</title>
+      <link>https://xyenchi.github.io/nonsence/202507/</link>
+      <pubDate>Wed, 23 Jul 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/202507/</guid>
+      <description>&lt;p&gt;近日发现难以做到日更，于是决定月更。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;有关项目&lt;/strong&gt;&lt;/em&gt;
+总结一下RIF现在碰到的一些问题：
+**** Segmentation Fault ****
+对构建过程和报错进行了描述放在github &lt;a href=&#34;https://github.com/plctlab/riscv-vector-intrinsic-fuzzing/issues/46&#34;&gt;issue&lt;/a&gt;
+目前并没有什么头绪，出现了按照test构建，没有segmentation fault但是也出现了vfsgnj指令报错:有dataC未定义。
+dataC无论在autogen/的文件里、spike的算法头文件里还是decode.hpp里都没有。
+删掉CustomOperator.def里面的其他指令之后就不会报错没有dataC了。
+**** vfsgnj(n/x) ****
+Decode.hpp里面写了和spike一样的算法宏&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define F16_SIGN ((uint16_t)1 &amp;lt;&amp;lt; 15)
+#define F32_SIGN ((uint32_t)1 &amp;lt;&amp;lt; 31)
+#define F64_SIGN ((uint64_t)1 &amp;lt;&amp;lt; 63)
+#define fsgnj16(a, b, n, x) \
+  f16((f16(a).v &amp;amp; ~F16_SIGN) | ((((x) ? f16(a).v : (n) ? F16_SIGN : 0) ^ f16(b).v) &amp;amp; F16_SIGN))
+#define fsgnj32(a, b, n, x) \
+  f32((f32(a).v &amp;amp; ~F32_SIGN) | ((((x) ? f32(a).v : (n) ? F32_SIGN : 0) ^ f32(b).v) &amp;amp; F32_SIGN))
+#define fsgnj64(a, b, n, x) \
+  f64((f64(a).v &amp;amp; ~F64_SIGN) | ((((x) ? f64(a).v : (n) ? F64_SIGN : 0) ^ f64(b).v) &amp;amp; F64_SIGN))
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;生成的测试用例，有mask的话遵循ta=1s，ma=1s，但是rvv intrinsic计算结果不遵循，就算有v0.t = 0
+也会正常计算所以报错了。
+在没有mask的测试用例中，rif golden 算出来的值是0，需要修。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>mask intrinsic</title>
       <link>https://xyenchi.github.io/nonsence/20250619/</link>
