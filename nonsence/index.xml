@@ -11,8 +11,24 @@
     </image>
     <generator>Hugo -- 0.148.2</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 23 Jul 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 15 Aug 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/nonsence/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>八月工作月更</title>
+      <link>https://xyenchi.github.io/nonsence/202508/</link>
+      <pubDate>Fri, 15 Aug 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/202508/</guid>
+      <description>&lt;h3 id=&#34;有关项目&#34;&gt;有关项目&lt;/h3&gt;
+&lt;p&gt;近期发现使用宏定义的方法满足 intrinsic function 的 rounding mode 需要是 unsign constant 的要求会导致传入的 rounding mode 是 0.
+在群友帮助下改为使用枚举四种 fixed-point 和五种 float point rounding mode的方法，对原本代码进行了大量重构。
+在 fix-point 的 vxrm rounding 中测试十分成功，在 float point 中测试不成功。
+想要抄袭 spike 写法，但没看懂如何实现的，我根本没找到在哪实现了（划掉。只有一个读 frm 的过程。
+自己这边调用 berkerly softfloat librar 的时候待 rounding 的值不满足任何一个 condition，没有任何改变地退出了。&lt;/p&gt;
+&lt;h3 id=&#34;c&#34;&gt;C++&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;uint16_t&lt;/code&gt; 16 bit 无符号整型。
+&lt;code&gt;uint_fast16_t&lt;/code&gt; C++ 11之后最快的可用无符号整型，至少 16 bit。&lt;/p&gt;
+&lt;p&gt;C 和 C++ 有 likely() 和 unlikely() 的宏给编译器大概率为真/不为真的提示。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>博客日更改为月更</title>
       <link>https://xyenchi.github.io/nonsence/202507/</link>
