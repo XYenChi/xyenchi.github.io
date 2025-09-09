@@ -4,7 +4,7 @@
 C++ uint16_t 16 bit 无符号整型。 uint_fast16_t C++ 11之后最快的可用无符号整型，至少 16 bit。
 C 和 C++ 有 likely() 和 unlikely() 的宏给编译器大概率为真/不为真的提示。
 __attribute__ ((__packed__)) 表示不对齐，以实际使用长度存储。
-技术分享 今日为了解决 float point rounding mode 的问题对 ieee754 2008 、berkely softfloat、spike 和 qemu 有关内容进行了少量研究。 (slides link)[https://docs.google.com/presentation/d/1c4s0P6chEdc6m7P4-OPWwJ9EYBh0mKjD3JV4IsWcrVA/edit?usp=sharing] 主要发现是 RIF 对 float16 和 float32 进行运算的数值都不在需要 rounding 的范围内。 qemu 会有把 float16 和 float32 变为 float64 处理的过程。</p></div><footer class=entry-footer><span title='2025-08-15 11:30:03 +0000 UTC'>August 15, 2025</span>&nbsp;·&nbsp;xyenchi</footer><a class=entry-link aria-label="post link to 八月工作月更" href=https://xyenchi.github.io/nonsence/202508/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>博客日更改为月更</h2></header><div class=entry-content><p>近日发现难以做到日更，于是决定月更。
+技术分享 今日为了解决 float point rounding mode 的问题对 ieee754 2008 、berkely softfloat、spike 和 qemu 有关内容进行了少量研究。 slides link 主要发现是 RIF 对 float16 和 float32 进行运算的数值都不在需要 rounding 的范围内。 qemu 会有把 float16 和 float32 变为 float64 处理的过程。</p></div><footer class=entry-footer><span title='2025-08-15 11:30:03 +0000 UTC'>August 15, 2025</span>&nbsp;·&nbsp;xyenchi</footer><a class=entry-link aria-label="post link to 八月工作月更" href=https://xyenchi.github.io/nonsence/202508/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>博客日更改为月更</h2></header><div class=entry-content><p>近日发现难以做到日更，于是决定月更。
 有关项目 总结一下RIF现在碰到的一些问题：
 Segmentation Fault 对构建过程和报错进行了描述放在github issue 目前并没有什么头绪，出现了按照test构建，没有segmentation fault但是也出现了vfsgnj指令报错:有dataC未定义。 dataC无论在autogen/的文件里、spike的算法头文件里还是decode.hpp里都没有。 删掉CustomOperator.def里面的其他指令之后就不会报错没有dataC了。
 vfsgnj(n/x) Decode.hpp里面写了和spike一样的算法宏
