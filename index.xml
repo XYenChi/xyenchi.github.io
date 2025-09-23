@@ -11,8 +11,28 @@
     </image>
     <generator>Hugo -- 0.150.0</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 15 Aug 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Sep 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>九月工作月更</title>
+      <link>https://xyenchi.github.io/nonsence/202509/</link>
+      <pubDate>Mon, 15 Sep 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/202509/</guid>
+      <description>&lt;h3 id=&#34;有关项目&#34;&gt;有关项目&lt;/h3&gt;
+&lt;p&gt;近日研究是否为浮点数进行了隐式类型转换导致的问题，但 spike 头文件中 f16_add() 的类型检查没问题，照理说不是。
+提交了 fixed point 相关的 patch，float point实在是有点没办法了，先不写了，研究一下别的指令怎么添加。&lt;/p&gt;
+&lt;h3 id=&#34;rvv&#34;&gt;RVV&lt;/h3&gt;
+&lt;h4 id=&#34;vrgather&#34;&gt;vrgather&lt;/h4&gt;
+&lt;p&gt;向量聚集指令从第一个源向量寄存器读取元素，位置由第二源向量寄存器组给出。第二向量寄存器的下标值按照无符号整型处理。源向量寄存器可以在任意小于 VLMAX 的下标处读取，无论 vl 的值是多少。写入目标寄存器的最大元素数量由 vl 给出，剩余超过 vl 的元素根据当前的 tail policy 处理。操作可以被 mask，inactive 的元素按照 mask undisturbed/agnostic policy 处理。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-assembly&#34; data-lang=&#34;assembly&#34;&gt;vrgather.vv vd, vs2, vs1, vm # vd[i] = (vs1[i] &amp;gt;= VLMAX) ? 0 : vs2[vs1[i]];
+vrgatherei16.vv vd, vs2, vs1, vm # vd[i] = (vs1[i] &amp;gt;= VLMAX) ? 0 : vs2[vs1[i]];
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;尝试了一下在 RIF 里面实现 permutation 相关的指令。
+golden 部分 spike 头文件中有读取元素位置的函数 P.VU.elt，RIF 的 processor.hpp 里面也要实现一个对应的，但是自动生成的头文件根据数组元素下标进行循环。需要添加另一个循环来遍历数组元素的每一个bit。添加的另一个循环不能出现在别的 operator 里面，所以 scripts 需要 needMerge attribute 来区分如何生成 computexxxOp.h。
+vlmax 如何确定呢？
+那么 Decoder.hpp 呢？
+又或者说，直接按照 sew * vl 来计算即可？
+这对吗？这不对吗？&lt;/p&gt;</description>
+    </item>
     <item>
       <title>八月工作月更</title>
       <link>https://xyenchi.github.io/nonsence/202508/</link>
