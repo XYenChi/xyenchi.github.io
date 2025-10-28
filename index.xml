@@ -9,7 +9,7 @@
       <url>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- 0.150.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>en</language>
     <lastBuildDate>Mon, 15 Sep 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
@@ -22,6 +22,7 @@
 &lt;p&gt;近日研究是否为浮点数进行了隐式类型转换导致的问题，但 spike 头文件中 f16_add() 的类型检查没问题，照理说不是。
 提交了 fixed point 相关的 patch，float point实在是有点没办法了，先不写了，研究一下别的指令怎么添加。&lt;/p&gt;
 &lt;h3 id=&#34;rvv&#34;&gt;RVV&lt;/h3&gt;
+&lt;h4 id=&#34;vlmax&#34;&gt;vlmax&lt;/h4&gt;
 &lt;h4 id=&#34;vrgather&#34;&gt;vrgather&lt;/h4&gt;
 &lt;p&gt;向量聚集指令从第一个源向量寄存器读取元素，位置由第二源向量寄存器组给出。第二向量寄存器的下标值按照无符号整型处理。源向量寄存器可以在任意小于 VLMAX 的下标处读取，无论 vl 的值是多少。写入目标寄存器的最大元素数量由 vl 给出，剩余超过 vl 的元素根据当前的 tail policy 处理。操作可以被 mask，inactive 的元素按照 mask undisturbed/agnostic policy 处理。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-assembly&#34; data-lang=&#34;assembly&#34;&gt;vrgather.vv vd, vs2, vs1, vm # vd[i] = (vs1[i] &amp;gt;= VLMAX) ? 0 : vs2[vs1[i]];
@@ -1258,27 +1259,27 @@ each build)&lt;/p&gt;</description>
       <description>&lt;h3 id=&#34;about-me&#34;&gt;about me&lt;/h3&gt;
 &lt;p&gt;steam id:896223072
 雀魂id:13634073&lt;/p&gt;
-&lt;p&gt;XYenChi 和 Chiuan 是中二时期根据反切注音法把自己的中文拼音切了.
+&lt;p&gt;XYenChi 和 Chiuan 是中二时期根据反切注音法把自己的中文拼音切了.&lt;br&gt;
 Oria 是中二时期把Artoria(Fate zero里面的Saber)名字切了art. 因为喜欢的不是Saber, 而是误以为是尼禄也是Saber, 而尼禄是通晓艺术(art)的暴君.&lt;/p&gt;
 &lt;h3 id=&#34;other&#34;&gt;other&lt;/h3&gt;
 &lt;p&gt;想到想写的再写.&lt;/p&gt;
 &lt;p&gt;经历了2025年8月的痛苦与挣扎，产生了奇妙的思考。就算可以通过观察学习模仿来获取别人的喜爱，彼此之间又有什么特别之处呢？money power fame 可以通过个人努力强求，友情 爱情 亲情也可以吗？&lt;/p&gt;
-&lt;p&gt;2024.8.12更新：
-有了一些想写的，于是更新，简化社交。
-首先我并不排斥认识新朋友这件事情，同时也没有过多的精力去维护社会关系，所以一切的行为的基准都是“如无必要，勿增实体”。
-如果给社交圈子亲密度评分+-100的话，我会给路人10分，表达我开放、乐于沟通的态度。举个例子就是如果路人找我问路或者求助我会在保证自身安全的前提下帮忙。
+&lt;p&gt;2024.8.12更新：&lt;br&gt;
+有了一些想写的，于是更新，简化社交。&lt;br&gt;
+首先我并不排斥认识新朋友这件事情，同时也没有过多的精力去维护社会关系，所以一切的行为的基准都是“如无必要，勿增实体”。&lt;br&gt;
+如果给社交圈子亲密度评分+-100的话，我会给路人10分，表达我开放、乐于沟通的态度。举个例子就是如果路人找我问路或者求助我会在保证自身安全的前提下帮忙。&lt;br&gt;
 在年纪不断老去、事件不断发生的情况下进行动态增减分。希望大家理解我的局限性，有很多事情我也是后知后觉想明白的，总是在很多年后感叹一句，只缘身在此山中。&lt;/p&gt;
 &lt;h4 id=&#34;关于人情世故&#34;&gt;关于人情世故&lt;/h4&gt;
-&lt;p&gt;大体遵循礼尚往来原则。
-首先我主张我自己是一个乐于助人的人，大家有急事找我帮忙尽管开口。但我的原则是救急不救穷，如果发现因为帮助别人而惹麻烦上身的话，会立即终止。
-其次声明我并不是一个大方的人，赠送礼物、请客吃饭等行为必定伴随着认为赠予或请客对象有助于我、我需要求别人办事或者回礼。
-同时坚信友情并不是通过吃饭喝酒来维持的，毕竟每个人都有自己的使命，就算是三年没联系的朋友，我也会维持当初的热忱。
+&lt;p&gt;大体遵循礼尚往来原则。&lt;br&gt;
+首先我主张我自己是一个乐于助人的人，大家有急事找我帮忙尽管开口。但我的原则是救急不救穷，如果发现因为帮助别人而惹麻烦上身的话，会立即终止。&lt;br&gt;
+其次声明我并不是一个大方的人，赠送礼物、请客吃饭等行为必定伴随着认为赠予或请客对象有助于我、我需要求别人办事或者回礼。&lt;br&gt;
+同时坚信友情并不是通过吃饭喝酒来维持的，毕竟每个人都有自己的使命，就算是三年没联系的朋友，我也会维持当初的热忱。&lt;br&gt;
 最后，存在亲密度等级高的人，我主动花钱乐呵乐呵的可能性。&lt;/p&gt;
 &lt;h4 id=&#34;关于消费观&#34;&gt;关于消费观&lt;/h4&gt;
 &lt;p&gt;近些年有些虚无主义的趋势，认为一切应以解决生活烦恼为最高位。如果变化了再修改吧。&lt;/p&gt;
 &lt;h4 id=&#34;关于工作&#34;&gt;关于工作&lt;/h4&gt;
-&lt;p&gt;目前有想要耕耘一生的事业，如果有机会的话我会尽我所能。不会强求什么薪资水平或者受人尊敬，这是一些自身信仰的敏感话题。
-不过目前困扰我的最大问题是自己太菜了导致焦虑反而不能好好学习和工作。一想到和别人的差距是以年为单位起步的就没有什么学习的动力，不过现在工作的压力摆在眼前，
+&lt;p&gt;目前有想要耕耘一生的事业，如果有机会的话我会尽我所能。不会强求什么薪资水平或者受人尊敬，这是一些自身信仰的敏感话题。&lt;br&gt;
+不过目前困扰我的最大问题是自己太菜了导致焦虑反而不能好好学习和工作。一想到和别人的差距是以年为单位起步的就没有什么学习的动力，不过现在工作的压力摆在眼前，&lt;br&gt;
 确实是不做也得做的事情，就先从坚持写学习工作记录开始吧。&lt;/p&gt;
 &lt;h4 id=&#34;关于恋人&#34;&gt;关于恋人&lt;/h4&gt;
 &lt;p&gt;目前并没有另外的一套好感度评级。倾向于能过就过、不能过拉倒。以沫相濡不如相忘于江湖的坚定拥护者，至少现在是。毕竟能相互陪伴过一辈子也是能过？&lt;/p&gt;
@@ -1299,6 +1300,37 @@ sort by time&lt;br&gt;
 &lt;a href=&#34;https://blog.cyyself.name/&#34;&gt;CYY&amp;rsquo;s Blog&lt;/a&gt;&lt;br&gt;
 &lt;a href=&#34;http://www.alexiusll.cn/&#34;&gt;alexiusll&amp;rsquo;s Blog&lt;/a&gt;&lt;br&gt;
 &lt;a href=&#34;https://leanhe.dev&#34;&gt;ssr&amp;rsquo;s blog&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>https://xyenchi.github.io/nonsence/202510/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/202510/</guid>
+      <description>&lt;h2 id=&#34;draft-false&#34;&gt;title: &amp;ldquo;十月工作月更&amp;rdquo;
+date: &amp;ldquo;2025-10-15T11:30:03+00:00&amp;rdquo;
+draft: false&lt;/h2&gt;
+&lt;p&gt;动荡不安的一个月。&lt;/p&gt;
+&lt;h3 id=&#34;rif&#34;&gt;RIF&lt;/h3&gt;
+&lt;p&gt;配置多个节点查看生成的图：&lt;code&gt;dot -Tpng output.dot &amp;gt; output.png&lt;/code&gt;&lt;br&gt;
+log:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;rif:converter.f16 = inf, intrinsic:converter2.f16 = nan
+rif:converter.u16 = 31744, intrinsic:converter2.u16 = 65535
+rif:converter.u16 = 7c00, intrinsic:converter2.u16 = ffff
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;gdb:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pc             0x10fc4  0x10fc4 &amp;lt;vrgather_vv_operator_0+142&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;gdb&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; info vector
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;v0             &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;q&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0xfffffffffffffffffffffffffffffff2, 0xffffffffffffffffffffffffffffffff&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;, 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;l&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0xfffffffffffffff2, 0xffffffffffffffff, 0xffffffffffffffff, 0xffffffffffffffff&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;, 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;w&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0xfffffff2, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;, 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;s&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0xfff2, 0xffff &amp;lt;repeats &lt;span class=&#34;m&#34;&gt;15&lt;/span&gt; times&amp;gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;, 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0xf2, 0xff &amp;lt;repeats &lt;span class=&#34;m&#34;&gt;31&lt;/span&gt; times&amp;gt;&lt;span class=&#34;o&#34;&gt;}}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;v1             &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;q&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0x18810fc510a810c20e33092d21eb26dc, 0x114513ce13ef1544027b0d6a245e1431&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;, 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;l&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0xe33092d21eb26dc, 0x18810fc510a810c2, 0x27b0d6a245e1431, 0x114513ce13ef1544&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;, 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;w&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0x21eb26dc, 0xe33092d, 0x10a810c2, 0x18810fc5, 0x245e1431, 0x27b0d6a, 0x13ef1544, 0x114513ce&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;, 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;s&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0x26dc, 0x21eb, 0x92d, 0xe33, 0x10c2, 0x10a8, 0xfc5, 0x1881, 0x1431, 0x245e, 0xd6a, 0x27b, 0x1544, 0x13ef, 0x13ce, 0x1145&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0xdc, 0x26, 0xeb, 0x21, 0x2d, 0x9, 0x33, 0xe, 0xc2, 0x10, 0xa8, 0x10, 0xc5, 0xf, 0x81, 0x18, 0x31, 0x14, 0x5e, 0x24, 0x6a, 0xd, 0x7b, 0x2, 0x44, 0x15, 0xef, 0x13, 0xce, 0x13, 0x45, 0x11&lt;span class=&#34;o&#34;&gt;}}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;ieee754_2008&#34;&gt;IEEE754_2008&lt;/h3&gt;
+&lt;p&gt;反正现在碰到的也都是浮点问题，不如直接从头到尾看完 IEEE 754。待更新。&lt;/p&gt;</description>
     </item>
     <item>
       <title>C&#43;&#43;学习笔记</title>
