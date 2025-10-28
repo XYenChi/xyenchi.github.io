@@ -77,6 +77,12 @@
     <loc>https://xyenchi.github.io/nonsence/20240613/</loc>
     <lastmod>2024-06-13T11:30:03+00:00</lastmod>
   </url><url>
+    <loc>https://xyenchi.github.io/novel/</loc>
+    <lastmod>2024-06-02T11:30:03+00:00</lastmod>
+  </url><url>
+    <loc>https://xyenchi.github.io/novel/%E5%BA%8F/</loc>
+    <lastmod>2024-06-02T11:30:03+00:00</lastmod>
+  </url><url>
     <loc>https://xyenchi.github.io/nonsence/only-riscv-%E5%88%86%E6%94%AF%E7%9A%84%E8%AE%B0%E5%BD%95/</loc>
     <lastmod>2024-04-22T11:30:03+00:00</lastmod>
   </url><url>
@@ -196,5 +202,7 @@
     <loc>https://xyenchi.github.io/perf/unmatched-javascript-%E5%BC%95%E6%93%8E-benchmark-%E8%B7%91%E5%88%86/</loc>
   </url><url>
     <loc>https://xyenchi.github.io/perf/unmatched-%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C-fpmark/</loc>
+  </url><url>
+    <loc>https://xyenchi.github.io/note/%E4%B8%8A%E6%89%8Brisc/</loc>
   </url>
 </urlset>
