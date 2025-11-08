@@ -50,6 +50,17 @@
 to access or start from when reading or writing vector elements.&lt;/p&gt;</description>
     </item>
     <item>
+      <title>十一月工作月更</title>
+      <link>https://xyenchi.github.io/nonsence/202511/</link>
+      <pubDate>Wed, 15 Oct 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/202511/</guid>
+      <description>&lt;h3 id=&#34;社区活动&#34;&gt;社区活动&lt;/h3&gt;
+&lt;p&gt;参加宁夏理工的 RISC-V 校园行。宁夏理工的社区氛围不错，不愧是之前举办过安同校园行的学校。&lt;br&gt;
+分享过程中发现不乏大一新生来参加活动，Slides 加入更多内容的决定是对的。后续可能更新一些如何区分指令集架构，放入教程链接。&lt;/p&gt;
+&lt;h3 id=&#34;rif&#34;&gt;RIF&lt;/h3&gt;
+&lt;p&gt;还是需要看 IEEE 754 获取一些前置知识，之前调用 roundToInt 函数的方法不对。fadd函数里面还套了一层。&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>九月工作月更</title>
       <link>https://xyenchi.github.io/nonsence/202509/</link>
       <pubDate>Mon, 15 Sep 2025 11:30:03 +0000</pubDate>
