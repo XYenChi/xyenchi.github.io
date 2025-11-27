@@ -11,8 +11,23 @@
     </image>
     <generator>Hugo -- 0.152.2</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 30 Oct 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 15 Nov 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>十一月工作月更</title>
+      <link>https://xyenchi.github.io/nonsence/202511/</link>
+      <pubDate>Sat, 15 Nov 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/202511/</guid>
+      <description>&lt;h3 id=&#34;社区活动&#34;&gt;社区活动&lt;/h3&gt;
+&lt;p&gt;参加宁夏理工的 RISC-V 校园行。宁夏理工的社区氛围不错，不愧是之前举办过安同校园行的学校。&lt;br&gt;
+分享过程中发现不乏大一新生来参加活动，Slides 加入更多内容的决定是对的。后续可能更新一些如何区分指令集架构，放入教程链接。&lt;br&gt;
+参加应急管理大学 RISC-V 校园行，没啥活力，结束后有签到领学分环节。&lt;/p&gt;
+&lt;h3 id=&#34;rif&#34;&gt;RIF&lt;/h3&gt;
+&lt;p&gt;还是需要看 IEEE 754 获取一些前置知识，之前调用 roundToInt 函数的方法不对。fadd函数里面还套了一层。&lt;br&gt;
+在 RIF 的头文件中使用函数改写 softfloat_roundingMode 即可。&lt;/p&gt;
+&lt;h4 id=&#34;vrgather&#34;&gt;vrgather&lt;/h4&gt;
+&lt;p&gt;某天晚上喝多了，在床上大哭，想到我会不会在 RIF 里直接用 length 来表示 vlmax 就可以了。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>十月工作月更</title>
       <link>https://xyenchi.github.io/nonsence/202510/</link>
@@ -48,17 +63,6 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;&lt;strong&gt;elts_per_reg&lt;/strong&gt;&lt;/em&gt;: VLEN &amp;raquo; 3 to get the vlenb, sizeof(T) to get the byte of sew.&lt;br&gt;
 &lt;em&gt;&lt;strong&gt;vReg&lt;/strong&gt;&lt;/em&gt;: The index of the starting vector register. The &lt;code&gt;vReg&lt;/code&gt; value specifies which vector register(e.g., v0, v1, &amp;hellip;, v31)
 to access or start from when reading or writing vector elements.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>十一月工作月更</title>
-      <link>https://xyenchi.github.io/nonsence/202511/</link>
-      <pubDate>Wed, 15 Oct 2025 11:30:03 +0000</pubDate>
-      <guid>https://xyenchi.github.io/nonsence/202511/</guid>
-      <description>&lt;h3 id=&#34;社区活动&#34;&gt;社区活动&lt;/h3&gt;
-&lt;p&gt;参加宁夏理工的 RISC-V 校园行。宁夏理工的社区氛围不错，不愧是之前举办过安同校园行的学校。&lt;br&gt;
-分享过程中发现不乏大一新生来参加活动，Slides 加入更多内容的决定是对的。后续可能更新一些如何区分指令集架构，放入教程链接。&lt;/p&gt;
-&lt;h3 id=&#34;rif&#34;&gt;RIF&lt;/h3&gt;
-&lt;p&gt;还是需要看 IEEE 754 获取一些前置知识，之前调用 roundToInt 函数的方法不对。fadd函数里面还套了一层。&lt;/p&gt;</description>
     </item>
     <item>
       <title>九月工作月更</title>
