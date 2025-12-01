@@ -11,8 +11,22 @@
     </image>
     <generator>Hugo -- 0.152.2</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 15 Nov 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 01 Dec 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>20251201</title>
+      <link>https://xyenchi.github.io/nonsence/20251201/</link>
+      <pubDate>Mon, 01 Dec 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20251201/</guid>
+      <description>&lt;h3 id=&#34;vslide1up&#34;&gt;vslide1up&lt;/h3&gt;
+&lt;p&gt;变量只能滑动一个元素，但也支持插入一个标量整型数字在空位。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-assenbly&#34; data-lang=&#34;assenbly&#34;&gt;vslide1up.vx vd, vs2, rs1, vm    # vd[0] = x[rs1], vd[i+1] = vs2[i]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;vslide1up&lt;/code&gt;指令把 &lt;code&gt;x&lt;/code&gt; 寄存器的参数放在目标向量寄存器的0号位，需要保证0号元素是激活的，否则遵循当前的 mask agnostic/undisturbed 策略。&lt;br&gt;
+如果 XLEN &amp;lt; SEW，值会被符号扩展到 SEW 个 bits。&lt;br&gt;
+如果 XLEN &amp;gt; SEW，取低位，忽略高位。&lt;/p&gt;
+&lt;p&gt;剩下的活跃 vl - 1 个元素从下标为 i 的源向量寄存器组复制到下标为 i+1 的目标向量寄存器组。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;vl&lt;/code&gt; 寄存器指定了目标向量寄存器会被源寄存器覆盖最多多少，剩下超过 vl 的部分会根据当前的 tail policy 处理。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>十一月工作月更</title>
       <link>https://xyenchi.github.io/nonsence/202511/</link>
