@@ -11,8 +11,31 @@
     </image>
     <generator>Hugo -- 0.152.2</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 01 Dec 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Dec 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/nonsence/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>20251204</title>
+      <link>https://xyenchi.github.io/nonsence/20251204/</link>
+      <pubDate>Thu, 04 Dec 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20251204/</guid>
+      <description>&lt;p&gt;如何编造出 P.VU.vstart-&amp;gt;read()&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>20251203</title>
+      <link>https://xyenchi.github.io/nonsence/20251203/</link>
+      <pubDate>Wed, 03 Dec 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20251203/</guid>
+      <description>&lt;h3 id=&#34;vslidedown&#34;&gt;vslidedown&lt;/h3&gt;
+&lt;p&gt;没有 vd&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>20251202</title>
+      <link>https://xyenchi.github.io/nonsence/20251202/</link>
+      <pubDate>Tue, 02 Dec 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20251202/</guid>
+      <description>&lt;h3 id=&#34;vslideup&#34;&gt;vslideup&lt;/h3&gt;
+&lt;p&gt;有 vd，CustomOperator.def内容是对的，需要区分开 vslideup 和 vslide1up。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>20251201</title>
       <link>https://xyenchi.github.io/nonsence/20251201/</link>
