@@ -11,8 +11,18 @@
     </image>
     <generator>Hugo -- 0.152.2</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 04 Dec 2025 11:30:03 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 09 Dec 2025 11:30:03 +0000</lastBuildDate>
     <atom:link href="https://xyenchi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>20251209</title>
+      <link>https://xyenchi.github.io/nonsence/20251209/</link>
+      <pubDate>Tue, 09 Dec 2025 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/nonsence/20251209/</guid>
+      <description>&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define VI_XI_SLIDEDOWN_PARAMS(x, off) \
+  auto &amp;amp;vd = P.VU.elt&amp;lt;type_sew_t&amp;lt;x&amp;gt;::type&amp;gt;(rd_num, i, true); \
+  auto vs2 = P.VU.elt&amp;lt;type_sew_t&amp;lt;x&amp;gt;::type&amp;gt;(rs2_num, i + off);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;和类型斗，其乐无穷。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>20251204</title>
       <link>https://xyenchi.github.io/nonsence/20251204/</link>
