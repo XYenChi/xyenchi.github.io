@@ -1,0 +1,264 @@
+<!doctype html><html lang=en dir=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>RVV intrinsic的实现分析 | xyenchi's blog</title><meta name=keywords content><meta name=description content="虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。
+既然我第一行就写明了，那么便不是标题党。
+之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。
+包含的文件
+iterator.md
+constraint.md
+riscv-c.cc
+riscv-protos.h
+riscv-vector-builtins-bases.cc
+riscv-vector-builtins-bases.h
+riscv-vector-builtins-functions.def
+riscv-vector-builtins-shapes.cc
+riscv-vector-builtins-shapes.h
+riscv-vector-builtins-types.def 
+riscv-vector-builtins.cc
+riscv-vector-builtins.h
+riscv.md
+vector-iterators.md
+vector.md
+Acronyms
+QI: 8 bits
+HI: 16 bits
+SI: 32 bits
+DI: 64 bits
+把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。
+iterator.md
+使用lisp声明通用寄存器位宽定义迭代器（iterator）名称
+constraint.md
+在 match_operand 中，可以指定操作数约束(operand  constraint)。
+约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。
+
+约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。
+说明操作数是否可以是一个内存引用以及其地址类型。
+描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。
+
+
+GCC 中的约束(constraint)使用字符串(string)表示。
+以下是常见用法（部分夹带RISC-V私货方便自己查询）：
+>:   memory operand, autoincrement addressing type, including preincrement and postincrement.
+f:   floating-point register
+g:   general register, memory or integer immediate constant.
+i:   Integer immediate operand, sign constant when and after compilering.
+j:   SIBCALL_REGS
+l:   JALR_REGS
+n:   known value integer immediate operand
+p:   memory address operand
+x:   all operand
+I:   12-bit integer signed immediate
+J:   integer zero
+K:   5-bit unsigned immediate for CSR access instructions   
+L:   U-type 20-bit signed immediate   
+Ds3:   1, 2 or 3 immediate
+DsS:   31 immediate
+DsD:   63 immediate
+DbS:
+DnS:
+D03:   0, 1, 2 or 3 immediate
+DsA:   0 - 10 immediate
+G:
+A:   An address that is held in a general-purpose register.
+S:   A constraint that matches an absolute symbolic address.
+U:   A PLT-indirect call address.
+T:
+vr:   vector register   
+vd:   vector register except mask register
+vm:   vector mask register
+vp:   poly int
+vu:   undefined vector value
+vi:   vector 5-bit signed immediate
+vj:   vector negated 5-bit signed immediate
+vk:   vector 5-bit unsigned immediate
+Wc0:   vector of immediate all zeros
+Wc1:   vector of immediate all ones
+Wb1:   BOOL vector of {&mldr;,0,&mldr;0,1}
+Wdm:   Vector duplicate memory operand
+th_f_fmv:   floating-point register for XTheadFmv
+th_r_fmv:   integer register for XTheadFmv
+vmWc1:
+vector mask register + a vector of immediate all ones
+rK:
+register operand using general register + 5-bit unsigned immediate for CSR access instructiosn
+约束修饰字符 (Constraint Modifier Characters)
+=:操作数只写
++:操作可读可写
+&:在某些约束选择(constraint alternative)中，该操作数是前面某个clobber的操作数，作为指令的输入操作数，该操作数在指令结束之前它的值已经被修改，因此，该操作数可能不在原来使用的寄存器或内存地址中存储   
+%:可交换，该操作数及其之后的操作数可以进行交换
+eg. 操作数1的约束为 &lsquo;%0&rsquo;，表示与操作数0的约束相同。
+#:直到逗号的所有字符在进行约束处理时将被忽略，这些字符只对寄存器选择起作用
+*: 直到逗号的所有字符在进行约束处理是将被忽略，这些字符在寄存器选择是也将被忽略。
+
+riscv-c.cc
+riscv intrinsic 相关。"><meta name=author content="xyenchi"><link rel=canonical href=https://xyenchi.github.io/rvv_intrinsic_analysis/><link crossorigin=anonymous href=/assets/css/stylesheet.2211ca3164be7830024f6aad2b3a2e520843a64f8f048445c3401c1249aa051d.css integrity="sha256-IhHKMWS+eDACT2qtKzouUghDpk+PBIRFw0AcEkmqBR0=" rel="preload stylesheet" as=style><link rel=icon href=https://xyenchi.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://xyenchi.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://xyenchi.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://xyenchi.github.io/apple-touch-icon.png><link rel=mask-icon href=https://xyenchi.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://xyenchi.github.io/rvv_intrinsic_analysis/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><meta property="og:url" content="https://xyenchi.github.io/rvv_intrinsic_analysis/"><meta property="og:site_name" content="xyenchi's blog"><meta property="og:title" content="RVV intrinsic的实现分析"><meta property="og:description" content="虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。
+既然我第一行就写明了，那么便不是标题党。
+之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。
+包含的文件 iterator.md
+constraint.md
+riscv-c.cc
+riscv-protos.h
+riscv-vector-builtins-bases.cc
+riscv-vector-builtins-bases.h
+riscv-vector-builtins-functions.def
+riscv-vector-builtins-shapes.cc
+riscv-vector-builtins-shapes.h
+riscv-vector-builtins-types.def riscv-vector-builtins.cc
+riscv-vector-builtins.h
+riscv.md
+vector-iterators.md
+vector.md
+Acronyms QI: 8 bits
+HI: 16 bits
+SI: 32 bits
+DI: 64 bits
+把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。
+iterator.md 使用lisp声明通用寄存器位宽定义迭代器（iterator）名称
+constraint.md 在 match_operand 中，可以指定操作数约束(operand constraint)。
+约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。
+约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。 说明操作数是否可以是一个内存引用以及其地址类型。 描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。 GCC 中的约束(constraint)使用字符串(string)表示。
+以下是常见用法（部分夹带RISC-V私货方便自己查询）：
+>: memory operand, autoincrement addressing type, including preincrement and postincrement.
+f: floating-point register
+g: general register, memory or integer immediate constant.
+i: Integer immediate operand, sign constant when and after compilering.
+j: SIBCALL_REGS
+l: JALR_REGS
+n: known value integer immediate operand
+p: memory address operand
+x: all operand
+I: 12-bit integer signed immediate J: integer zero
+K: 5-bit unsigned immediate for CSR access instructions L: U-type 20-bit signed immediate Ds3: 1, 2 or 3 immediate
+DsS: 31 immediate
+DsD: 63 immediate
+DbS:
+DnS:
+D03: 0, 1, 2 or 3 immediate
+DsA: 0 - 10 immediate
+G:
+A: An address that is held in a general-purpose register.
+S: A constraint that matches an absolute symbolic address.
+U: A PLT-indirect call address.
+T:
+vr: vector register vd: vector register except mask register
+vm: vector mask register
+vp: poly int
+vu: undefined vector value
+vi: vector 5-bit signed immediate
+vj: vector negated 5-bit signed immediate
+vk: vector 5-bit unsigned immediate
+Wc0: vector of immediate all zeros
+Wc1: vector of immediate all ones
+Wb1: BOOL vector of {…,0,…0,1}
+Wdm: Vector duplicate memory operand
+th_f_fmv: floating-point register for XTheadFmv
+th_r_fmv: integer register for XTheadFmv
+vmWc1:
+vector mask register + a vector of immediate all ones
+rK:
+register operand using general register + 5-bit unsigned immediate for CSR access instructiosn 约束修饰字符 (Constraint Modifier Characters)
+=:操作数只写
++:操作可读可写
+&:在某些约束选择(constraint alternative)中，该操作数是前面某个clobber的操作数，作为指令的输入操作数，该操作数在指令结束之前它的值已经被修改，因此，该操作数可能不在原来使用的寄存器或内存地址中存储 %:可交换，该操作数及其之后的操作数可以进行交换
+eg. 操作数1的约束为 ‘%0’，表示与操作数0的约束相同。
+#:直到逗号的所有字符在进行约束处理时将被忽略，这些字符只对寄存器选择起作用
+*: 直到逗号的所有字符在进行约束处理是将被忽略，这些字符在寄存器选择是也将被忽略。 riscv-c.cc riscv intrinsic 相关。"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="og:image" content="https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:title content="RVV intrinsic的实现分析"><meta name=twitter:description content="虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。
+既然我第一行就写明了，那么便不是标题党。
+之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。
+包含的文件
+iterator.md
+constraint.md
+riscv-c.cc
+riscv-protos.h
+riscv-vector-builtins-bases.cc
+riscv-vector-builtins-bases.h
+riscv-vector-builtins-functions.def
+riscv-vector-builtins-shapes.cc
+riscv-vector-builtins-shapes.h
+riscv-vector-builtins-types.def 
+riscv-vector-builtins.cc
+riscv-vector-builtins.h
+riscv.md
+vector-iterators.md
+vector.md
+Acronyms
+QI: 8 bits
+HI: 16 bits
+SI: 32 bits
+DI: 64 bits
+把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。
+iterator.md
+使用lisp声明通用寄存器位宽定义迭代器（iterator）名称
+constraint.md
+在 match_operand 中，可以指定操作数约束(operand  constraint)。
+约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。
+
+约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。
+说明操作数是否可以是一个内存引用以及其地址类型。
+描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。
+
+
+GCC 中的约束(constraint)使用字符串(string)表示。
+以下是常见用法（部分夹带RISC-V私货方便自己查询）：
+>:   memory operand, autoincrement addressing type, including preincrement and postincrement.
+f:   floating-point register
+g:   general register, memory or integer immediate constant.
+i:   Integer immediate operand, sign constant when and after compilering.
+j:   SIBCALL_REGS
+l:   JALR_REGS
+n:   known value integer immediate operand
+p:   memory address operand
+x:   all operand
+I:   12-bit integer signed immediate
+J:   integer zero
+K:   5-bit unsigned immediate for CSR access instructions   
+L:   U-type 20-bit signed immediate   
+Ds3:   1, 2 or 3 immediate
+DsS:   31 immediate
+DsD:   63 immediate
+DbS:
+DnS:
+D03:   0, 1, 2 or 3 immediate
+DsA:   0 - 10 immediate
+G:
+A:   An address that is held in a general-purpose register.
+S:   A constraint that matches an absolute symbolic address.
+U:   A PLT-indirect call address.
+T:
+vr:   vector register   
+vd:   vector register except mask register
+vm:   vector mask register
+vp:   poly int
+vu:   undefined vector value
+vi:   vector 5-bit signed immediate
+vj:   vector negated 5-bit signed immediate
+vk:   vector 5-bit unsigned immediate
+Wc0:   vector of immediate all zeros
+Wc1:   vector of immediate all ones
+Wb1:   BOOL vector of {&mldr;,0,&mldr;0,1}
+Wdm:   Vector duplicate memory operand
+th_f_fmv:   floating-point register for XTheadFmv
+th_r_fmv:   integer register for XTheadFmv
+vmWc1:
+vector mask register + a vector of immediate all ones
+rK:
+register operand using general register + 5-bit unsigned immediate for CSR access instructiosn
+约束修饰字符 (Constraint Modifier Characters)
+=:操作数只写
++:操作可读可写
+&:在某些约束选择(constraint alternative)中，该操作数是前面某个clobber的操作数，作为指令的输入操作数，该操作数在指令结束之前它的值已经被修改，因此，该操作数可能不在原来使用的寄存器或内存地址中存储   
+%:可交换，该操作数及其之后的操作数可以进行交换
+eg. 操作数1的约束为 &lsquo;%0&rsquo;，表示与操作数0的约束相同。
+#:直到逗号的所有字符在进行约束处理时将被忽略，这些字符只对寄存器选择起作用
+*: 直到逗号的所有字符在进行约束处理是将被忽略，这些字符在寄存器选择是也将被忽略。
+
+riscv-c.cc
+riscv intrinsic 相关。"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://xyenchi.github.io/posts/"},{"@type":"ListItem","position":2,"name":"RVV intrinsic的实现分析","item":"https://xyenchi.github.io/rvv_intrinsic_analysis/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"RVV intrinsic的实现分析","name":"RVV intrinsic的实现分析","description":"虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。\n既然我第一行就写明了，那么便不是标题党。\n之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。\n包含的文件 iterator.md\nconstraint.md\nriscv-c.cc\nriscv-protos.h\nriscv-vector-builtins-bases.cc\nriscv-vector-builtins-bases.h\nriscv-vector-builtins-functions.def\nriscv-vector-builtins-shapes.cc\nriscv-vector-builtins-shapes.h\nriscv-vector-builtins-types.def riscv-vector-builtins.cc\nriscv-vector-builtins.h\nriscv.md\nvector-iterators.md\nvector.md\nAcronyms QI: 8 bits\nHI: 16 bits\nSI: 32 bits\nDI: 64 bits\n把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。\niterator.md 使用lisp声明通用寄存器位宽定义迭代器（iterator）名称\nconstraint.md 在 match_operand 中，可以指定操作数约束(operand constraint)。\n约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。\n约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。 说明操作数是否可以是一个内存引用以及其地址类型。 描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。 GCC 中的约束(constraint)使用字符串(string)表示。\n以下是常见用法（部分夹带RISC-V私货方便自己查询）：\n\u0026gt;: memory operand, autoincrement addressing type, including preincrement and postincrement.\nf: floating-point register\ng: general register, memory or integer immediate constant.\ni: Integer immediate operand, sign constant when and after compilering.\nj: SIBCALL_REGS\nl: JALR_REGS\nn: known value integer immediate operand\np: memory address operand\nx: all operand\nI: 12-bit integer signed immediate J: integer zero\nK: 5-bit unsigned immediate for CSR access instructions L: U-type 20-bit signed immediate Ds3: 1, 2 or 3 immediate\nDsS: 31 immediate\nDsD: 63 immediate\nDbS:\nDnS:\nD03: 0, 1, 2 or 3 immediate\nDsA: 0 - 10 immediate\nG:\nA: An address that is held in a general-purpose register.\nS: A constraint that matches an absolute symbolic address.\nU: A PLT-indirect call address.\nT:\nvr: vector register vd: vector register except mask register\nvm: vector mask register\nvp: poly int\nvu: undefined vector value\nvi: vector 5-bit signed immediate\nvj: vector negated 5-bit signed immediate\nvk: vector 5-bit unsigned immediate\nWc0: vector of immediate all zeros\nWc1: vector of immediate all ones\nWb1: BOOL vector of {\u0026hellip;,0,\u0026hellip;0,1}\nWdm: Vector duplicate memory operand\nth_f_fmv: floating-point register for XTheadFmv\nth_r_fmv: integer register for XTheadFmv\nvmWc1:\nvector mask register + a vector of immediate all ones\nrK:\nregister operand using general register + 5-bit unsigned immediate for CSR access instructiosn 约束修饰字符 (Constraint Modifier Characters)\n=:操作数只写\n+:操作可读可写\n\u0026amp;:在某些约束选择(constraint alternative)中，该操作数是前面某个clobber的操作数，作为指令的输入操作数，该操作数在指令结束之前它的值已经被修改，因此，该操作数可能不在原来使用的寄存器或内存地址中存储 %:可交换，该操作数及其之后的操作数可以进行交换\neg. 操作数1的约束为 \u0026lsquo;%0\u0026rsquo;，表示与操作数0的约束相同。\n#:直到逗号的所有字符在进行约束处理时将被忽略，这些字符只对寄存器选择起作用\n*: 直到逗号的所有字符在进行约束处理是将被忽略，这些字符在寄存器选择是也将被忽略。 riscv-c.cc riscv intrinsic 相关。\n","keywords":[],"articleBody":"虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。\n既然我第一行就写明了，那么便不是标题党。\n之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。\n包含的文件 iterator.md\nconstraint.md\nriscv-c.cc\nriscv-protos.h\nriscv-vector-builtins-bases.cc\nriscv-vector-builtins-bases.h\nriscv-vector-builtins-functions.def\nriscv-vector-builtins-shapes.cc\nriscv-vector-builtins-shapes.h\nriscv-vector-builtins-types.def riscv-vector-builtins.cc\nriscv-vector-builtins.h\nriscv.md\nvector-iterators.md\nvector.md\nAcronyms QI: 8 bits\nHI: 16 bits\nSI: 32 bits\nDI: 64 bits\n把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。\niterator.md 使用lisp声明通用寄存器位宽定义迭代器（iterator）名称\nconstraint.md 在 match_operand 中，可以指定操作数约束(operand constraint)。\n约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。\n约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。 说明操作数是否可以是一个内存引用以及其地址类型。 描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。 GCC 中的约束(constraint)使用字符串(string)表示。\n以下是常见用法（部分夹带RISC-V私货方便自己查询）：\n\u003e: memory operand, autoincrement addressing type, including preincrement and postincrement.\nf: floating-point register\ng: general register, memory or integer immediate constant.\ni: Integer immediate operand, sign constant when and after compilering.\nj: SIBCALL_REGS\nl: JALR_REGS\nn: known value integer immediate operand\np: memory address operand\nx: all operand\nI: 12-bit integer signed immediate J: integer zero\nK: 5-bit unsigned immediate for CSR access instructions L: U-type 20-bit signed immediate Ds3: 1, 2 or 3 immediate\nDsS: 31 immediate\nDsD: 63 immediate\nDbS:\nDnS:\nD03: 0, 1, 2 or 3 immediate\nDsA: 0 - 10 immediate\nG:\nA: An address that is held in a general-purpose register.\nS: A constraint that matches an absolute symbolic address.\nU: A PLT-indirect call address.\nT:\nvr: vector register vd: vector register except mask register\nvm: vector mask register\nvp: poly int\nvu: undefined vector value\nvi: vector 5-bit signed immediate\nvj: vector negated 5-bit signed immediate\nvk: vector 5-bit unsigned immediate\nWc0: vector of immediate all zeros\nWc1: vector of immediate all ones\nWb1: BOOL vector of {…,0,…0,1}\nWdm: Vector duplicate memory operand\nth_f_fmv: floating-point register for XTheadFmv\nth_r_fmv: integer register for XTheadFmv\nvmWc1:\nvector mask register + a vector of immediate all ones\nrK:\nregister operand using general register + 5-bit unsigned immediate for CSR access instructiosn 约束修饰字符 (Constraint Modifier Characters)\n=:操作数只写\n+:操作可读可写\n\u0026:在某些约束选择(constraint alternative)中，该操作数是前面某个clobber的操作数，作为指令的输入操作数，该操作数在指令结束之前它的值已经被修改，因此，该操作数可能不在原来使用的寄存器或内存地址中存储 %:可交换，该操作数及其之后的操作数可以进行交换\neg. 操作数1的约束为 ‘%0’，表示与操作数0的约束相同。\n#:直到逗号的所有字符在进行约束处理时将被忽略，这些字符只对寄存器选择起作用\n*: 直到逗号的所有字符在进行约束处理是将被忽略，这些字符在寄存器选择是也将被忽略。 riscv-c.cc riscv intrinsic 相关。\nriscv-vector-builtins-bases.h 包含所有向量操作的namespace，声明外部的常量指针。\nriscv-vector-builtins-bases.cc 对 RISC-V v extension 中的指令对应的 intrinsic function 包含的元素进行声明。比如操作数类型、舍入形式、mask 类型等。\n实现 vsetvl 和 vsetvlmax\n实现运算的操作看起来都是根据操作数类型转到对应的rtl.\nriscv-vector-builtins-functions.def 速记 DEF_RVV_TYPE:\nNAME: “vint32m1_t”\nNCHARS: the length of ABI-name, ABI名的长度。\"__rvv_int32m1_t\" 的长度是15。\nABI_NAME: “__rvv_int32m1_t”\nSCALAR_TYPE: 写 RVV intrinsic function 的名称，是否mask, 操作数符号和类型之类的。\nriscv-vector-builtins-shapes.cc 定义函数 shape NAME, 指向类_def实例。\n存在 rvv 0.7 的类定义，但是继承自 misc_def 结构体，misc_def 结构体继承自 build_base 结构体， build_base 结构体继承自 function_shape 类。\nfunction_shape 类 写intrinsic function的格式\nriscv-vector-builtins-shapes.h 在 riscv_vector 的命名空间里声明 shapes 的命名空间\nriscv-vector-builtins-types.def 定义数据类型的宏\nriscv-vector-builtins.cc 看起来是在写intrinsic格式。\nriscv-vector-builtins.h 记录了 RVV intrinsic function 的命名方式：\nthe base name (“vadd”, etc.): 一般是 RISC-V 指令前面加个 ‘v’，除法指令的操作数顺序是反的，不要问我是怎么发现的（划掉。 the operand suffix (\"_vv\", “_vx”, etc.): 表明指令操作数类型，‘v’表示向量，‘x’表示标量。 the type suffix (\"_i32m1\", “_i32mf2”, etc.): 数字按照先后顺序表示 sew 和 lmul。 the predication suffix (\"_tamu\", “_tumu”, etc.): t表示tail，m表示mask，a表示agnostic，u表示undisturbed。\n记录实现过程中名称代表的含义： function_base represents the base name. operand_type_index can be used as an index to get operand suffix. rvv_op_info can be used as an index to get argument suffix. predication_type_index can be used as an index to get predication suffix. overloaded functions 移除了一些可以根据参数类型推测出来的后缀。\nfunction_builder 类提供了一些辅助函数来添加 intrinsic function。 function_shape 类描述了指令如何在语言级别呈现。决定了 C/C++ overload 函数如何被编译器在语言级别识别；指定每个函数在语言级别呈现的的参数类型和返回类型。\nriscv_vector 这个命名空间包括：\n1.描述函数做什么的标识和读函数参数返回结果\n2.定义用来识别RVV intrinsic需要的拓展的位值的宏\n3.枚举 RVV 操作类型\n声明 intrinsic 用到的数据类型，后缀的结构体。\nfunction_base 类的定义\nfunction_checker 类的定义\nfunction_shape 类的定义\nmachine mode\n规定 intrinsic 特殊要求的bit表示\n用到的 rtx 种类 use_exact_ins\nuse_contiguous_load_insn use_contiguous_store_insn\nuse_compare_insn\nuse_ternop_ins\nuse_widen_ternop_insn\nuse_scalar_move_insn\ngenerate_insn\nmachine mode vector mode\nindex mode\narg mode\nmask mode\nret mode\nriscv.md 写 vector 相关的 rtl\nattribute has_vtype_op\n在 gcc/config/riscv/riscv-vsetvl.cc 里定义的 bool 值。判断RVV指令是否会用到 VTYPE 全局状态寄存器。\n(define_attr \"has_vtype_op\" \"false,true\" 表示 rtl 里面的 has_vtype_op 可以取到 false 或者 true。\nvector-iterators.md define_mode_iterator rtl\ndefine_code_attr\nvector.md 属性(Attribute)定义：\nhas_vtype_op\nhas_vl_op\nsew\nlmul\nratio:sew/lmul\nmerge_op_idx: “The index of operand[] to get the merge op.”\nvl_op_idx: “The index of operand[] to get the avl op.”\nta: tail agnostic\nma: mask agnostic\navl_type\nvxrm_mode: fix-point. rnu,rne,rdn,rod,none\nfrm_mode: float-point. 指令模板(Insn Pattern)定义： vlmax_avl\nvxrmsi\nfsrmsi_backup\nfsrmsi_restore ","wordCount":"562","inLanguage":"en","image":"https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E","datePublished":"0001-01-01T00:00:00Z","dateModified":"0001-01-01T00:00:00Z","author":{"@type":"Person","name":"xyenchi"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://xyenchi.github.io/rvv_intrinsic_analysis/"},"publisher":{"@type":"Organization","name":"xyenchi's blog","logo":{"@type":"ImageObject","url":"https://xyenchi.github.io/favicon.ico"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://xyenchi.github.io/ accesskey=h title="xyenchi's blog (Alt + H)">xyenchi's blog</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://xyenchi.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://xyenchi.github.io/record/ title=Record><span>Record</span></a></li><li><a href=https://xyenchi.github.io/perf/ title=Perf><span>Perf</span></a></li><li><a href=https://xyenchi.github.io/note/ title=Note><span>Note</span></a></li><li><a href=https://xyenchi.github.io/nonsence/ title=Nonsence><span>Nonsence</span></a></li><li><a href=https://xyenchi.github.io/novel/ title=Novel><span>Novel</span></a></li><li><a href=https://xyenchi.github.io/about/ title=About><span>About</span></a></li><li><a href=https://xyenchi.github.io/friends/ title=Friends><span>Friends</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">RVV intrinsic的实现分析</h1><div class=post-meta>3 min&nbsp;·&nbsp;562 words&nbsp;·&nbsp;xyenchi</div></header><div class=post-content><p>虽然标题叫分析，但现在已经变成了大量注释内容整合的形状，可能得改名为笔记。<br>既然我第一行就写明了，那么便不是标题党。<br>之所以不能叫分析，当然是自己回头看一遍都没看懂在写啥。</p><h3 id=包含的文件>包含的文件<a hidden class=anchor aria-hidden=true href=#包含的文件>#</a></h3><p><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/iterator.md>iterator.md</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/constraint.md>constraint.md</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-c.cc>riscv-c.cc</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-protos.h>riscv-protos.h</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-bases.cc>riscv-vector-builtins-bases.cc</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-bases.h>riscv-vector-builtins-bases.h</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-functions.def>riscv-vector-builtins-functions.def</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-shapes.cc>riscv-vector-builtins-shapes.cc</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-shapes.h>riscv-vector-builtins-shapes.h</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins-types.def>riscv-vector-builtins-types.def</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins.cc>riscv-vector-builtins.cc</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv-vector-builtins.h>riscv-vector-builtins.h</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/riscv.md>riscv.md</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector-iterators.md>vector-iterators.md</a><br><a href=https://github.com/gcc-mirror/gcc/blob/master/gcc/config/riscv/vector.md>vector.md</a></p><h3 id=acronyms>Acronyms<a hidden class=anchor aria-hidden=true href=#acronyms>#</a></h3><p>QI: 8 bits<br>HI: 16 bits<br>SI: 32 bits<br>DI: 64 bits<br>把一个word（即 32 bit 当成计量单位）四分之一（quarter）、二分之一（half）、双倍（double）。</p><h4 id=iteratormd>iterator.md<a hidden class=anchor aria-hidden=true href=#iteratormd>#</a></h4><p>使用lisp声明通用寄存器位宽定义迭代器（iterator）名称</p><h4 id=constraintmd>constraint.md<a hidden class=anchor aria-hidden=true href=#constraintmd>#</a></h4><p>在 match_operand 中，可以指定操作数约束(operand constraint)。<br>约束(constraint)对断言(predicate)所允许的操作数进行更详细的描述。</p><ol><li>约束条件可以定义操作数是否可以使用寄存器以及使用何种寄存器。</li><li>说明操作数是否可以是一个内存引用以及其地址类型。</li><li>描述该操作数是都可以是一个立即数常量(immediate)以及其可能的值。</li></ol><ul><li>GCC 中的约束(constraint)使用字符串(string)表示。<br>以下是常见用法（部分夹带RISC-V私货方便自己查询）：<br><em><strong>></strong></em>: memory operand, autoincrement addressing type, including preincrement and postincrement.<br><em><strong>f</strong></em>: floating-point register<br><em><strong>g</strong></em>: general register, memory or integer immediate constant.<br><em><strong>i</strong></em>: Integer immediate operand, sign constant when and after compilering.<br><em><strong>j</strong></em>: SIBCALL_REGS<br><em><strong>l</strong></em>: JALR_REGS<br><em><strong>n</strong></em>: known value integer immediate operand<br><em><strong>p</strong></em>: memory address operand<br><em><strong>x</strong></em>: all operand<br><em><strong>I</strong></em>: 12-bit integer signed immediate
+<em><strong>J</strong></em>: integer zero<br><em><strong>K</strong></em>: 5-bit unsigned immediate for CSR access instructions<br><em><strong>L</strong></em>: U-type 20-bit signed immediate<br><em><strong>Ds3</strong></em>: 1, 2 or 3 immediate<br><em><strong>DsS</strong></em>: 31 immediate<br><em><strong>DsD</strong></em>: 63 immediate<br><em><strong>DbS</strong></em>:<br><em><strong>DnS</strong></em>:<br><em><strong>D03</strong></em>: 0, 1, 2 or 3 immediate<br><em><strong>DsA</strong></em>: 0 - 10 immediate<br><em><strong>G</strong></em>:<br><em><strong>A</strong></em>: An address that is held in a general-purpose register.<br><em><strong>S</strong></em>: A constraint that matches an absolute symbolic address.<br><em><strong>U</strong></em>: A PLT-indirect call address.<br><em><strong>T</strong></em>:<br><em><strong>vr</strong></em>: vector register<br><em><strong>vd</strong></em>: vector register except mask register<br><em><strong>vm</strong></em>: vector mask register<br><em><strong>vp</strong></em>: poly int<br><em><strong>vu</strong></em>: undefined vector value<br><em><strong>vi</strong></em>: vector 5-bit signed immediate<br><em><strong>vj</strong></em>: vector negated 5-bit signed immediate<br><em><strong>vk</strong></em>: vector 5-bit unsigned immediate<br><em><strong>Wc0</strong></em>: vector of immediate all zeros<br><em><strong>Wc1</strong></em>: vector of immediate all ones<br><em><strong>Wb1</strong></em>: BOOL vector of {&mldr;,0,&mldr;0,1}<br><em><strong>Wdm</strong></em>: Vector duplicate memory operand<br><em><strong>th_f_fmv</strong></em>: floating-point register for XTheadFmv<br><em><strong>th_r_fmv</strong></em>: integer register for XTheadFmv<br><em><strong>vmWc1</strong></em>:<br>vector mask register + a vector of immediate all ones<br><em><strong>rK</strong></em>:<br>register operand using general register + 5-bit unsigned immediate for CSR access instructiosn</li><li>约束修饰字符 (Constraint Modifier Characters)<br><em><strong>=</strong></em>:操作数只写<br><em><strong>+</strong></em>:操作可读可写<br><em><strong>&</strong></em>:在某些约束选择(constraint alternative)中，该操作数是前面某个clobber的操作数，作为指令的输入操作数，该操作数在指令结束之前它的值已经被修改，因此，该操作数可能不在原来使用的寄存器或内存地址中存储<br><em><strong>%</strong></em>:可交换，该操作数及其之后的操作数可以进行交换<br>eg. 操作数1的约束为 &lsquo;%0&rsquo;，表示与操作数0的约束相同。<br><em><strong>#</strong></em>:直到逗号的所有字符在进行约束处理时将被忽略，这些字符只对寄存器选择起作用<br><em><strong>*:</strong></em> 直到逗号的所有字符在进行约束处理是将被忽略，这些字符在寄存器选择是也将被忽略。</li></ul><h4 id=riscv-ccc>riscv-c.cc<a hidden class=anchor aria-hidden=true href=#riscv-ccc>#</a></h4><p>riscv intrinsic 相关。</p><h4 id=riscv-vector-builtins-basesh>riscv-vector-builtins-bases.h<a hidden class=anchor aria-hidden=true href=#riscv-vector-builtins-basesh>#</a></h4><p>包含所有向量操作的namespace，声明外部的常量指针。</p><h4 id=riscv-vector-builtins-basescc>riscv-vector-builtins-bases.cc<a hidden class=anchor aria-hidden=true href=#riscv-vector-builtins-basescc>#</a></h4><p>对 RISC-V v extension 中的指令对应的 intrinsic function 包含的元素进行声明。比如操作数类型、舍入形式、mask 类型等。</p><p>实现 vsetvl 和 vsetvlmax</p><p>实现运算的操作看起来都是根据操作数类型转到对应的rtl.</p><h4 id=riscv-vector-builtins-functionsdef>riscv-vector-builtins-functions.def<a hidden class=anchor aria-hidden=true href=#riscv-vector-builtins-functionsdef>#</a></h4><p>速记 DEF_RVV_TYPE:<br>NAME: &ldquo;vint32m1_t&rdquo;<br>NCHARS: the length of ABI-name, ABI名的长度。"__rvv_int32m1_t" 的长度是15。<br>ABI_NAME: &ldquo;__rvv_int32m1_t&rdquo;<br>SCALAR_TYPE:
+写 RVV intrinsic function 的名称，是否mask, 操作数符号和类型之类的。</p><h4 id=riscv-vector-builtins-shapescc>riscv-vector-builtins-shapes.cc<a hidden class=anchor aria-hidden=true href=#riscv-vector-builtins-shapescc>#</a></h4><p>定义函数 shape NAME, 指向类<code>&lt;NAME>_def</code>实例。<br>存在 rvv 0.7 的类定义，但是继承自 <code>misc_def</code> 结构体，<code>misc_def</code> 结构体继承自 <code>build_base</code> 结构体， <code>build_base</code> 结构体继承自 <code>function_shape</code> 类。</p><h5 id=function_shape-类>function_shape 类<a hidden class=anchor aria-hidden=true href=#function_shape-类>#</a></h5><p>写intrinsic function的格式</p><h4 id=riscv-vector-builtins-shapesh>riscv-vector-builtins-shapes.h<a hidden class=anchor aria-hidden=true href=#riscv-vector-builtins-shapesh>#</a></h4><p>在 riscv_vector 的命名空间里声明 shapes 的命名空间</p><h4 id=riscv-vector-builtins-typesdef>riscv-vector-builtins-types.def<a hidden class=anchor aria-hidden=true href=#riscv-vector-builtins-typesdef>#</a></h4><p>定义数据类型的宏</p><h4 id=riscv-vector-builtinscc>riscv-vector-builtins.cc<a hidden class=anchor aria-hidden=true href=#riscv-vector-builtinscc>#</a></h4><p>看起来是在写intrinsic格式。</p><h4 id=riscv-vector-builtinsh>riscv-vector-builtins.h<a hidden class=anchor aria-hidden=true href=#riscv-vector-builtinsh>#</a></h4><p>记录了 RVV intrinsic function 的命名方式：</p><ul><li>the base name (&ldquo;vadd&rdquo;, etc.): 一般是 RISC-V 指令前面加个 &lsquo;v&rsquo;，除法指令的操作数顺序是反的，不要问我是怎么发现的（划掉。</li><li>the operand suffix ("_vv", &ldquo;_vx&rdquo;, etc.): 表明指令操作数类型，&lsquo;v&rsquo;表示向量，&lsquo;x&rsquo;表示标量。</li><li>the type suffix ("_i32m1", &ldquo;_i32mf2&rdquo;, etc.): 数字按照先后顺序表示 sew 和 lmul。</li><li>the predication suffix ("_tamu", &ldquo;_tumu&rdquo;, etc.): t表示tail，m表示mask，a表示agnostic，u表示undisturbed。<br>记录实现过程中名称代表的含义：</li><li>function_base represents the base name.</li><li>operand_type_index can be used as an index to get operand suffix.</li><li>rvv_op_info can be used as an index to get argument suffix.</li><li>predication_type_index can be used as an index to get predication suffix.</li></ul><p>overloaded functions 移除了一些可以根据参数类型推测出来的后缀。<br>function_builder 类提供了一些辅助函数来添加 intrinsic function。<br>function_shape 类描述了指令如何在语言级别呈现。决定了 C/C++ overload 函数如何被编译器在语言级别识别；指定每个函数在语言级别呈现的的参数类型和返回类型。</p><p>riscv_vector 这个命名空间包括：<br>1.描述函数做什么的标识和读函数参数返回结果<br>2.定义用来识别RVV intrinsic需要的拓展的位值的宏<br>3.枚举 RVV 操作类型</p><p>声明 intrinsic 用到的数据类型，后缀的结构体。<br>function_base 类的定义<br>function_checker 类的定义<br>function_shape 类的定义<br>machine mode<br><em>规定 intrinsic 特殊要求的bit表示</em></p><h5 id=用到的-rtx-种类>用到的 rtx 种类<a hidden class=anchor aria-hidden=true href=#用到的-rtx-种类>#</a></h5><p>use_exact_ins<br>use_contiguous_load_insn
+use_contiguous_store_insn<br>use_compare_insn<br>use_ternop_ins<br>use_widen_ternop_insn<br>use_scalar_move_insn<br>generate_insn</p><h5 id=machine-mode>machine mode<a hidden class=anchor aria-hidden=true href=#machine-mode>#</a></h5><p>vector mode<br>index mode<br>arg mode<br>mask mode<br>ret mode</p><h4 id=riscvmd>riscv.md<a hidden class=anchor aria-hidden=true href=#riscvmd>#</a></h4><p>写 vector 相关的 rtl</p><h5 id=attribute>attribute<a hidden class=anchor aria-hidden=true href=#attribute>#</a></h5><p>has_vtype_op<br>在 gcc/config/riscv/riscv-vsetvl.cc 里定义的 bool 值。判断RVV指令是否会用到 VTYPE 全局状态寄存器。<br><code>(define_attr "has_vtype_op" "false,true"</code> 表示 rtl 里面的 has_vtype_op 可以取到 false 或者 true。</p><h4 id=vector-iteratorsmd>vector-iterators.md<a hidden class=anchor aria-hidden=true href=#vector-iteratorsmd>#</a></h4><p>define_mode_iterator rtl<br>define_code_attr</p><h4 id=vectormd>vector.md<a hidden class=anchor aria-hidden=true href=#vectormd>#</a></h4><ul><li>属性(Attribute)定义：<br><code>has_vtype_op</code><br><code>has_vl_op</code><br><code>sew</code><br><code>lmul</code><br><code>ratio</code>:sew/lmul<br><code>merge_op_idx</code>: &ldquo;The index of operand[] to get the merge op.&rdquo;<br><code>vl_op_idx</code>: &ldquo;The index of operand[] to get the avl op.&rdquo;<br><code>ta</code>: tail agnostic<br><code>ma</code>: mask agnostic<br><code>avl_type</code><br><code>vxrm_mode</code>: fix-point. rnu,rne,rdn,rod,none<br><code>frm_mode</code>: float-point.</li><li>指令模板(Insn Pattern)定义：
+<code>vlmax_avl</code><br><code>vxrmsi</code><br><code>fsrmsi_backup</code><br><code>fsrmsi_restore</code></li></ul></div><footer class=post-footer><ul class=post-tags></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://xyenchi.github.io/>xyenchi's blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Records on xyenchi&#39;s blog</title>
+    <link>https://xyenchi.github.io/record/</link>
+    <description>Recent content in Records on xyenchi&#39;s blog</description>
+    <image>
+      <title>xyenchi&#39;s blog</title>
+      <url>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.155.3</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 16 Nov 2023 11:30:03 +0000</lastBuildDate>
+    <atom:link href="https://xyenchi.github.io/record/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>记录 Gnu Modula 2</title>
+      <link>https://xyenchi.github.io/gnu/gcc/modula2/</link>
+      <pubDate>Thu, 16 Nov 2023 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/gnu/gcc/modula2/</guid>
+      <description>&lt;p&gt;Gnu Modula 2 在 gcc 源码目录里，属于处理源代码的前端。根据职业生涯所学从 AST 到 GIMPLE 到 pass 到 RTL, 竟不知从何下手去移植到 RISC-V。&lt;/p&gt;
+&lt;p&gt;查询了一下 modula 2 的用法。和 gcc 较为相似，使用 gm2 编译运行 .mod 文件。&lt;/p&gt;
+&lt;p&gt;猜测是也能在 riscv-gnu-toolchain 里生成可执行文件，类似于 riscv-gnu-unknown-linux/elf-gcc。&lt;/p&gt;
+&lt;p&gt;将 gcc 切换到 devel/modula-2 分支之后，使用 &lt;code&gt;--with=rv64gc --with-abi-lp64d&lt;/code&gt; 编译了一次，缺少某个库而报错。&lt;br&gt;
+意外的是，如果进入 gcc 文件夹，使用 &lt;code&gt;--enable-libgm2 GM2_for_target=riscv&lt;/code&gt; 配置一下之后，编译通过了。&lt;br&gt;
+想到修改 makefile 。添加 makefile 的难处在于，gm2 在 gcc 文件夹中，如何使之脱离 gcc 并能够使用。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>debug record</title>
+      <link>https://xyenchi.github.io/debug_record/</link>
+      <pubDate>Mon, 06 Nov 2023 11:30:03 +0000</pubDate>
+      <guid>https://xyenchi.github.io/debug_record/</guid>
+      <description>&lt;h3 id=&#34;工具链&#34;&gt;工具链&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/riscv-collab/riscv-gnu-toolchain&#34;&gt;riscv-gnu-toolchain&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;源码&#34;&gt;源码&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/gcc-mirror/gcc/blob/master/gcc/common/config/riscv/riscv-common.cc&#34;&gt;https://github.com/gcc-mirror/gcc/blob/master/gcc/common/config/riscv/riscv-common.cc&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;方法&#34;&gt;方法&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;./configure --prefix=&amp;quot;$PWD/opt&amp;quot; --with-arch=rv64gc --with-abi=lp64d&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;make -j $(nproc)&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;make linux -j $(nproc)&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;gdb opt/riscv64-unknown-linux-gnu-gcc&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;没想到想办法实现了好几天的 &lt;code&gt;-march=rv64gcv0p7&lt;/code&gt; 解析成 &lt;code&gt;rv64i2p1_m2p0_a2p1_f2p2 _d2p2 _c2p0 _v0p7&lt;/code&gt; 而不是 &lt;code&gt;rv64i2p1_m2p0_a2p1_f2p2_d2p2_c2p0_v0p7_zicsr2p0_zifencei2p0_zve32f1p0_zve32x1p0_zve64d1p0_zve64f1p0_zve64x1p0_zvl128b1p0_zvl32b1p0_zvl64b1p0&lt;/code&gt; 因为 T head 实现方法是 &lt;code&gt;-march=rv64gcXthreadVector&lt;/code&gt; 而搁置了。&lt;/p&gt;
+&lt;p&gt;初期是在 &lt;code&gt;handle_implied_ext&lt;/code&gt; 前面判断版本。但是发现参数 &lt;code&gt;*ext&lt;/code&gt; 在与 &lt;code&gt;riscv_implied_info[]&lt;/code&gt; 比较，没有获取大小版本的机会，于是引入了一个参数指给 &lt;code&gt;riscv_ext_version_table[]&lt;/code&gt;。还用过 &lt;code&gt;get_default_version&lt;/code&gt;，始终卡在不知道获取了哪个扩展的 major_version = 2, minor_version = 0。&lt;/p&gt;
+&lt;p&gt;继而想在&lt;code&gt;parse&lt;/code&gt;调用 &lt;code&gt;handle_implied_ext&lt;/code&gt; 之前判断出大小版本返回 &lt;code&gt;implied_version_p = false&lt;/code&gt;。但是使用前文中的 &lt;code&gt;itr&lt;/code&gt; 调用 &lt;code&gt;lookup()&lt;/code&gt;始终不对。自此编程苦手烂尾。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,346 @@
+<!doctype html><html lang=en dir=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>继续移植gprofng | xyenchi's blog</title><meta name=keywords content><meta name=description content="天气晴。
+早上到达武汉非常冷，发现了一个很中二的说法，回笼觉念成回龙决。
+偷一个 /usr/include/sys/ucontext.h 出来观测，qemu 里面显示得太异常了。大佬告诉我这是 glibc 的内容。
+/* struct ucontext definition, RISC-V version.
+   Copyright (C) 1997-2023 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library.  If not, see
+   <https://www.gnu.org/licenses/>.  */
+
+/* Don't rely on this, the interface is currently messed up and may need to
+   be broken to be fixed.  */
+#ifndef _SYS_UCONTEXT_H
+#define _SYS_UCONTEXT_H 1
+
+#include <features.h>
+
+#include <bits/types/sigset_t.h>
+#include <bits/types/stack_t.h>
+
+typedef unsigned long int __riscv_mc_gp_state[32];
+
+#ifdef __USE_MISC
+# define NGREG  32
+
+# define REG_PC 0
+# define REG_RA 1
+# define REG_SP 2
+# define REG_TP 4
+# define REG_S0 8
+# define REG_S1 9
+# define REG_A0 10
+# define REG_S2 18
+# define REG_NARGS 8
+
+typedef unsigned long int greg_t;
+
+/* Container for all general registers.  */
+typedef __riscv_mc_gp_state gregset_t;
+
+/* Container for floating-point state.  */
+typedef union __riscv_mc_fp_state fpregset_t;
+#endif
+
+struct __riscv_mc_f_ext_state
+  {
+    unsigned int __f[32];
+    unsigned int __fcsr;
+  };
+
+struct __riscv_mc_d_ext_state
+  {
+    unsigned long long int __f[32];
+    unsigned int __fcsr;
+  };
+
+struct __riscv_mc_q_ext_state
+  {
+    unsigned long long int __f[64] __attribute__ ((__aligned__ (16)));
+    unsigned int __fcsr;
+    /* Reserved for expansion of sigcontext structure.  Currently zeroed
+       upon signal, and must be zero upon sigreturn.  */
+           unsigned int __glibc_reserved[3];
+  };
+
+union __riscv_mc_fp_state
+  {
+    struct __riscv_mc_f_ext_state __f;
+    struct __riscv_mc_d_ext_state __d;
+    struct __riscv_mc_q_ext_state __q;
+  };
+
+typedef struct mcontext_t
+  {
+    __riscv_mc_gp_state __gregs;
+    union  __riscv_mc_fp_state __fpregs;
+  } mcontext_t;
+
+/* Userlevel context.  */
+typedef struct ucontext_t
+  {
+    unsigned long int  __uc_flags;
+    struct ucontext_t *uc_link;
+    stack_t            uc_stack;
+    sigset_t           uc_sigmask;
+    /* There's some padding here to allow sigset_t to be expanded in the
+       future.  Though this is unlikely, other architectures put uc_sigmask
+       at the end of this structure and explicitly state it can be
+       expanded, so we didn't want to box ourselves in here.  */
+    char               __glibc_reserved[1024 / 8 - sizeof (sigset_t)];
+    /* We can't put uc_sigmask at the end of this structure because we need
+       to be able to expand sigcontext in the future.  For example, the
+       vector ISA extension will almost certainly add ISA state.  We want
+       to ensure all user-visible ISA state can be saved and restored via a
+       ucontext, so we're putting this at the end in order to allow for
+       infinite extensibility.  Since we know this will be extended and we
+       assume sigset_t won't be extended an extreme amount, we're
+       prioritizing this.  */
+    mcontext_t uc_mcontext;
+  } ucontext_t;
+
+#endif /* sys/ucontext.h */
+"><meta name=author content="xyenchi"><link rel=canonical href=https://xyenchi.github.io/nonsence/%E7%BB%A7%E7%BB%AD%E7%A7%BB%E6%A4%8Dgprofng/><link crossorigin=anonymous href=/assets/css/stylesheet.2211ca3164be7830024f6aad2b3a2e520843a64f8f048445c3401c1249aa051d.css integrity="sha256-IhHKMWS+eDACT2qtKzouUghDpk+PBIRFw0AcEkmqBR0=" rel="preload stylesheet" as=style><link rel=icon href=https://xyenchi.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://xyenchi.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://xyenchi.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://xyenchi.github.io/apple-touch-icon.png><link rel=mask-icon href=https://xyenchi.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://xyenchi.github.io/nonsence/%E7%BB%A7%E7%BB%AD%E7%A7%BB%E6%A4%8Dgprofng/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><meta property="og:url" content="https://xyenchi.github.io/nonsence/%E7%BB%A7%E7%BB%AD%E7%A7%BB%E6%A4%8Dgprofng/"><meta property="og:site_name" content="xyenchi's blog"><meta property="og:title" content="继续移植gprofng"><meta property="og:description" content="天气晴。
+早上到达武汉非常冷，发现了一个很中二的说法，回笼觉念成回龙决。
+偷一个 /usr/include/sys/ucontext.h 出来观测，qemu 里面显示得太异常了。大佬告诉我这是 glibc 的内容。
+/* struct ucontext definition, RISC-V version. Copyright (C) 1997-2023 Free Software Foundation, Inc. This file is part of the GNU C Library. The GNU C Library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version. The GNU C Library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with the GNU C Library. If not, see <https://www.gnu.org/licenses/>. */ /* Don't rely on this, the interface is currently messed up and may need to be broken to be fixed. */ #ifndef _SYS_UCONTEXT_H #define _SYS_UCONTEXT_H 1 #include <features.h> #include <bits/types/sigset_t.h> #include <bits/types/stack_t.h> typedef unsigned long int __riscv_mc_gp_state[32]; #ifdef __USE_MISC # define NGREG 32 # define REG_PC 0 # define REG_RA 1 # define REG_SP 2 # define REG_TP 4 # define REG_S0 8 # define REG_S1 9 # define REG_A0 10 # define REG_S2 18 # define REG_NARGS 8 typedef unsigned long int greg_t; /* Container for all general registers. */ typedef __riscv_mc_gp_state gregset_t; /* Container for floating-point state. */ typedef union __riscv_mc_fp_state fpregset_t; #endif struct __riscv_mc_f_ext_state { unsigned int __f[32]; unsigned int __fcsr; }; struct __riscv_mc_d_ext_state { unsigned long long int __f[32]; unsigned int __fcsr; }; struct __riscv_mc_q_ext_state { unsigned long long int __f[64] __attribute__ ((__aligned__ (16))); unsigned int __fcsr; /* Reserved for expansion of sigcontext structure. Currently zeroed upon signal, and must be zero upon sigreturn. */ unsigned int __glibc_reserved[3]; }; union __riscv_mc_fp_state { struct __riscv_mc_f_ext_state __f; struct __riscv_mc_d_ext_state __d; struct __riscv_mc_q_ext_state __q; }; typedef struct mcontext_t { __riscv_mc_gp_state __gregs; union __riscv_mc_fp_state __fpregs; } mcontext_t; /* Userlevel context. */ typedef struct ucontext_t { unsigned long int __uc_flags; struct ucontext_t *uc_link; stack_t uc_stack; sigset_t uc_sigmask; /* There's some padding here to allow sigset_t to be expanded in the future. Though this is unlikely, other architectures put uc_sigmask at the end of this structure and explicitly state it can be expanded, so we didn't want to box ourselves in here. */ char __glibc_reserved[1024 / 8 - sizeof (sigset_t)]; /* We can't put uc_sigmask at the end of this structure because we need to be able to expand sigcontext in the future. For example, the vector ISA extension will almost certainly add ISA state. We want to ensure all user-visible ISA state can be saved and restored via a ucontext, so we're putting this at the end in order to allow for infinite extensibility. Since we know this will be extended and we assume sigset_t won't be extended an extreme amount, we're prioritizing this. */ mcontext_t uc_mcontext; } ucontext_t; #endif /* sys/ucontext.h */ "><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="nonsence"><meta property="article:published_time" content="2024-03-15T11:30:03+00:00"><meta property="article:modified_time" content="2024-03-15T11:30:03+00:00"><meta property="og:image" content="https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:title content="继续移植gprofng"><meta name=twitter:description content="天气晴。
+早上到达武汉非常冷，发现了一个很中二的说法，回笼觉念成回龙决。
+偷一个 /usr/include/sys/ucontext.h 出来观测，qemu 里面显示得太异常了。大佬告诉我这是 glibc 的内容。
+/* struct ucontext definition, RISC-V version.
+   Copyright (C) 1997-2023 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library.  If not, see
+   <https://www.gnu.org/licenses/>.  */
+
+/* Don't rely on this, the interface is currently messed up and may need to
+   be broken to be fixed.  */
+#ifndef _SYS_UCONTEXT_H
+#define _SYS_UCONTEXT_H 1
+
+#include <features.h>
+
+#include <bits/types/sigset_t.h>
+#include <bits/types/stack_t.h>
+
+typedef unsigned long int __riscv_mc_gp_state[32];
+
+#ifdef __USE_MISC
+# define NGREG  32
+
+# define REG_PC 0
+# define REG_RA 1
+# define REG_SP 2
+# define REG_TP 4
+# define REG_S0 8
+# define REG_S1 9
+# define REG_A0 10
+# define REG_S2 18
+# define REG_NARGS 8
+
+typedef unsigned long int greg_t;
+
+/* Container for all general registers.  */
+typedef __riscv_mc_gp_state gregset_t;
+
+/* Container for floating-point state.  */
+typedef union __riscv_mc_fp_state fpregset_t;
+#endif
+
+struct __riscv_mc_f_ext_state
+  {
+    unsigned int __f[32];
+    unsigned int __fcsr;
+  };
+
+struct __riscv_mc_d_ext_state
+  {
+    unsigned long long int __f[32];
+    unsigned int __fcsr;
+  };
+
+struct __riscv_mc_q_ext_state
+  {
+    unsigned long long int __f[64] __attribute__ ((__aligned__ (16)));
+    unsigned int __fcsr;
+    /* Reserved for expansion of sigcontext structure.  Currently zeroed
+       upon signal, and must be zero upon sigreturn.  */
+           unsigned int __glibc_reserved[3];
+  };
+
+union __riscv_mc_fp_state
+  {
+    struct __riscv_mc_f_ext_state __f;
+    struct __riscv_mc_d_ext_state __d;
+    struct __riscv_mc_q_ext_state __q;
+  };
+
+typedef struct mcontext_t
+  {
+    __riscv_mc_gp_state __gregs;
+    union  __riscv_mc_fp_state __fpregs;
+  } mcontext_t;
+
+/* Userlevel context.  */
+typedef struct ucontext_t
+  {
+    unsigned long int  __uc_flags;
+    struct ucontext_t *uc_link;
+    stack_t            uc_stack;
+    sigset_t           uc_sigmask;
+    /* There's some padding here to allow sigset_t to be expanded in the
+       future.  Though this is unlikely, other architectures put uc_sigmask
+       at the end of this structure and explicitly state it can be
+       expanded, so we didn't want to box ourselves in here.  */
+    char               __glibc_reserved[1024 / 8 - sizeof (sigset_t)];
+    /* We can't put uc_sigmask at the end of this structure because we need
+       to be able to expand sigcontext in the future.  For example, the
+       vector ISA extension will almost certainly add ISA state.  We want
+       to ensure all user-visible ISA state can be saved and restored via a
+       ucontext, so we're putting this at the end in order to allow for
+       infinite extensibility.  Since we know this will be extended and we
+       assume sigset_t won't be extended an extreme amount, we're
+       prioritizing this.  */
+    mcontext_t uc_mcontext;
+  } ucontext_t;
+
+#endif /* sys/ucontext.h */
+"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Nonsences","item":"https://xyenchi.github.io/nonsence/"},{"@type":"ListItem","position":2,"name":"继续移植gprofng","item":"https://xyenchi.github.io/nonsence/%E7%BB%A7%E7%BB%AD%E7%A7%BB%E6%A4%8Dgprofng/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"继续移植gprofng","name":"继续移植gprofng","description":"天气晴。\n早上到达武汉非常冷，发现了一个很中二的说法，回笼觉念成回龙决。\n偷一个 /usr/include/sys/ucontext.h 出来观测，qemu 里面显示得太异常了。大佬告诉我这是 glibc 的内容。\n/* struct ucontext definition, RISC-V version. Copyright (C) 1997-2023 Free Software Foundation, Inc. This file is part of the GNU C Library. The GNU C Library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version. The GNU C Library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with the GNU C Library. If not, see \u0026lt;https://www.gnu.org/licenses/\u0026gt;. */ /* Don\u0026#39;t rely on this, the interface is currently messed up and may need to be broken to be fixed. */ #ifndef _SYS_UCONTEXT_H #define _SYS_UCONTEXT_H 1 #include \u0026lt;features.h\u0026gt; #include \u0026lt;bits/types/sigset_t.h\u0026gt; #include \u0026lt;bits/types/stack_t.h\u0026gt; typedef unsigned long int __riscv_mc_gp_state[32]; #ifdef __USE_MISC # define NGREG 32 # define REG_PC 0 # define REG_RA 1 # define REG_SP 2 # define REG_TP 4 # define REG_S0 8 # define REG_S1 9 # define REG_A0 10 # define REG_S2 18 # define REG_NARGS 8 typedef unsigned long int greg_t; /* Container for all general registers. */ typedef __riscv_mc_gp_state gregset_t; /* Container for floating-point state. */ typedef union __riscv_mc_fp_state fpregset_t; #endif struct __riscv_mc_f_ext_state { unsigned int __f[32]; unsigned int __fcsr; }; struct __riscv_mc_d_ext_state { unsigned long long int __f[32]; unsigned int __fcsr; }; struct __riscv_mc_q_ext_state { unsigned long long int __f[64] __attribute__ ((__aligned__ (16))); unsigned int __fcsr; /* Reserved for expansion of sigcontext structure. Currently zeroed upon signal, and must be zero upon sigreturn. */ unsigned int __glibc_reserved[3]; }; union __riscv_mc_fp_state { struct __riscv_mc_f_ext_state __f; struct __riscv_mc_d_ext_state __d; struct __riscv_mc_q_ext_state __q; }; typedef struct mcontext_t { __riscv_mc_gp_state __gregs; union __riscv_mc_fp_state __fpregs; } mcontext_t; /* Userlevel context. */ typedef struct ucontext_t { unsigned long int __uc_flags; struct ucontext_t *uc_link; stack_t uc_stack; sigset_t uc_sigmask; /* There\u0026#39;s some padding here to allow sigset_t to be expanded in the future. Though this is unlikely, other architectures put uc_sigmask at the end of this structure and explicitly state it can be expanded, so we didn\u0026#39;t want to box ourselves in here. */ char __glibc_reserved[1024 / 8 - sizeof (sigset_t)]; /* We can\u0026#39;t put uc_sigmask at the end of this structure because we need to be able to expand sigcontext in the future. For example, the vector ISA extension will almost certainly add ISA state. We want to ensure all user-visible ISA state can be saved and restored via a ucontext, so we\u0026#39;re putting this at the end in order to allow for infinite extensibility. Since we know this will be extended and we assume sigset_t won\u0026#39;t be extended an extreme amount, we\u0026#39;re prioritizing this. */ mcontext_t uc_mcontext; } ucontext_t; #endif /* sys/ucontext.h */ ","keywords":[],"articleBody":"天气晴。\n早上到达武汉非常冷，发现了一个很中二的说法，回笼觉念成回龙决。\n偷一个 /usr/include/sys/ucontext.h 出来观测，qemu 里面显示得太异常了。大佬告诉我这是 glibc 的内容。\n/* struct ucontext definition, RISC-V version. Copyright (C) 1997-2023 Free Software Foundation, Inc. This file is part of the GNU C Library. The GNU C Library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version. The GNU C Library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with the GNU C Library. If not, see . */ /* Don't rely on this, the interface is currently messed up and may need to be broken to be fixed. */ #ifndef _SYS_UCONTEXT_H #define _SYS_UCONTEXT_H 1 #include #include #include typedef unsigned long int __riscv_mc_gp_state[32]; #ifdef __USE_MISC # define NGREG 32 # define REG_PC 0 # define REG_RA 1 # define REG_SP 2 # define REG_TP 4 # define REG_S0 8 # define REG_S1 9 # define REG_A0 10 # define REG_S2 18 # define REG_NARGS 8 typedef unsigned long int greg_t; /* Container for all general registers. */ typedef __riscv_mc_gp_state gregset_t; /* Container for floating-point state. */ typedef union __riscv_mc_fp_state fpregset_t; #endif struct __riscv_mc_f_ext_state { unsigned int __f[32]; unsigned int __fcsr; }; struct __riscv_mc_d_ext_state { unsigned long long int __f[32]; unsigned int __fcsr; }; struct __riscv_mc_q_ext_state { unsigned long long int __f[64] __attribute__ ((__aligned__ (16))); unsigned int __fcsr; /* Reserved for expansion of sigcontext structure. Currently zeroed upon signal, and must be zero upon sigreturn. */ unsigned int __glibc_reserved[3]; }; union __riscv_mc_fp_state { struct __riscv_mc_f_ext_state __f; struct __riscv_mc_d_ext_state __d; struct __riscv_mc_q_ext_state __q; }; typedef struct mcontext_t { __riscv_mc_gp_state __gregs; union __riscv_mc_fp_state __fpregs; } mcontext_t; /* Userlevel context. */ typedef struct ucontext_t { unsigned long int __uc_flags; struct ucontext_t *uc_link; stack_t uc_stack; sigset_t uc_sigmask; /* There's some padding here to allow sigset_t to be expanded in the future. Though this is unlikely, other architectures put uc_sigmask at the end of this structure and explicitly state it can be expanded, so we didn't want to box ourselves in here. */ char __glibc_reserved[1024 / 8 - sizeof (sigset_t)]; /* We can't put uc_sigmask at the end of this structure because we need to be able to expand sigcontext in the future. For example, the vector ISA extension will almost certainly add ISA state. We want to ensure all user-visible ISA state can be saved and restored via a ucontext, so we're putting this at the end in order to allow for infinite extensibility. Since we know this will be extended and we assume sigset_t won't be extended an extreme amount, we're prioritizing this. */ mcontext_t uc_mcontext; } ucontext_t; #endif /* sys/ucontext.h */ ","wordCount":"491","inLanguage":"en","image":"https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E","datePublished":"2024-03-15T11:30:03Z","dateModified":"2024-03-15T11:30:03Z","author":{"@type":"Person","name":"xyenchi"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://xyenchi.github.io/nonsence/%E7%BB%A7%E7%BB%AD%E7%A7%BB%E6%A4%8Dgprofng/"},"publisher":{"@type":"Organization","name":"xyenchi's blog","logo":{"@type":"ImageObject","url":"https://xyenchi.github.io/favicon.ico"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://xyenchi.github.io/ accesskey=h title="xyenchi's blog (Alt + H)">xyenchi's blog</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://xyenchi.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://xyenchi.github.io/record/ title=Record><span>Record</span></a></li><li><a href=https://xyenchi.github.io/perf/ title=Perf><span>Perf</span></a></li><li><a href=https://xyenchi.github.io/note/ title=Note><span>Note</span></a></li><li><a href=https://xyenchi.github.io/nonsence/ title=Nonsence><span>Nonsence</span></a></li><li><a href=https://xyenchi.github.io/novel/ title=Novel><span>Novel</span></a></li><li><a href=https://xyenchi.github.io/about/ title=About><span>About</span></a></li><li><a href=https://xyenchi.github.io/friends/ title=Friends><span>Friends</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">继续移植gprofng</h1><div class=post-meta><span title='2024-03-15 11:30:03 +0000 UTC'>March 15, 2024</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;491 words&nbsp;·&nbsp;xyenchi</div></header><div class=post-content><p>天气晴。<br>早上到达武汉非常冷，发现了一个很中二的说法，回笼觉念成回龙决。<br>偷一个 <code>/usr/include/sys/ucontext.h</code> 出来观测，qemu 里面显示得太异常了。大佬告诉我这是 glibc 的内容。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-C data-lang=C><span class=line><span class=cl><span class=cm>/* struct ucontext definition, RISC-V version.
+</span></span></span><span class=line><span class=cl><span class=cm>   Copyright (C) 1997-2023 Free Software Foundation, Inc.
+</span></span></span><span class=line><span class=cl><span class=cm>   This file is part of the GNU C Library.
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>   The GNU C Library is free software; you can redistribute it and/or
+</span></span></span><span class=line><span class=cl><span class=cm>   modify it under the terms of the GNU Lesser General Public
+</span></span></span><span class=line><span class=cl><span class=cm>   License as published by the Free Software Foundation; either
+</span></span></span><span class=line><span class=cl><span class=cm>   version 2.1 of the License, or (at your option) any later version.
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>   The GNU C Library is distributed in the hope that it will be useful,
+</span></span></span><span class=line><span class=cl><span class=cm>   but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span></span></span><span class=line><span class=cl><span class=cm>   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+</span></span></span><span class=line><span class=cl><span class=cm>   Lesser General Public License for more details.
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>   You should have received a copy of the GNU Lesser General Public
+</span></span></span><span class=line><span class=cl><span class=cm>   License along with the GNU C Library.  If not, see
+</span></span></span><span class=line><span class=cl><span class=cm>   &lt;https://www.gnu.org/licenses/&gt;.  */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/* Don&#39;t rely on this, the interface is currently messed up and may need to
+</span></span></span><span class=line><span class=cl><span class=cm>   be broken to be fixed.  */</span>
+</span></span><span class=line><span class=cl><span class=cp>#ifndef _SYS_UCONTEXT_H
+</span></span></span><span class=line><span class=cl><span class=cp>#define _SYS_UCONTEXT_H 1
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;features.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;bits/types/sigset_t.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;bits/types/stack_t.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>typedef</span> <span class=kt>unsigned</span> <span class=kt>long</span> <span class=kt>int</span> <span class=n>__riscv_mc_gp_state</span><span class=p>[</span><span class=mi>32</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#ifdef __USE_MISC
+</span></span></span><span class=line><span class=cl><span class=cp># define NGREG  32
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp># define REG_PC 0
+</span></span></span><span class=line><span class=cl><span class=cp># define REG_RA 1
+</span></span></span><span class=line><span class=cl><span class=cp># define REG_SP 2
+</span></span></span><span class=line><span class=cl><span class=cp># define REG_TP 4
+</span></span></span><span class=line><span class=cl><span class=cp># define REG_S0 8
+</span></span></span><span class=line><span class=cl><span class=cp># define REG_S1 9
+</span></span></span><span class=line><span class=cl><span class=cp># define REG_A0 10
+</span></span></span><span class=line><span class=cl><span class=cp># define REG_S2 18
+</span></span></span><span class=line><span class=cl><span class=cp># define REG_NARGS 8
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>typedef</span> <span class=kt>unsigned</span> <span class=kt>long</span> <span class=kt>int</span> <span class=kt>greg_t</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/* Container for all general registers.  */</span>
+</span></span><span class=line><span class=cl><span class=k>typedef</span> <span class=n>__riscv_mc_gp_state</span> <span class=kt>gregset_t</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/* Container for floating-point state.  */</span>
+</span></span><span class=line><span class=cl><span class=k>typedef</span> <span class=k>union</span> <span class=n>__riscv_mc_fp_state</span> <span class=kt>fpregset_t</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=n>__riscv_mc_f_ext_state</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>__f</span><span class=p>[</span><span class=mi>32</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>__fcsr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=n>__riscv_mc_d_ext_state</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>unsigned</span> <span class=kt>long</span> <span class=kt>long</span> <span class=kt>int</span> <span class=n>__f</span><span class=p>[</span><span class=mi>32</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>__fcsr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=n>__riscv_mc_q_ext_state</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>unsigned</span> <span class=kt>long</span> <span class=kt>long</span> <span class=kt>int</span> <span class=n>__f</span><span class=p>[</span><span class=mi>64</span><span class=p>]</span> <span class=nf>__attribute__</span> <span class=p>((</span><span class=nf>__aligned__</span> <span class=p>(</span><span class=mi>16</span><span class=p>)));</span>
+</span></span><span class=line><span class=cl>    <span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>__fcsr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/* Reserved for expansion of sigcontext structure.  Currently zeroed
+</span></span></span><span class=line><span class=cl><span class=cm>       upon signal, and must be zero upon sigreturn.  */</span>
+</span></span><span class=line><span class=cl>           <span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>__glibc_reserved</span><span class=p>[</span><span class=mi>3</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>union</span> <span class=n>__riscv_mc_fp_state</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>struct</span> <span class=n>__riscv_mc_f_ext_state</span> <span class=n>__f</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>struct</span> <span class=n>__riscv_mc_d_ext_state</span> <span class=n>__d</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>struct</span> <span class=n>__riscv_mc_q_ext_state</span> <span class=n>__q</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>typedef</span> <span class=k>struct</span> <span class=kt>mcontext_t</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>__riscv_mc_gp_state</span> <span class=n>__gregs</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>union</span>  <span class=n>__riscv_mc_fp_state</span> <span class=n>__fpregs</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=kt>mcontext_t</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/* Userlevel context.  */</span>
+</span></span><span class=line><span class=cl><span class=k>typedef</span> <span class=k>struct</span> <span class=kt>ucontext_t</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>unsigned</span> <span class=kt>long</span> <span class=kt>int</span>  <span class=n>__uc_flags</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>struct</span> <span class=kt>ucontext_t</span> <span class=o>*</span><span class=n>uc_link</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>stack_t</span>            <span class=n>uc_stack</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>sigset_t</span>           <span class=n>uc_sigmask</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/* There&#39;s some padding here to allow sigset_t to be expanded in the
+</span></span></span><span class=line><span class=cl><span class=cm>       future.  Though this is unlikely, other architectures put uc_sigmask
+</span></span></span><span class=line><span class=cl><span class=cm>       at the end of this structure and explicitly state it can be
+</span></span></span><span class=line><span class=cl><span class=cm>       expanded, so we didn&#39;t want to box ourselves in here.  */</span>
+</span></span><span class=line><span class=cl>    <span class=kt>char</span>               <span class=n>__glibc_reserved</span><span class=p>[</span><span class=mi>1024</span> <span class=o>/</span> <span class=mi>8</span> <span class=o>-</span> <span class=k>sizeof</span> <span class=p>(</span><span class=kt>sigset_t</span><span class=p>)];</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/* We can&#39;t put uc_sigmask at the end of this structure because we need
+</span></span></span><span class=line><span class=cl><span class=cm>       to be able to expand sigcontext in the future.  For example, the
+</span></span></span><span class=line><span class=cl><span class=cm>       vector ISA extension will almost certainly add ISA state.  We want
+</span></span></span><span class=line><span class=cl><span class=cm>       to ensure all user-visible ISA state can be saved and restored via a
+</span></span></span><span class=line><span class=cl><span class=cm>       ucontext, so we&#39;re putting this at the end in order to allow for
+</span></span></span><span class=line><span class=cl><span class=cm>       infinite extensibility.  Since we know this will be extended and we
+</span></span></span><span class=line><span class=cl><span class=cm>       assume sigset_t won&#39;t be extended an extreme amount, we&#39;re
+</span></span></span><span class=line><span class=cl><span class=cm>       prioritizing this.  */</span>
+</span></span><span class=line><span class=cl>    <span class=kt>mcontext_t</span> <span class=n>uc_mcontext</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=kt>ucontext_t</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#endif </span><span class=cm>/* sys/ucontext.h */</span><span class=cp>
+</span></span></span></code></pre></div></div><footer class=post-footer><ul class=post-tags></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://xyenchi.github.io/>xyenchi's blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

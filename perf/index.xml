@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Perves on xyenchi&#39;s blog</title>
+    <link>https://xyenchi.github.io/perf/</link>
+    <description>Recent content in Perves on xyenchi&#39;s blog</description>
+    <image>
+      <title>xyenchi&#39;s blog</title>
+      <url>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- 0.155.3</generator>
+    <language>en</language>
+    <atom:link href="https://xyenchi.github.io/perf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Port gprofng for RISC-V</title>
+      <link>https://xyenchi.github.io/perf/port-gprofng-for-risc-v/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://xyenchi.github.io/perf/port-gprofng-for-risc-v/</guid>
+      <description>&lt;h3 id=&#34;简单介绍一下-gprofng-的功能&#34;&gt;简单介绍一下 gprofng 的功能&lt;/h3&gt;
+&lt;p&gt;由于 gprofng 可以对可执行程序直接进行分析不需要重新编译源码，所以对闭源软件进行性能评测也很方便。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;对 C、C++、Java 或者 Scala 程序进行性能分析&lt;/li&gt;
+&lt;li&gt;支持 Pthread、OpenMP 和 Java thread 多线程编程模型&lt;/li&gt;
+&lt;li&gt;gprofng 主要数据收集命令 gprofng collect app 运行时一般使用程序计数器（PC）采样 (Sample)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;简单介绍一下-gprofng-的安装方法&#34;&gt;简单介绍一下 gprofng 的安装方法&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;直接用各大发行版的软件包管理器安装&lt;/li&gt;
+&lt;li&gt;从源码开始编译安装 &lt;br&gt;
+&lt;a href=&#34;https://github.com/bminor/binutils-gdb/tree/master/gprofng&#34;&gt;https://github.com/bminor/binutils-gdb/tree/master/gprofng&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;简单介绍一下-gprofng-的使用方法&#34;&gt;简单介绍一下 gprofng 的使用方法&lt;/h3&gt;
+&lt;p&gt;首先收集数据：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gprofng collect app &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;your app&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;eg.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gprofng collect app &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;上述命令会生成 test.n.er 文件夹，里面是收集的数据。 &lt;br&gt;
+然后进行处理：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gprofng display text -func -exp -head test.&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;times&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;.er/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;简单介绍一下-port-过程干了啥&#34;&gt;简单介绍一下 port 过程干了啥&lt;/h3&gt;
+&lt;h4 id=&#34;添加-binutils-gdb-的-enable-gprofng-支持的架构&#34;&gt;添加 binutils-gdb 的 &amp;ndash;enable-gprofng 支持的架构&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&#34;https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=configure.ac;h=a390639bfa90a8013da0b6c65aa6f848f1b26759;hb=91b999864f9831287f2ea6f960e8fa98e7b13ee9&#34;&gt;configure.ac&lt;/a&gt;中判断是否开启构建 gprofng 的 target 里面添加 riscv64 的 &lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;triplet。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/Writing-configure_002eac.html&#34;&gt;gnu configure.ac 的介绍官网链接&lt;/a&gt;&lt;br&gt;
+虽然很短一段但是翻译过来放在我的博客文章中却可以显得我的博客很长：&lt;br&gt;
+新建名为 &lt;em&gt;configure.ac&lt;/em&gt; 、包含调用 Autoconf 用来检测软件包所需或者可以使用的系统特性的宏的文件来给软件包生成 &lt;em&gt;configure&lt;/em&gt; 脚本。&lt;br&gt;
+从描述上看，Autoconf 已有的宏可以检测多种特性；详见&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/Existing-Tests.html#Existing-Tests&#34;&gt;已有检测&lt;/a&gt;&lt;br&gt;
+也可以使用 Autoconf 模版来生成一般性检测宏；详见&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/Writing-Tests.html#Writing-Tests&#34;&gt;写检测&lt;/a&gt;&lt;br&gt;
+对于特殊的特性，&lt;em&gt;configure.ac&lt;/em&gt; 可能需要手写 shell 命令；详见&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/Portable-Shell.html#Portable-Shell&#34;&gt;可移植 shell&lt;/a&gt;&lt;br&gt;
+&lt;em&gt;autoscan&lt;/em&gt; 程序可以帮助你快速入门写 &lt;em&gt;configure.ac&lt;/em&gt; ，详见&lt;a href=&#34;https://www.gnu.org/software/autoconf/manual/autoconf-2.60/html_node/autoscan-Invocation.html#autoscan-Invocation&#34;&gt;autoscan 调用&lt;/a&gt;;&lt;br&gt;
+同理在 gprofng 文件夹中的 configure.ac 中也添加 RISC-V 架构相关配置信息。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Unmatched JavaScript 引擎 Benchmark 跑分</title>
+      <link>https://xyenchi.github.io/perf/unmatched-javascript-%E5%BC%95%E6%93%8E-benchmark-%E8%B7%91%E5%88%86/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://xyenchi.github.io/perf/unmatched-javascript-%E5%BC%95%E6%93%8E-benchmark-%E8%B7%91%E5%88%86/</guid>
+      <description>&lt;p&gt;unmatched 的系统信息 &lt;code&gt;Linux milk 5.19.2-arch1-1 #1 SMP PREEMPT Fri, 19 Aug 2022 19:44:19 +0000 riscv64 GNU/Linux&lt;/code&gt; python 版本 :&lt;code&gt;Python 3.10.6&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;v8&#34;&gt;v8&lt;/h3&gt;
+&lt;p&gt;arch riscv 的 unmatched 上面并没有 v8 直接装来用，所以需要构建一个。放一个 &lt;a href=&#34;https://v8.dev/docs/build&#34;&gt;v8 官方网站的构建教程&lt;/a&gt;做参考。但是这样以我的水平并不能糊出来一个 PKGBUILD ，于是在 AUR 库找到了 v8-r 这个包，用&lt;code&gt;PARU -G v8-r&lt;/code&gt;命令把 PKGBUILD 及相关文件获取到本地或者性能更优的编译机器。修改&lt;code&gt;PKGBUILD&lt;/code&gt;中的arch为&lt;code&gt;riscv64&lt;/code&gt;。参考&lt;a href=&#34;https://github.com/felixonmars/archriscv-packages/wiki/archbuild-%E4%BD%BF%E7%94%A8%E5%8F%82%E8%80%83#%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%89%93%E5%8C%85&#34;&gt; arch 跨平台打包教程&lt;/a&gt;。进行第一次 &lt;code&gt;extra-riscv64-build -- -d &amp;quot;/tmp/cache:/var/cache/pacman/pkg&amp;quot;&lt;/code&gt;,报错如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;==&amp;gt; Starting prepare()...
+  -&amp;gt; Fetching V8 code
+/build/v8-r/src/depot_tools/vpython3: line 45: /build/v8-r/src/depot_tools/.cipd_bin/vpython3: No such file or directory
+==&amp;gt; ERROR: A failure occurred in prepare().
+    Aborting...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在&lt;a href=&#34;https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/refs/heads/main/vpython3&#34;&gt;谷歌源码站&lt;/a&gt;找到vpython3。第 45 行的上下文：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Unmatched 编译运行 Fpmark</title>
+      <link>https://xyenchi.github.io/perf/unmatched-%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C-fpmark/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://xyenchi.github.io/perf/unmatched-%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C-fpmark/</guid>
+      <description>&lt;p&gt;现有如下两块 unmatched 用来跑 benchmark, 一台叫 lemontea, 另一台叫 milk 。&lt;/p&gt;
+&lt;p&gt;lemontea 系统信息，clang 版本，gcc 版本如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;root@lemontea ~&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# uname -a&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Linux lemontea 5.18.3-arch1-1 &lt;span class=&#34;c1&#34;&gt;#1 SMP PREEMPT Sun, 12 Jun 2022 18:42:25 +0000 riscv64 GNU/Linux&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;root@lemontea ~&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# clang -v&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;clang version 13.0.1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Target: riscv64-unknown-linux-gnu
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Thread model: posix
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;InstalledDir: /usr/bin
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Found candidate GCC installation: /usr/bin/../lib/gcc/riscv64-unknown-linux-gnu/12.1.0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Selected GCC installation: /usr/bin/../lib/gcc/riscv64-unknown-linux-gnu/12.1.0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;root@lemontea ~&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# gcc -v&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Using built-in specs.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;COLLECT_GCC&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;gcc
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;COLLECT_LTO_WRAPPER&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/lib/gcc/riscv64-unknown-linux-gnu/12.1.0/lto-wrapper
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Target: riscv64-unknown-linux-gnu
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Configured with: /build/gcc/src/gcc/configure --enable-languages&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;c,c++,fortran,go,lto,objc,obj-c++ --enable-bootstrap --prefix&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr --libdir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/lib --libexecdir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/lib --mandir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/share/man --infodir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/share/info --with-bugurl&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;https://bugs.archlinux.org/ --with-linker-hash-style&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;gnu --with-system-zlib --enable-__cxa_atexit --enable-cet&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;auto --enable-checking&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;release --enable-clocale&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;gnu --enable-default-pie --enable-default-ssp --enable-gnu-indirect-function --enable-gnu-unique-object --enable-linker-build-id --enable-lto --disable-multilib --enable-plugin --enable-shared --enable-threads&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;posix --disable-libssp --disable-libstdcxx-pch --disable-werror --enable-link-serialization&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Thread model: posix
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Supported LTO compression algorithms: zlib zstd
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gcc version 12.1.0 &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;GCC&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;milk 系统信息，clang 版本，gcc 版本如下：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
