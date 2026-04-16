@@ -1,0 +1,117 @@
+<!doctype html><html lang=en dir=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>一些记录 | xyenchi's blog</title><meta name=keywords content><meta name=description content="测试集发现了一个 flaot 到 int 转换的问题
+python test/test_tensor_creation_ops.py TestTensorCreationCPU.test_float_to_int_conversion_nonfinite_cpu_int16
+python
+import torch
+import math
+torch.tensor([math.inf, -math.inf, math.nan]).to(torch.int16)
+结果是 tensor([-1, 0, -1], dtype=torch.int16)
+在 aten/src/ATen/native/cpu/CopyKernel.cpp 中 的 copy_kernel 函数 iter.has_contiguous_first_dim() 条件为真。
+python test/inductor/test_aot_inductor_arrayref.py AOTInductorTestABICompatibleCpuWithStackAllocation.test_misc_1_max_autotune_True_cpu_with_stack_allocation
+python test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_aoti_bmm_unique_identifiers_cpu_float32
+python test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_int8_woq_mm_batch_size_17_mid_dim_1_in_features_144_out_features_1024_cpu_bfloat16
+>>> L1_cache_size = torch.cpu.get_capabilities().get(&#34;l1d_cache_size&#34;, 0)
+>>> print(L1_cache_size)
+0
+>>> print(torch.cpu.get_capabilities())
+{'l1d_cache_size': 0, 'num_logical_cores': 64, 'num_physical_cores': 64, 'l2_cache_size': 0, 'num_sockets': 1, 'cpu_name': '', 'architecture': 'riscv64'}
+测试在读 cpuinfo 的时候读到L1 cache size是0，还有救
+python test/inductor/test_binary_folding.py FreezingCpuTests.test_conv_binary_folding_cpu
+看起来是精度问题，可能也得救
+python test/inductor/test_compile_subprocess.py CpuTests.test_remove_noop_slice1_cpu图生成失败问题，log里建议重新跑"><meta name=author content="xyenchi"><link rel=canonical href=https://xyenchi.github.io/nonsence/20260309/><link crossorigin=anonymous href=/assets/css/stylesheet.aeb04085357f24835232aa89766467110fb6da019fa0a790d4d097b3949d7276.css integrity="sha256-rrBAhTV/JINSMqqJdmRnEQ+22gGfoKeQ1NCXs5SdcnY=" rel="preload stylesheet" as=style><link rel=icon href=https://xyenchi.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://xyenchi.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://xyenchi.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://xyenchi.github.io/apple-touch-icon.png><link rel=mask-icon href=https://xyenchi.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://xyenchi.github.io/nonsence/20260309/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><meta property="og:url" content="https://xyenchi.github.io/nonsence/20260309/"><meta property="og:site_name" content="xyenchi's blog"><meta property="og:title" content="一些记录"><meta property="og:description" content="测试集发现了一个 flaot 到 int 转换的问题
+python test/test_tensor_creation_ops.py TestTensorCreationCPU.test_float_to_int_conversion_nonfinite_cpu_int16 python import torch import math torch.tensor([math.inf, -math.inf, math.nan]).to(torch.int16) 结果是 tensor([-1, 0, -1], dtype=torch.int16) 在 aten/src/ATen/native/cpu/CopyKernel.cpp 中 的 copy_kernel 函数 iter.has_contiguous_first_dim() 条件为真。
+python test/inductor/test_aot_inductor_arrayref.py AOTInductorTestABICompatibleCpuWithStackAllocation.test_misc_1_max_autotune_True_cpu_with_stack_allocation
+python test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_aoti_bmm_unique_identifiers_cpu_float32
+python test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_int8_woq_mm_batch_size_17_mid_dim_1_in_features_144_out_features_1024_cpu_bfloat16
+>>> L1_cache_size = torch.cpu.get_capabilities().get(&#34;l1d_cache_size&#34;, 0) >>> print(L1_cache_size) 0 >>> print(torch.cpu.get_capabilities()) {'l1d_cache_size': 0, 'num_logical_cores': 64, 'num_physical_cores': 64, 'l2_cache_size': 0, 'num_sockets': 1, 'cpu_name': '', 'architecture': 'riscv64'} 测试在读 cpuinfo 的时候读到L1 cache size是0，还有救
+python test/inductor/test_binary_folding.py FreezingCpuTests.test_conv_binary_folding_cpu 看起来是精度问题，可能也得救
+python test/inductor/test_compile_subprocess.py CpuTests.test_remove_noop_slice1_cpu图生成失败问题，log里建议重新跑"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="nonsence"><meta property="article:published_time" content="2026-03-09T00:00:03+00:00"><meta property="article:modified_time" content="2026-03-09T00:00:03+00:00"><meta property="og:image" content="https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:title content="一些记录"><meta name=twitter:description content="测试集发现了一个 flaot 到 int 转换的问题
+python test/test_tensor_creation_ops.py TestTensorCreationCPU.test_float_to_int_conversion_nonfinite_cpu_int16
+python
+import torch
+import math
+torch.tensor([math.inf, -math.inf, math.nan]).to(torch.int16)
+结果是 tensor([-1, 0, -1], dtype=torch.int16)
+在 aten/src/ATen/native/cpu/CopyKernel.cpp 中 的 copy_kernel 函数 iter.has_contiguous_first_dim() 条件为真。
+python test/inductor/test_aot_inductor_arrayref.py AOTInductorTestABICompatibleCpuWithStackAllocation.test_misc_1_max_autotune_True_cpu_with_stack_allocation
+python test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_aoti_bmm_unique_identifiers_cpu_float32
+python test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_int8_woq_mm_batch_size_17_mid_dim_1_in_features_144_out_features_1024_cpu_bfloat16
+>>> L1_cache_size = torch.cpu.get_capabilities().get(&#34;l1d_cache_size&#34;, 0)
+>>> print(L1_cache_size)
+0
+>>> print(torch.cpu.get_capabilities())
+{'l1d_cache_size': 0, 'num_logical_cores': 64, 'num_physical_cores': 64, 'l2_cache_size': 0, 'num_sockets': 1, 'cpu_name': '', 'architecture': 'riscv64'}
+测试在读 cpuinfo 的时候读到L1 cache size是0，还有救
+python test/inductor/test_binary_folding.py FreezingCpuTests.test_conv_binary_folding_cpu
+看起来是精度问题，可能也得救
+python test/inductor/test_compile_subprocess.py CpuTests.test_remove_noop_slice1_cpu图生成失败问题，log里建议重新跑"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Nonsences","item":"https://xyenchi.github.io/nonsence/"},{"@type":"ListItem","position":2,"name":"一些记录","item":"https://xyenchi.github.io/nonsence/20260309/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"一些记录","name":"一些记录","description":"测试集发现了一个 flaot 到 int 转换的问题\npython test/test_tensor_creation_ops.py TestTensorCreationCPU.test_float_to_int_conversion_nonfinite_cpu_int16 python import torch import math torch.tensor([math.inf, -math.inf, math.nan]).to(torch.int16) 结果是 tensor([-1, 0, -1], dtype=torch.int16) 在 aten/src/ATen/native/cpu/CopyKernel.cpp 中 的 copy_kernel 函数 iter.has_contiguous_first_dim() 条件为真。\npython test/inductor/test_aot_inductor_arrayref.py AOTInductorTestABICompatibleCpuWithStackAllocation.test_misc_1_max_autotune_True_cpu_with_stack_allocation\npython test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_aoti_bmm_unique_identifiers_cpu_float32\npython test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_int8_woq_mm_batch_size_17_mid_dim_1_in_features_144_out_features_1024_cpu_bfloat16\n\u0026gt;\u0026gt;\u0026gt; L1_cache_size = torch.cpu.get_capabilities().get(\u0026#34;l1d_cache_size\u0026#34;, 0) \u0026gt;\u0026gt;\u0026gt; print(L1_cache_size) 0 \u0026gt;\u0026gt;\u0026gt; print(torch.cpu.get_capabilities()) {\u0026#39;l1d_cache_size\u0026#39;: 0, \u0026#39;num_logical_cores\u0026#39;: 64, \u0026#39;num_physical_cores\u0026#39;: 64, \u0026#39;l2_cache_size\u0026#39;: 0, \u0026#39;num_sockets\u0026#39;: 1, \u0026#39;cpu_name\u0026#39;: \u0026#39;\u0026#39;, \u0026#39;architecture\u0026#39;: \u0026#39;riscv64\u0026#39;} 测试在读 cpuinfo 的时候读到L1 cache size是0，还有救\npython test/inductor/test_binary_folding.py FreezingCpuTests.test_conv_binary_folding_cpu 看起来是精度问题，可能也得救\npython test/inductor/test_compile_subprocess.py CpuTests.test_remove_noop_slice1_cpu图生成失败问题，log里建议重新跑\n","keywords":[],"articleBody":"测试集发现了一个 flaot 到 int 转换的问题\npython test/test_tensor_creation_ops.py TestTensorCreationCPU.test_float_to_int_conversion_nonfinite_cpu_int16 python import torch import math torch.tensor([math.inf, -math.inf, math.nan]).to(torch.int16) 结果是 tensor([-1, 0, -1], dtype=torch.int16) 在 aten/src/ATen/native/cpu/CopyKernel.cpp 中 的 copy_kernel 函数 iter.has_contiguous_first_dim() 条件为真。\npython test/inductor/test_aot_inductor_arrayref.py AOTInductorTestABICompatibleCpuWithStackAllocation.test_misc_1_max_autotune_True_cpu_with_stack_allocation\npython test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_aoti_bmm_unique_identifiers_cpu_float32\npython test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_int8_woq_mm_batch_size_17_mid_dim_1_in_features_144_out_features_1024_cpu_bfloat16\n\u003e\u003e\u003e L1_cache_size = torch.cpu.get_capabilities().get(\"l1d_cache_size\", 0) \u003e\u003e\u003e print(L1_cache_size) 0 \u003e\u003e\u003e print(torch.cpu.get_capabilities()) {'l1d_cache_size': 0, 'num_logical_cores': 64, 'num_physical_cores': 64, 'l2_cache_size': 0, 'num_sockets': 1, 'cpu_name': '', 'architecture': 'riscv64'} 测试在读 cpuinfo 的时候读到L1 cache size是0，还有救\npython test/inductor/test_binary_folding.py FreezingCpuTests.test_conv_binary_folding_cpu 看起来是精度问题，可能也得救\npython test/inductor/test_compile_subprocess.py CpuTests.test_remove_noop_slice1_cpu图生成失败问题，log里建议重新跑\npython test/inductor/test_cpu_repro.py CPUReproTests.test_broadcast_scalar_cpp_tile_2d_kernel精度问题\npython test/inductor/test_cpu_repro.py CPUReproTests.test_tanh_atan2_use_decompose_tanh AssertionError: AssertionError not raised\nFAILED [0.0074s] inductor/test_extension_backend.py::ExtensionBackendTests::test_open_device_registration - RuntimeError: The runtime module of 'extension_device' has already been registered with '","wordCount":"328","inLanguage":"en","image":"https://xyenchi.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E","datePublished":"2026-03-09T00:00:03Z","dateModified":"2026-03-09T00:00:03Z","author":{"@type":"Person","name":"xyenchi"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://xyenchi.github.io/nonsence/20260309/"},"publisher":{"@type":"Organization","name":"xyenchi's blog","logo":{"@type":"ImageObject","url":"https://xyenchi.github.io/favicon.ico"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://xyenchi.github.io/ accesskey=h title="xyenchi's blog (Alt + H)">xyenchi's blog</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://xyenchi.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://xyenchi.github.io/record/ title=Record><span>Record</span></a></li><li><a href=https://xyenchi.github.io/perf/ title=Perf><span>Perf</span></a></li><li><a href=https://xyenchi.github.io/note/ title=Note><span>Note</span></a></li><li><a href=https://xyenchi.github.io/nonsence/ title=Nonsence><span>Nonsence</span></a></li><li><a href=https://xyenchi.github.io/novel/ title=Novel><span>Novel</span></a></li><li><a href=https://xyenchi.github.io/about/ title=About><span>About</span></a></li><li><a href=https://xyenchi.github.io/friends/ title=Friends><span>Friends</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">一些记录</h1><div class=post-meta><span title='2026-03-09 00:00:03 +0000 UTC'>March 9, 2026</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;328 words&nbsp;·&nbsp;xyenchi</div></header><div class=post-content><p>测试集发现了一个 flaot 到 int 转换的问题</p><pre tabindex=0><code>python test/test_tensor_creation_ops.py TestTensorCreationCPU.test_float_to_int_conversion_nonfinite_cpu_int16
+</code></pre><pre tabindex=0><code>python
+import torch
+import math
+torch.tensor([math.inf, -math.inf, math.nan]).to(torch.int16)
+</code></pre><p>结果是 <code>tensor([-1, 0, -1], dtype=torch.int16)</code>
+在 aten/src/ATen/native/cpu/CopyKernel.cpp 中 的 copy_kernel 函数 iter.has_contiguous_first_dim() 条件为真。</p><p><code>python test/inductor/test_aot_inductor_arrayref.py AOTInductorTestABICompatibleCpuWithStackAllocation.test_misc_1_max_autotune_True_cpu_with_stack_allocation</code><br><code>python test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_aoti_bmm_unique_identifiers_cpu_float32</code><br><code>python test/inductor/test_cpu_select_algorithm.py TestSelectAlgorithmCPU.test_int8_woq_mm_batch_size_17_mid_dim_1_in_features_144_out_features_1024_cpu_bfloat16</code></p><pre tabindex=0><code>&gt;&gt;&gt; L1_cache_size = torch.cpu.get_capabilities().get(&#34;l1d_cache_size&#34;, 0)
+&gt;&gt;&gt; print(L1_cache_size)
+0
+&gt;&gt;&gt; print(torch.cpu.get_capabilities())
+{&#39;l1d_cache_size&#39;: 0, &#39;num_logical_cores&#39;: 64, &#39;num_physical_cores&#39;: 64, &#39;l2_cache_size&#39;: 0, &#39;num_sockets&#39;: 1, &#39;cpu_name&#39;: &#39;&#39;, &#39;architecture&#39;: &#39;riscv64&#39;}
+</code></pre><p>测试在读 cpuinfo 的时候读到L1 cache size是0，还有救</p><p><code>python test/inductor/test_binary_folding.py FreezingCpuTests.test_conv_binary_folding_cpu</code>
+看起来是精度问题，可能也得救</p><p><code>python test/inductor/test_compile_subprocess.py CpuTests.test_remove_noop_slice1_cpu</code>图生成失败问题，log里建议重新跑</p><p><code>python test/inductor/test_cpu_repro.py CPUReproTests.test_broadcast_scalar_cpp_tile_2d_kernel</code>精度问题</p><p><code>python test/inductor/test_cpu_repro.py CPUReproTests.test_tanh_atan2_use_decompose_tanh</code> AssertionError: AssertionError not raised</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>FAILED <span class=o>[</span>0.0074s<span class=o>]</span> inductor/test_extension_backend.py::ExtensionBackendTests::test_open_device_registration - RuntimeError: The runtime module of <span class=s1>&#39;extension_device&#39;</span> has already been registered with <span class=s1>&#39;&lt;module &#39;</span>extension_device<span class=s1>&#39; from &#39;</span>/home/chenyixuan/.cache/torch_extensions/py311_cpu/extension_device/extension_device.so<span class=s1>&#39;&gt;&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>To execute this test, run the following from the base repo dir:
+</span></span><span class=line><span class=cl>    python test/inductor/test_extension_backend.py ExtensionBackendTests.test_open_device_registration
+</span></span></code></pre></div><p>和预期值不相等，待分析</p><pre tabindex=0><code>__________________ TestExperimentalUtils.test_fuzz_symbolize ___________________
+Traceback (most recent call last):
+  File &#34;/usr/lib64/python3.11/unittest/case.py&#34;, line 57, in testPartExecutor
+    yield
+  File &#34;/usr/lib64/python3.11/unittest/case.py&#34;, line 623, in run
+    self._callTestMethod(testMethod)
+  File &#34;/usr/lib64/python3.11/unittest/case.py&#34;, line 579, in _callTestMethod
+    if method() is not None:
+       ^^^^^^^^
+  File &#34;/home/chenyixuan/pytorch/torch/testing/_internal/common_utils.py&#34;, line 3368, in wrapper
+    method(*args, **kwargs)
+  File &#34;/home/chenyixuan/pytorch/test/profiler/test_profiler.py&#34;, line 3386, in test_fuzz_symbolize
+    self.assertEqual(len(fast), len(addrs))
+  File &#34;/home/chenyixuan/pytorch/torch/testing/_internal/common_utils.py&#34;, line 4363, in assertEqual
+    raise error_metas.pop()[0].to_error(  # type: ignore[index]
+AssertionError: Scalars are not equal!
+
+Expected 200 but got 0.
+Absolute difference: 200
+Relative difference: 1.0
+</code></pre><p>精度转换问题</p><pre tabindex=0><code>=================================== FAILURES ===================================
+_____________ TestBinaryUfuncsCPU.test_copysign_cpu_float32_int32 ______________
+Traceback (most recent call last):
+  File &#34;/usr/lib64/python3.11/unittest/case.py&#34;, line 57, in testPartExecutor
+    yield
+  File &#34;/usr/lib64/python3.11/unittest/case.py&#34;, line 623, in run
+    self._callTestMethod(testMethod)
+  File &#34;/usr/lib64/python3.11/unittest/case.py&#34;, line 579, in _callTestMethod
+    if method() is not None:
+       ^^^^^^^^
+  File &#34;/home/chenyixuan/pytorch/torch/testing/_internal/common_utils.py&#34;, line 3368, in wrapper
+    method(*args, **kwargs)
+  File &#34;/home/chenyixuan/pytorch/torch/testing/_internal/common_device_type.py&#34;, line 430, in instantiated_test
+    result = test(self, **param_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;/home/chenyixuan/pytorch/test/test_binary_ufuncs.py&#34;, line 2571, in test_copysign
+    _test_copysign_numpy(
+  File &#34;/home/chenyixuan/pytorch/test/test_binary_ufuncs.py&#34;, line 2541, in _test_copysign_numpy
+    self.assertEqual(
+  File &#34;/home/chenyixuan/pytorch/torch/testing/_internal/common_utils.py&#34;, line 4363, in assertEqual
+    raise error_metas.pop()[0].to_error(  # type: ignore[index]
+AssertionError: Tensor-likes are not close!
+
+Mismatched elements: 51 / 100 (51.0%)
+Greatest absolute difference: 2.0 at index (0, 0) (up to 1e-07 allowed)
+Greatest relative difference: 2.0 at index (0, 0) (up to 1e-07 allowed)
+
+To execute this test, run the following from the base repo dir:
+    python test/test_binary_ufuncs.py TestBinaryUfuncsCPU.test_copysign_cpu_float32_int32
+</code></pre></div><footer class=post-footer><ul class=post-tags></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://xyenchi.github.io/>xyenchi's blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>
